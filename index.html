@@ -3,1731 +3,1829 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slow Morning — Культура потребления</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>AeroSpace Dynamics — Величие инженерной мысли</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg: #F7F3EC;
-            --bg-warm: #EDE6DA;
-            --fg: #2C1810;
-            --fg-light: #4A3728;
-            --muted: #8B7355;
-            --accent: #C4A484;
-            --coffee: #3D2314;
-            --latte: #D4C4B0;
-            --cream: #FDF8F3;
-            --rose: #D4A5A5;
-            --olive: #8B9A7D;
-            --copper: #B87333;
-            --gold: #C9A962;
+            --bg-deep: #030306;
+            --bg-night: #080810;
+            --bg-dawn: #1a1420;
+            --fg: #e8e8f0;
+            --fg-muted: #7a7a8a;
+            --accent-copper: #c87941;
+            --accent-orange: #ff6b35;
+            --accent-violet: #9d8ec9;
+            --accent-gold: #d4a855;
+            --accent-teal: #4a9d9d;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: var(--bg);
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-deep);
             color: var(--fg);
             overflow-x: hidden;
             line-height: 1.7;
         }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-copper); border-radius: 2px; }
+        :focus-visible { outline: 2px solid var(--accent-copper); outline-offset: 2px; }
 
-        .font-serif {
-            font-family: 'Playfair Display', Georgia, serif;
-        }
-
-        /* Noise texture overlay */
-        .noise-overlay {
+        #canvas-container {
             position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.035;
-            z-index: 9999;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Custom cursor */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--coffee);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10001;
-            transition: transform 0.15s ease;
-        }
-
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--coffee);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all 0.2s ease-out;
-            opacity: 0.5;
-        }
-
-        .cursor-ring.hover {
-            transform: scale(1.5);
-            border-color: var(--copper);
-            opacity: 0.8;
-        }
-
-        @media (pointer: coarse) {
-            .cursor-dot, .cursor-ring { display: none; }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--muted);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--coffee);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes steamRise {
-            0% {
-                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(-40px) translateX(8px) scale(1.3) rotate(5deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-80px) translateX(-5px) scale(0.6) rotate(-3deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-
-        @keyframes gentleFloatReverse {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(10px) rotate(-2deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.05); }
-        }
-
-        @keyframes lightBeam {
-            0% { opacity: 0.2; transform: translateX(-30%) skewX(-15deg); }
-            50% { opacity: 0.5; }
-            100% { opacity: 0.2; transform: translateX(30%) skewX(-15deg); }
-        }
-
-        @keyframes rotateBean {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes drawLine {
-            to { stroke-dashoffset: 0; }
-        }
-
-        @keyframes rippleExpand {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .animate-fadeInUp {
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn 1.2s ease-out forwards;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .reveal-scale.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .reveal, .reveal-scale {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-            .animate-fadeInUp,
-            .animate-fadeIn {
-                animation: none;
-                opacity: 1;
-            }
-        }
-
-        /* Hero section */
-        .hero {
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse at 20% 10%, rgba(255, 250, 245, 0.9) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 90%, rgba(196, 164, 132, 0.2) 0%, transparent 40%),
-                radial-gradient(ellipse at 60% 40%, rgba(201, 169, 98, 0.08) 0%, transparent 30%),
-                linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
-        }
-
-        .light-beam {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            width: 50%;
-            height: 120%;
-            background: linear-gradient(180deg, 
-                rgba(255, 252, 245, 0.5) 0%, 
-                rgba(255, 248, 235, 0.2) 40%,
-                transparent 100%);
-            transform: translateX(-50%) skewX(-12deg);
-            animation: lightBeam 12s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Floating beans decoration */
-        .floating-bean {
-            position: absolute;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-
-        .floating-bean.slow {
-            animation: gentleFloat 8s ease-in-out infinite;
-        }
-
-        .floating-bean.medium {
-            animation: gentleFloatReverse 6s ease-in-out infinite;
-        }
-
-        .floating-bean.fast {
-            animation: gentleFloat 4s ease-in-out infinite;
-        }
-
-        /* Coffee cup */
-        .coffee-cup-container {
-            position: relative;
-            width: 300px;
-            height: 380px;
-            perspective: 1000px;
-        }
-
-        .coffee-cup {
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
+            z-index: 0;
         }
-
-        .coffee-cup-container:hover .coffee-cup {
-            transform: rotateY(-5deg) rotateX(2deg);
-        }
-
-        .cup-body {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px;
-            height: 200px;
-            background: linear-gradient(145deg, 
-                var(--cream) 0%, 
-                #FAF6F1 30%,
-                #F0EBE3 70%,
-                #E8E2D8 100%);
-            border-radius: 12px 12px 55% 55%;
-            box-shadow: 
-                inset 8px 8px 20px rgba(255, 255, 255, 0.9),
-                inset -4px -4px 15px rgba(0, 0, 0, 0.03),
-                0 25px 60px rgba(44, 24, 16, 0.12),
-                0 10px 20px rgba(44, 24, 16, 0.08);
-        }
-
-        .cup-coffee {
-            position: absolute;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 160px;
-            background: radial-gradient(ellipse at 35% 35%, 
-                #6B4A38 0%, 
-                var(--coffee) 50%, 
-                #1A0F0A 100%);
-            border-radius: 12px 12px 55% 55%;
-            overflow: hidden;
-        }
-
-        .coffee-surface {
-            position: absolute;
+        
+        nav {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, 
-                rgba(107, 74, 56, 0.7) 0%, 
-                transparent 100%);
-            border-radius: 12px 12px 0 0;
-        }
-
-        .latte-art {
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 110px;
-            height: 90px;
-        }
-
-        /* Steam */
-        .steam-container {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-        }
-
-        .steam {
-            position: absolute;
-            bottom: 0;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.3) 50%,
-                rgba(255, 255, 255, 0.1) 100%);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: steamRise 4s ease-out infinite;
-        }
-
-        .steam:nth-child(1) {
-            left: 15%;
-            width: 25px;
-            height: 50px;
-            animation-delay: 0s;
-        }
-
-        .steam:nth-child(2) {
-            left: 45%;
-            width: 30px;
-            height: 60px;
-            animation-delay: 0.7s;
-        }
-
-        .steam:nth-child(3) {
-            left: 70%;
-            width: 22px;
-            height: 45px;
-            animation-delay: 1.4s;
-        }
-
-        .steam:nth-child(4) {
-            left: 30%;
-            width: 18px;
-            height: 35px;
-            animation-delay: 2.1s;
-        }
-
-        .cup-handle {
-            position: absolute;
-            right: -40px;
-            top: 35px;
-            width: 45px;
-            height: 90px;
-            border: 14px solid var(--cream);
-            border-left: none;
-            border-radius: 0 60px 60px 0;
-            box-shadow: 
-                6px 4px 15px rgba(0, 0, 0, 0.08),
-                inset -2px 0 10px rgba(0, 0, 0, 0.02);
-        }
-
-        .saucer {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 280px;
-            height: 35px;
-            background: linear-gradient(145deg, var(--cream) 0%, #E8E2D8 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 15px 40px rgba(44, 24, 16, 0.1),
-                0 5px 15px rgba(44, 24, 16, 0.05);
-        }
-
-        .saucer::before {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 15px;
-            background: linear-gradient(145deg, 
-                rgba(255, 255, 255, 0.5) 0%, 
-                transparent 100%);
-            border-radius: 50%;
-        }
-
-        /* Ripple effect on coffee */
-        .coffee-ripple {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: rippleExpand 3s ease-out infinite;
-        }
-
-        .coffee-ripple:nth-child(2) { animation-delay: 1s; }
-        .coffee-ripple:nth-child(3) { animation-delay: 2s; }
-
-        /* Menu cards */
-        .menu-item {
-            position: relative;
-            padding: 1.75rem 0;
-            border-bottom: 1px solid rgba(139, 115, 85, 0.15);
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0;
-            background: linear-gradient(90deg, 
-                rgba(201, 169, 98, 0.1) 0%, 
-                transparent 100%);
-            transition: width 0.5s ease;
-        }
-
-        .menu-item:hover {
-            padding-left: 1.5rem;
-        }
-
-        .menu-item:hover::before {
             width: 100%;
-        }
-
-        .menu-item:hover .menu-item-title {
-            color: var(--coffee);
-        }
-
-        .menu-item-price {
-            transition: transform 0.3s ease;
-        }
-
-        .menu-item:hover .menu-item-price {
-            transform: scale(1.1);
-        }
-
-        .flavor-card {
-            position: absolute;
-            left: calc(100% + 2rem);
-            top: 50%;
-            transform: translateY(-50%) translateX(20px);
-            width: 300px;
-            padding: 1.75rem;
-            background: var(--cream);
-            border-radius: 16px;
-            box-shadow: 
-                0 20px 60px rgba(44, 24, 16, 0.12),
-                0 8px 25px rgba(44, 24, 16, 0.08);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 10;
-            border: 1px solid rgba(196, 164, 132, 0.2);
-        }
-
-        .flavor-card::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%) rotate(45deg);
-            width: 16px;
-            height: 16px;
-            background: var(--cream);
-            border-left: 1px solid rgba(196, 164, 132, 0.2);
-            border-bottom: 1px solid rgba(196, 164, 132, 0.2);
-        }
-
-        .menu-item:hover .flavor-card {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-            pointer-events: auto;
-        }
-
-        @media (max-width: 768px) {
-            .flavor-card {
-                position: fixed;
-                left: 50%;
-                top: auto;
-                bottom: 2rem;
-                transform: translateX(-50%) translateY(30px);
-                width: calc(100% - 2rem);
-                max-width: 340px;
-            }
-            
-            .flavor-card::before {
-                display: none;
-            }
-            
-            .menu-item:hover .flavor-card {
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        /* Flavor tag animation */
-        .flavor-tag {
-            display: inline-block;
-            padding: 0.375rem 0.875rem;
-            font-size: 0.75rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .flavor-tag:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Split section */
-        .split-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 85vh;
-        }
-
-        @media (max-width: 768px) {
-            .split-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .texture-panel {
-            position: relative;
-            background: var(--bg-warm);
-            overflow: hidden;
-        }
-
-        /* Temperature curve */
-        .temp-curve {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .curve-line {
-            fill: none;
-            stroke: var(--copper);
-            stroke-width: 2;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-        }
-
-        .curve-line.animate {
-            animation: drawLine 2s ease forwards;
-        }
-
-        /* Stats counter */
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 400;
-            color: var(--coffee);
-            line-height: 1;
-        }
-
-        /* Map illustration */
-        .map-illustration {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            aspect-ratio: 4/3;
-        }
-
-        .map-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .map-path {
-            stroke-dasharray: 500;
-            stroke-dashoffset: 500;
-            transition: stroke-dashoffset 1.5s ease;
-        }
-
-        .map-path.animate {
-            stroke-dashoffset: 0;
-        }
-
-        /* Button styles */
-        .btn-primary {
-            display: inline-flex;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.875rem;
-            padding: 1.125rem 2.25rem;
-            background: var(--coffee);
-            color: var(--cream);
-            border: none;
-            border-radius: 4px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.15), 
-                transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        .btn-primary:hover::before {
-            transform: translateX(100%);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(44, 24, 16, 0.25);
-        }
-
-        .btn-primary:focus-visible {
-            outline: 2px solid var(--gold);
-            outline-offset: 4px;
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
-        }
-
-        /* Secondary button */
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            color: var(--fg);
-            border: 1px solid var(--muted);
-            border-radius: 4px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--coffee);
-            color: var(--coffee);
-            background: rgba(61, 35, 20, 0.03);
-        }
-
-        /* Decorative elements */
-        .plant-decoration {
-            position: absolute;
-            opacity: 0.12;
-            pointer-events: none;
-        }
-
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            pointer-events: none;
-        }
-
-        /* Quote styling */
-        .quote-text {
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .quote-text::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--copper), var(--rose));
-            border-radius: 2px;
-        }
-
-        /* Focus states */
-        a:focus-visible,
-        button:focus-visible {
-            outline: 2px solid var(--copper);
-            outline-offset: 3px;
-        }
-
-        /* Selection */
-        ::selection {
-            background: var(--rose);
-            color: var(--fg);
-        }
-
-        /* Section divider */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--muted) 20%, 
-                var(--muted) 80%, 
-                transparent);
-            opacity: 0.2;
-        }
-
-        /* Origin map section */
-        .origin-card {
-            position: relative;
-            padding: 2rem;
-            background: var(--cream);
-            border-radius: 20px;
-            border: 1px solid rgba(196, 164, 132, 0.15);
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(3,3,6,0.98) 0%, rgba(3,3,6,0.7) 50%, transparent 100%);
             transition: all 0.4s ease;
         }
-
-        .origin-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(44, 24, 16, 0.1);
+        nav.scrolled {
+            background: rgba(3,3,6,0.98);
+            backdrop-filter: blur(20px);
         }
-
-        .origin-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+        .logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            color: var(--fg);
+            text-transform: uppercase;
+            text-decoration: none;
         }
-
-        /* Social icons */
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(253, 248, 243, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            background: rgba(253, 248, 243, 0.2);
-            transform: translateY(-3px);
-        }
-
-        /* Nav link underline */
-        .nav-link {
+        .logo span { color: var(--accent-copper); }
+        .nav-links { display: flex; gap: 3rem; list-style: none; }
+        .nav-links a {
+            color: var(--fg-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
             position: relative;
+            padding: 0.5rem 0;
+            font-weight: 500;
         }
-
-        .nav-link::after {
+        .nav-links a::after {
             content: '';
             position: absolute;
             bottom: -4px;
             left: 0;
             width: 0;
             height: 1px;
-            background: var(--copper);
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--accent-copper), var(--accent-orange));
+            transition: width 0.4s ease;
+        }
+        .nav-links a:hover, .nav-links a:focus { color: var(--fg); }
+        .nav-links a:hover::after, .nav-links a:focus::after { width: 100%; }
+
+        section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+        section > * { pointer-events: auto; }
+        
+        #hero {
+            height: 100vh;
+            justify-content: flex-start;
+            padding: 0 8%;
+        }
+        .hero-content {
+            max-width: 650px;
+            opacity: 0;
+            transform: translateY(60px);
+            animation: heroReveal 1.5s ease 0.5s forwards;
+        }
+        @keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
+        
+        .hero-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--accent-copper);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hero-subtitle::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent-copper);
+        }
+        
+        .hero-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 5rem);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: 0.03em;
+            margin-bottom: 2rem;
+        }
+        .hero-title strong {
+            font-weight: 700;
+            display: block;
+            background: linear-gradient(135deg, var(--fg) 0%, var(--accent-copper) 50%, var(--accent-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--fg-muted);
+            margin-bottom: 3rem;
+            letter-spacing: 0.03em;
+            max-width: 480px;
+            line-height: 1.8;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 2.8rem;
+            background: transparent;
+            border: 1px solid var(--accent-copper);
+            color: var(--fg);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+        }
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(200,121,65,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        .hero-btn:hover::before, .hero-btn:focus::before { left: 100%; }
+        .hero-btn:hover, .hero-btn:focus {
+            background: var(--accent-copper);
+            box-shadow: 0 0 40px rgba(200,121,65,0.4), 0 0 80px rgba(200,121,65,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .hero-btn-secondary {
+            background: rgba(200,121,65,0.1);
+            border-color: transparent;
+        }
+        .hero-btn-secondary:hover {
+            background: rgba(200,121,65,0.2);
+            border-color: var(--accent-copper);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+        }
+        .scroll-indicator span {
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+        }
+        .scroll-line {
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, var(--accent-copper), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+            .hero-content { opacity: 1; transform: none; }
+            .hero-subtitle, .scroll-indicator { opacity: 1; }
         }
 
-        .nav-link:hover::after {
+        #gallery {
+            min-height: 100vh;
+            padding: 8rem 8%;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        .section-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.6em;
+            text-transform: uppercase;
+            color: var(--accent-copper);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .section-label::before, .section-label::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--accent-copper);
+            opacity: 0.5;
+        }
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: 0.08em;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
             width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            background: linear-gradient(145deg, rgba(8,8,16,0.95) 0%, rgba(3,3,6,0.98) 100%);
+            border: 1px solid rgba(200,121,65,0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(200,121,65,0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(200,121,65,0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item:hover::before, .gallery-item:focus-within::before { opacity: 1; }
+        .gallery-item:hover::after, .gallery-item:focus-within::after { opacity: 1; }
+        .gallery-item:hover, .gallery-item:focus-within {
+            border-color: rgba(200,121,65,0.5);
+            transform: translateY(-12px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(200,121,65,0.15);
+        }
+        .gallery-visual {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 5rem;
+            font-weight: 200;
+            color: rgba(200,121,65,0.08);
+            transition: all 0.6s ease;
+        }
+        .gallery-item:hover .gallery-visual, .gallery-item:focus-within .gallery-visual {
+            color: rgba(200,121,65,0.25);
+            transform: scale(1.1);
+        }
+        .gallery-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(3,3,6,0.98) 0%, rgba(3,3,6,0.8) 50%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gallery-item:hover .gallery-info, .gallery-item:focus-within .gallery-info {
+            transform: translateY(0);
+        }
+        .gallery-info h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+        .gallery-info p {
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.03em;
+        }
+
+        #journey {
+            min-height: 300vh;
+            padding: 10rem 8%;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .journey-container {
+            display: flex;
+            gap: 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            position: sticky;
+            top: 12rem;
+        }
+        .journey-text { flex: 1; max-width: 500px; }
+        .journey-visual {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+            position: relative;
+        }
+        .journey-stage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .journey-stage.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .stage-visual {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stage-sketch {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-copper), transparent);
+            position: relative;
+        }
+        .stage-sketch::before, .stage-sketch::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(200,121,65,0.4);
+            border-radius: 50%;
+            animation: pulse 3s ease infinite;
+        }
+        .stage-sketch::before { top: -60px; left: 15%; opacity: 0.3; animation-delay: 0s; }
+        .stage-sketch::after { top: -60px; right: 15%; opacity: 0.5; animation-delay: 1.5s; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
+        
+        .stage-draft {
+            width: 70%;
+            aspect-ratio: 16/9;
+            border: 1px solid rgba(200,121,65,0.5);
+            position: relative;
+            background: linear-gradient(135deg, rgba(200,121,65,0.08) 0%, transparent 50%);
+            box-shadow: 0 0 60px rgba(200,121,65,0.1);
+        }
+        .stage-draft::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-copper), transparent);
+        }
+        .stage-draft::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 20%;
+            width: 60%;
+            height: 40%;
+            border: 1px solid rgba(200,121,65,0.3);
+            border-radius: 50%;
+        }
+        
+        .stage-complete {
+            width: 75%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(200,121,65,0.15) 0%, rgba(157,142,201,0.08) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--accent-copper);
+            border: 1px solid rgba(200,121,65,0.4);
+            box-shadow: 0 0 80px rgba(200,121,65,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .stage-complete::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(200,121,65,0.1) 50%, transparent 60%);
+            animation: shimmer 3s ease infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .journey-text-item {
+            margin-bottom: 3.5rem;
+            opacity: 0.25;
+            transform: translateX(-40px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-left: 2rem;
+            border-left: 2px solid transparent;
+        }
+        .journey-text-item.active {
+            opacity: 1;
+            transform: translateX(0);
+            border-left-color: var(--accent-copper);
+        }
+        .journey-text-item h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            color: var(--accent-copper);
+        }
+        .journey-text-item p {
+            color: var(--fg-muted);
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+        .journey-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--fg-muted);
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+        }
+
+        #specs {
+            min-height: 100vh;
+            padding: 8rem 8%;
+            justify-content: center;
+        }
+        .specs-container {
+            max-width: 1400px;
+            width: 100%;
+            display: flex;
+            gap: 5rem;
+            align-items: center;
+        }
+        .specs-hud {
+            flex: 1;
+            position: relative;
+            min-height: 550px;
+        }
+        .hud-element {
+            position: absolute;
+            padding: 1.8rem 2rem;
+            border: 1px solid rgba(200,121,65,0.3);
+            background: rgba(3,3,6,0.9);
+            backdrop-filter: blur(15px);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hud-element.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .hud-element::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 25px;
+            right: 25px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-copper), transparent);
+        }
+        .hud-element .value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--accent-copper);
+            line-height: 1;
+        }
+        .hud-element .unit {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--fg-muted);
+            margin-left: 0.3rem;
+        }
+        .hud-element .label {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            margin-top: 0.7rem;
+        }
+        .hud-1 { top: 0; left: 0; transition-delay: 0.1s; }
+        .hud-2 { top: 0; right: 0; transition-delay: 0.2s; }
+        .hud-3 { bottom: 120px; left: 40px; transition-delay: 0.3s; }
+        .hud-4 { bottom: 120px; right: 40px; transition-delay: 0.4s; }
+        .hud-5 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition-delay: 0.5s;
+        }
+        .hud-5.visible { transform: translate(-50%, -50%) scale(1); }
+        .hud-center {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 1px solid var(--accent-copper);
+            background: radial-gradient(circle, rgba(200,121,65,0.15) 0%, transparent 70%);
+            position: relative;
+        }
+        .hud-center::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(200,121,65,0.2);
+            border-radius: 50%;
+            animation: hudSpin 20s linear infinite;
+        }
+        @keyframes hudSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .hud-center .value { font-size: 4rem; }
+        .specs-info { flex: 1; }
+        .specs-info .section-label { text-align: left; justify-content: flex-start; }
+        .specs-info .section-label::before { display: none; }
+        .specs-info .section-title { text-align: left; margin-bottom: 2rem; }
+        .specs-info p {
+            color: var(--fg-muted);
+            margin-bottom: 2.5rem;
+            max-width: 520px;
+            line-height: 1.9;
+        }
+        .specs-list { list-style: none; }
+        .specs-list li {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .specs-list li:hover {
+            padding-left: 0.5rem;
+            border-bottom-color: rgba(200,121,65,0.3);
+        }
+        .specs-list li::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-copper);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+        }
+
+        #contact {
+            min-height: 60vh;
+            padding: 8rem 8%;
+            justify-content: center;
+            background: linear-gradient(to top, rgba(3,3,6,1) 0%, transparent 100%);
+        }
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        .contact-container .section-title {
+            margin-bottom: 1.5rem;
+        }
+        .contact-desc {
+            color: var(--fg-muted);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+        .contact-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .contact-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(8,8,16,0.8);
+            border: 1px solid rgba(200,121,65,0.2);
+            color: var(--fg);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .contact-input:focus {
+            outline: none;
+            border-color: var(--accent-copper);
+            box-shadow: 0 0 20px rgba(200,121,65,0.2);
+        }
+        .contact-input::placeholder {
+            color: var(--fg-muted);
+        }
+
+        footer {
+            position: relative;
+            padding: 5rem 8%;
+            background: var(--bg-deep);
+            z-index: 20;
+            border-top: 1px solid rgba(200,121,65,0.1);
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .footer-logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+        }
+        .footer-logo span { color: var(--accent-copper); }
+        .footer-links {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--fg-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+        .footer-links a:hover, .footer-links a:focus {
+            color: var(--accent-copper);
+        }
+        .footer-copy {
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            color: var(--fg-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-copper), var(--accent-orange), var(--accent-violet));
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+        
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loading-logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.2s forwards;
+        }
+        .loading-logo span { color: var(--accent-copper); }
+        .loading-bar {
+            width: 220px;
+            height: 2px;
+            background: rgba(200,121,65,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-copper), var(--accent-orange));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .loading-text {
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 1024px) {
+            nav { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            #hero, #gallery, #journey, #specs, #contact { padding: 4rem 5%; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .journey-container { flex-direction: column; gap: 2.5rem; }
+            .specs-container { flex-direction: column; }
+            .specs-hud { width: 100%; min-height: 450px; }
+            .contact-form { flex-direction: column; }
+        }
+        @media (max-width: 640px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.2rem; }
+            .hero-buttons { flex-direction: column; }
+            .hud-element { padding: 1.2rem 1.5rem; }
+            .hud-element .value { font-size: 2rem; }
+            .hud-center { width: 120px; height: 120px; }
+            .hud-center .value { font-size: 2.5rem; }
+            .footer-content { flex-direction: column; text-align: center; }
+            .journey-container { top: 8rem; }
+        }
+        
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     </style>
 </head>
 <body>
-    <div class="noise-overlay" aria-hidden="true"></div>
-    
-    <!-- Custom cursor -->
-    <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-    <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+    <div class="loading-screen" id="loadingScreen" role="status" aria-label="Загрузка">
+        <div class="loading-logo">Aero<span>Space</span></div>
+        <div class="loading-bar"><div class="loading-progress" id="loadingProgress"></div></div>
+        <div class="loading-text">Инициализация системы</div>
+    </div>
+    <div class="progress-bar" id="progressBar"></div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 md:py-6 transition-all duration-500" id="navbar">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="font-serif text-2xl md:text-3xl tracking-wide transition-opacity hover:opacity-70" style="color: var(--coffee);">
-                Slow Morning
-            </a>
-            <div class="hidden md:flex items-center gap-12">
-                <a href="#philosophy" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Философия</a>
-                <a href="#menu" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Меню</a>
-                <a href="#process" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Процесс</a>
-                <a href="#contact" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Найти нас</a>
-            </div>
-            <button class="md:hidden p-2 -mr-2" id="menuToggle" aria-label="Открыть меню">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                    <line x1="4" y1="7" x2="20" y2="7"></line>
-                    <line x1="4" y1="17" x2="20" y2="17"></line>
-                </svg>
-            </button>
-        </div>
+    <nav role="navigation" id="mainNav">
+        <a href="#hero" class="logo">Aero<span>Space</span></a>
+        <ul class="nav-links">
+            <li><a href="#hero">Главная</a></li>
+            <li><a href="#gallery">Производство</a></li>
+            <li><a href="#journey">Разработка</a></li>
+            <li><a href="#specs">Характеристики</a></li>
+            <li><a href="#contact">Контакты</a></li>
+        </ul>
     </nav>
 
-    <!-- Mobile Menu -->
-    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="menuOverlay"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full p-8 transform translate-x-full transition-transform duration-500" style="background: var(--cream);" id="menuPanel">
-            <button class="absolute top-6 right-6 p-2" id="closeMenu" aria-label="Закрыть меню">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                    <line x1="6" y1="18" x2="18" y2="6"></line>
-                </svg>
-            </button>
-            <div class="flex flex-col gap-8 mt-20">
-                <a href="#philosophy" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Философия</a>
-                <a href="#menu" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Меню</a>
-                <a href="#process" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Процесс</a>
-                <a href="#contact" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Найти нас</a>
-            </div>
-        </div>
-    </div>
+    <div id="canvas-container" aria-hidden="true"></div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="light-beam" aria-hidden="true"></div>
-        
-        <!-- Glow orbs -->
-        <div class="glow-orb" style="top: 20%; left: 10%; width: 300px; height: 300px; background: var(--gold); opacity: 0.08;" aria-hidden="true"></div>
-        <div class="glow-orb" style="bottom: 30%; right: 5%; width: 250px; height: 250px; background: var(--rose); opacity: 0.06;" aria-hidden="true"></div>
-        
-        <!-- Floating beans -->
-        <svg class="floating-bean slow" style="top: 15%; left: 8%; width: 50px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none"/>
-        </svg>
-        
-        <svg class="floating-bean medium" style="top: 25%; right: 12%; width: 35px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(30 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(30 20 30)"/>
-        </svg>
-        
-        <svg class="floating-bean fast" style="bottom: 35%; left: 15%; width: 25px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(-20 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(-20 20 30)"/>
-        </svg>
-        
-        <svg class="floating-bean slow" style="bottom: 25%; right: 20%; width: 40px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(45 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(45 20 30)"/>
-        </svg>
-        
-        <!-- Decorative plant -->
-        <svg class="plant-decoration" style="top: 8%; left: 3%; width: 180px;" viewBox="0 0 100 150" aria-hidden="true">
-            <path d="M50 150 Q35 100 50 50 Q65 100 50 150" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="28" cy="55" rx="22" ry="38" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-25 28 55)"/>
-            <ellipse cx="72" cy="65" rx="22" ry="38" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(25 72 65)"/>
-        </svg>
-        
-        <div class="relative z-10 h-full flex flex-col">
-            <div class="flex-1 flex items-center justify-center px-6 pt-24">
-                <div class="text-center max-w-4xl">
-                    <p class="text-sm md:text-base tracking-[0.35em] uppercase mb-8 animate-fadeIn" style="color: var(--muted); animation-delay: 0.3s; opacity: 0;">
-                        Авторская кофейня
-                    </p>
-                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-10 animate-fadeInUp" style="color: var(--coffee); animation-delay: 0.5s; opacity: 0;">
-                        Slow Morning
-                    </h1>
-                    <p class="text-lg md:text-xl max-w-xl mx-auto mb-14 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.7s; opacity: 0; line-height: 1.8;">
-                        Кофе — это не просто напиток для бодрости.<br>
-                        Это повод остановиться и насладиться моментом.
-                    </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fadeInUp" style="animation-delay: 0.9s; opacity: 0;">
-                        <a href="#menu" class="btn-primary">
-                            <span>Исследовать вкусы</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M19 12l-7 7-7-7"/>
-                            </svg>
-                        </a>
-                        <a href="#philosophy" class="btn-secondary">
-                            <span>О нас</span>
-                        </a>
-                    </div>
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <p class="hero-subtitle">Инженерное искусство</p>
+                <h1 class="hero-title">Величие мысли,<strong>эстетика высоты</strong></h1>
+                <p class="hero-desc">Мы создаём не просто самолёты — мы проектируем будущее. Каждая линия, каждый изгиб — это симфония технологий и красоты, воплощённая в металле и композитах.</p>
+                <div class="hero-buttons">
+                    <button class="hero-btn" type="button">
+                        <span>Открыть горизонты</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    <button class="hero-btn hero-btn-secondary" type="button">
+                        <span>Узнать больше</span>
+                    </button>
                 </div>
             </div>
-            
-            <!-- Coffee cup illustration -->
-            <div class="flex justify-center pb-16 md:pb-24">
-                <div class="coffee-cup-container animate-fadeIn" style="animation-delay: 1.1s; opacity: 0;">
-                    <div class="coffee-cup">
-                        <div class="steam-container">
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                        </div>
-                        <div class="cup-body">
-                            <div class="cup-coffee">
-                                <div class="coffee-surface"></div>
-                                <div class="coffee-ripple"></div>
-                                <div class="coffee-ripple"></div>
-                                <div class="coffee-ripple"></div>
-                                <svg class="latte-art" viewBox="0 0 110 90" aria-hidden="true">
-                                    <defs>
-                                        <radialGradient id="latteGrad" cx="50%" cy="50%">
-                                            <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.9"/>
-                                            <stop offset="70%" stop-color="var(--latte)" stop-opacity="0.5"/>
-                                            <stop offset="100%" stop-color="var(--latte)" stop-opacity="0"/>
-                                        </radialGradient>
-                                    </defs>
-                                    <!-- Rosetta pattern -->
-                                    <ellipse cx="55" cy="50" rx="40" ry="30" fill="url(#latteGrad)"/>
-                                    <path d="M55 20 Q45 35 55 50 Q65 35 55 20" fill="var(--latte)" opacity="0.7"/>
-                                    <path d="M55 30 Q48 42 55 55 Q62 42 55 30" fill="var(--latte)" opacity="0.6"/>
-                                    <path d="M55 40 Q50 48 55 58 Q60 48 55 40" fill="var(--latte)" opacity="0.5"/>
-                                    <path d="M35 45 Q40 55 55 60 Q70 55 75 45" stroke="var(--latte)" stroke-width="3" fill="none" opacity="0.4"/>
-                                    <path d="M30 50 Q38 60 55 65 Q72 60 80 50" stroke="var(--latte)" stroke-width="2" fill="none" opacity="0.3"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="cup-handle"></div>
-                    </div>
-                    <div class="saucer"></div>
-                </div>
+            <div class="scroll-indicator">
+                <span>Прокрутите вниз</span>
+                <div class="scroll-line"></div>
             </div>
-        </div>
-        
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-40 animate-fadeIn" style="animation-delay: 1.5s;">
-            <span class="text-xs tracking-[0.25em] uppercase" style="color: var(--muted);">Листайте</span>
-            <div class="w-px h-10 bg-gradient-to-b from-current to-transparent" style="color: var(--muted);"></div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Philosophy Section -->
-    <section class="py-28 md:py-36 px-6 relative overflow-hidden" id="philosophy" style="background: var(--bg-warm);">
-        <div class="glow-orb" style="top: -10%; right: -5%; width: 400px; height: 400px; background: var(--accent); opacity: 0.1;" aria-hidden="true"></div>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Философия</span>
-                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5 mb-10 leading-tight" style="color: var(--coffee);">
-                        Лучший кофе — тот,<br>
-                        <em class="opacity-80">который пьётся в тишине</em>
-                    </h2>
-                    <div class="space-y-7 text-lg" style="color: var(--fg-light);">
-                        <p>
-                            Мы не торопим вас. В «Slow Morning» время течёт иначе — 
-                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
-                        </p>
-                        <p>
-                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
-                            насыпает зёрна, до последнего глотка, оставляющего тепло где-то внутри.
-                        </p>
-                    </div>
-                    
-                    <div class="quote-text mt-10 font-serif text-xl italic" style="color: var(--muted);">
-                        Кофе — это не продукт.<br>Это отношение.
-                    </div>
-                </div>
-                
-                <div class="reveal-scale" style="transition-delay: 0.2s;">
-                    <div class="relative">
-                        <!-- Stylized coffee bean illustration -->
-                        <svg viewBox="0 0 400 400" class="w-full max-w-md mx-auto" aria-hidden="true">
-                            <!-- Background glow -->
-                            <defs>
-                                <radialGradient id="glow" cx="50%" cy="50%">
-                                    <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.4"/>
-                                    <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                                </radialGradient>
-                                <linearGradient id="beanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#5C3D2E"/>
-                                    <stop offset="50%" stop-color="var(--coffee)"/>
-                                    <stop offset="100%" stop-color="#1A0F0A"/>
-                                </linearGradient>
-                            </defs>
-                            <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
-                            
-                            <!-- Decorative circles -->
-                            <circle cx="200" cy="200" r="140" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.3"/>
-                            <circle cx="200" cy="200" r="100" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-                            
-                            <!-- Coffee beans -->
-                            <g fill="url(#beanGrad)" opacity="0.95">
-                                <ellipse cx="150" cy="180" rx="48" ry="70" transform="rotate(-35 150 180)"/>
-                                <path d="M150 120 Q168 180 150 240" stroke="var(--bg-warm)" stroke-width="4" fill="none"/>
-                                
-                                <ellipse cx="255" cy="195" rx="52" ry="75" transform="rotate(25 255 195)"/>
-                                <path d="M255 130 Q275 195 255 260" stroke="var(--bg-warm)" stroke-width="4" fill="none"/>
-                                
-                                <ellipse cx="180" cy="290" rx="42" ry="60" transform="rotate(15 180 290)"/>
-                                <path d="M180 240 Q198 290 180 340" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
-                            </g>
-                            
-                            <!-- Texture lines -->
-                            <g stroke="var(--gold)" stroke-width="0.5" opacity="0.25">
-                                <line x1="80" y1="100" x2="320" y2="100"/>
-                                <line x1="60" y1="160" x2="340" y2="160"/>
-                                <line x1="70" y1="330" x2="330" y2="330"/>
-                            </g>
-                            
-                            <!-- Accent dots -->
-                            <circle cx="320" cy="120" r="4" fill="var(--gold)" opacity="0.4"/>
-                            <circle cx="90" cy="280" r="3" fill="var(--gold)" opacity="0.3"/>
-                        </svg>
-                        
-                        <!-- Floating label -->
-                        <div class="absolute top-8 right-0 font-serif italic text-lg px-4 py-2 rounded-lg" style="color: var(--muted); background: rgba(253, 248, 243, 0.8);">
-                            Обжарено с душой
-                        </div>
-                    </div>
-                </div>
+        <section id="gallery">
+            <div class="section-header">
+                <p class="section-label">Производственные мощности</p>
+                <h2 class="section-title">Там, где рождается полёт</h2>
             </div>
-        </div>
-    </section>
-
-    <!-- Origin Map Section -->
-    <section class="py-24 md:py-32 px-6 relative" style="background: var(--cream);">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Происхождение</span>
-                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5" style="color: var(--coffee);">
-                    Откуда наш кофе
-                </h2>
-            </div>
-            
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay: 0.2s;">
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--olive);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Эфиопия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Иргачеффе, Сидамо</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Колыбель кофе. Цветочные ноты и яркая цитрусовая кислотность.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--copper);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Колумбия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Уила, Нариньо</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Карамельная сладость, сбалансированность и мягкое тело.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--rose);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Кения</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Абердар, Ньери</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Яркая ягодная кислотность, сложный вкусовой профиль.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--accent);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Бразилия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Серрадо, Сул-де-Минас</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Мягкий, ореховый, с нотами молочного шоколада.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--fg);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Гватемала</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Антигуа, Уэуэтенанго</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Дымные ноты, пряности, вулканические почвы.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--gold);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Коста-Рика</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Тарразу, Центральная долина</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Чистый, яркий, с медовой сладостью.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Menu Section -->
-    <section class="py-28 md:py-36 px-6 relative" id="menu" style="background: var(--bg);">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Не просто напитки</span>
-                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5" style="color: var(--coffee);">
-                    Наши вкусы
-                </h2>
-                <p class="mt-8 text-lg max-w-xl mx-auto" style="color: var(--muted);">
-                    Наведите на название, чтобы узнать вкусовой профиль
-                </p>
-            </div>
-            
-            <div class="reveal" style="transition-delay: 0.15s;">
-                <!-- Menu items -->
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Эфиопия Иргачеффе</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, V60</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">280 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--olive), var(--rose));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Ноты жасмина, спелого персика и лёгкая цитрусовая кислинка. 
-                            Чашка весеннего сада.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(139, 154, 125, 0.15); color: var(--olive);">Цветочный</span>
-                            <span class="flavor-tag" style="background: rgba(212, 165, 165, 0.2); color: var(--rose);">Фруктовый</span>
-                        </div>
-                    </div>
+            <div class="gallery-grid">
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">T</div>
+                    <div class="gallery-info"><h3>Турбинный цех</h3><p>Точность до микрона в каждом компоненте.</p></div>
                 </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Колумбия Уила</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Эспрессо, doppio</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">220 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--copper), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Карамельная сладость, ноты горького шоколада и ореховое послевкусие. 
-                            Утро в горах.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(184, 115, 51, 0.15); color: var(--copper);">Нутовый</span>
-                            <span class="flavor-tag" style="background: rgba(61, 35, 20, 0.1); color: var(--coffee);">Шоколадный</span>
-                        </div>
-                    </div>
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">C</div>
+                    <div class="gallery-info"><h3>Композиты</h3><p>Сотканы из прочности и лёгкости.</p></div>
                 </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Кения Абердар</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, Kalita</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">320 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--rose), var(--accent));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Яркая смородиновая кислинка, томное послевкусие сушеных ягод. 
-                            Африка в каждой чашке.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(212, 165, 165, 0.2); color: var(--rose);">Ягодный</span>
-                            <span class="flavor-tag" style="background: rgba(139, 154, 125, 0.15); color: var(--olive);">Сбалансированный</span>
-                        </div>
-                    </div>
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">W</div>
+                    <div class="gallery-info"><h3>Сборка крыла</h3><p>Аэродинамическое совершенство формы.</p></div>
                 </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Бразилия Серрадо</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Эспрессо, лунго</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">200 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--accent), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Мягкий, с нотами молочного шоколада и жареного фундука. 
-                            Идеальный компаньон для неторопливой беседы.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(196, 164, 132, 0.2); color: var(--accent);">Мягкий</span>
-                            <span class="flavor-tag" style="background: rgba(184, 115, 51, 0.15); color: var(--copper);">Ореховый</span>
-                        </div>
-                    </div>
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">A</div>
+                    <div class="gallery-info"><h3>Авионика</h3><p>Мозг современного самолёта.</p></div>
                 </article>
-                
-                <article class="menu-item" style="border-bottom: none;">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Гватемала Антигуа</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, Chemex</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">350 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--fg), var(--copper));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Дымные ноты, пряности и темный шоколад. 
-                            Вкус вулканических почв и древних городов.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(74, 55, 40, 0.12); color: var(--fg-light);">Пряный</span>
-                            <span class="flavor-tag" style="background: rgba(61, 35, 20, 0.1); color: var(--coffee);">Насыщенный</span>
-                        </div>
-                    </div>
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">F</div>
+                    <div class="gallery-info"><h3>Фюзеляж</h3><p>Гармония формы и функции.</p></div>
+                </article>
+                <article class="gallery-item" tabindex="0">
+                    <div class="gallery-visual">P</div>
+                    <div class="gallery-info"><h3>Испытания</h3><p>Тысячи часов краш-тестов.</p></div>
                 </article>
             </div>
-            
-            <div class="text-center mt-16 reveal">
-                <p class="text-sm" style="color: var(--muted);">
-                    Также спросите бариста о сезонных альтернативах и дрип-пакетах домой
-                </p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Process Section -->
-    <section class="split-section" id="process">
-        <div class="texture-panel relative flex items-center justify-center p-8 md:p-12">
-            <!-- Stylized hand/tamper illustration -->
-            <svg viewBox="0 0 400 500" class="w-full h-full max-w-sm" aria-hidden="true">
-                <!-- Background warmth -->
-                <defs>
-                    <radialGradient id="warmth" cx="50%" cy="50%">
-                        <stop offset="0%" stop-color="var(--copper)" stop-opacity="0.12"/>
-                        <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                    </radialGradient>
-                </defs>
-                <circle cx="200" cy="250" r="200" fill="url(#warmth)"/>
-                
-                <!-- Decorative rings -->
-                <circle cx="200" cy="250" r="150" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-                <circle cx="200" cy="250" r="100" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-                
-                <!-- Tamper -->
-                <g transform="translate(120, 80)">
-                    <!-- Handle -->
-                    <rect x="60" y="0" width="40" height="200" rx="20" fill="var(--coffee)"/>
-                    <rect x="65" y="10" width="15" height="180" rx="7" fill="rgba(255,255,255,0.05)"/>
-                    <ellipse cx="80" cy="200" rx="55" ry="18" fill="var(--coffee)"/>
-                    
-                    <!-- Base -->
-                    <rect x="25" y="200" width="110" height="35" rx="3" fill="var(--fg)"/>
-                    <rect x="30" y="205" width="100" height="5" rx="2" fill="rgba(255,255,255,0.08)"/>
-                    
-                    <!-- Coffee grounds texture -->
-                    <g fill="var(--coffee)" opacity="0.5">
-                        <circle cx="45" cy="240" r="3"/>
-                        <circle cx="65" cy="244" r="2"/>
-                        <circle cx="85" cy="238" r="2.5"/>
-                        <circle cx="105" cy="242" r="2"/>
-                        <circle cx="125" cy="239" r="2"/>
-                        <circle cx="55" cy="248" r="1.5"/>
-                        <circle cx="95" cy="250" r="2"/>
-                        <circle cx="115" cy="247" r="1.5"/>
-                    </g>
-                    
-                    <!-- Portafilter basket -->
-                    <ellipse cx="80" cy="250" rx="60" ry="15" fill="none" stroke="var(--muted)" stroke-width="2"/>
-                </g>
-                
-                <!-- Decorative elements -->
-                <g stroke="var(--gold)" stroke-width="0.5" opacity="0.3">
-                    <line x1="50" y1="380" x2="350" y2="380"/>
-                    <line x1="70" y1="410" x2="330" y2="410"/>
-                    <line x1="100" y1="440" x2="300" y2="440"/>
-                </g>
-                
-                <!-- Steam/aroma lines -->
-                <g stroke="var(--muted)" stroke-width="1" fill="none" opacity="0.25">
-                    <path d="M170 60 Q165 40 175 20 Q185 0 170 -20"/>
-                    <path d="M200 50 Q195 30 205 10 Q215 -10 200 -30"/>
-                    <path d="M230 60 Q225 40 235 20 Q245 0 230 -20"/>
-                </g>
-            </svg>
-            
-            <!-- Temperature curve overlay -->
-            <svg class="temp-curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <path class="curve-line" d="M0 90 Q25 85 40 60 Q55 35 70 40 Q85 45 100 20"/>
-            </svg>
-        </div>
-        
-        <div class="flex items-center p-8 md:p-12 lg:p-20" style="background: var(--cream);">
-            <div class="reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Процесс</span>
-                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mt-5 mb-10 leading-tight" style="color: var(--coffee);">
-                    Обжарка маленькими партиями
-                </h2>
-                <div class="space-y-7 text-lg" style="color: var(--fg-light);">
-                    <p>
-                        Мы обжариваем зерно маленькими партиями, чтобы сохранить 
-                        аромат и раскрыть характер каждого региона.
-                    </p>
-                    <p>
-                        Каждый день наши бариста калибруют оборудование, 
-                        пробуют эспрессо и настраивают рецепты — 
-                        чтобы ваша чашка была идеальной.
-                    </p>
+        <section id="journey">
+            <h2 class="visually-hidden">Путь к небу</h2>
+            <div class="journey-container">
+                <div class="journey-text">
+                    <div class="journey-text-item" data-stage="0">
+                        <div class="journey-number">01 / 04</div>
+                        <h3>Замысел</h3>
+                        <p>Начало с чистого листа. Инженеры и дизайнеры работают вместе, создавая первоначальные эскизы и концепции будущего воздушного судна.</p>
+                    </div>
+                    <div class="journey-text-item" data-stage="1">
+                        <div class="journey-number">02 / 04</div>
+                        <h3>Проектирование</h3>
+                        <p>Цифровая модель рождается в суперкомпьютерах. Каждая деталь просчитывается с точностью до нанометров.</p>
+                    </div>
+                    <div class="journey-text-item" data-stage="2">
+                        <div class="journey-number">03 / 04</div>
+                        <h3>Создание</h3>
+                        <p>Рождение компонентов. Роботизированные линии и мастера своего дела воплощают чертежи в реальность.</p>
+                    </div>
+                    <div class="journey-text-item" data-stage="3">
+                        <div class="journey-number">04 / 04</div>
+                        <h3>Первый полёт</h3>
+                        <p>Отрыв от земли. Момент истины, когда годы работы получают своё подтверждение в небе.</p>
+                    </div>
                 </div>
-                
-                <div class="mt-12 flex flex-wrap gap-5">
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">12</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">регионов мира</span>
+                <div class="journey-visual">
+                    <div class="journey-stage active" data-stage="0">
+                        <div class="stage-visual"><div class="stage-sketch"></div></div>
                     </div>
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">4</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">года обжарки</span>
+                    <div class="journey-stage" data-stage="1">
+                        <div class="stage-visual"><div class="stage-draft"></div></div>
                     </div>
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">∞</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">внимания</span>
+                    <div class="journey-stage" data-stage="2">
+                        <div class="stage-visual"><div class="stage-complete">AS-1</div></div>
+                    </div>
+                    <div class="journey-stage" data-stage="3">
+                        <div class="stage-visual"><div class="stage-complete" style="background: linear-gradient(135deg, rgba(255,107,53,0.25) 0%, rgba(200,121,65,0.15) 100%);">FLIGHT</div></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section class="py-28 md:py-36 px-6 relative overflow-hidden" id="contact" style="background: var(--bg-warm);">
-        <!-- Decorative plant -->
-        <svg class="plant-decoration" style="bottom: 5%; right: 5%; width: 220px;" viewBox="0 0 150 200" aria-hidden="true">
-            <path d="M75 200 Q60 150 75 100 Q90 150 75 200" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="40" cy="80" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-15 40 80)"/>
-            <ellipse cx="110" cy="90" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(15 110 90)"/>
-            <ellipse cx="75" cy="50" rx="30" ry="45" fill="none" stroke="var(--olive)" stroke-width="0.5"/>
-        </svg>
-        
-        <div class="glow-orb" style="top: 10%; left: -5%; width: 300px; height: 300px; background: var(--gold); opacity: 0.06;" aria-hidden="true"></div>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-16 md:gap-24">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Найти нас</span>
-                    <h2 class="font-serif text-4xl md:text-5xl mt-5 mb-10" style="color: var(--coffee);">
-                        Приходите за тишиной
-                    </h2>
-                    
-                    <div class="space-y-10">
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Адрес</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                ул. Тихая, 14<br>
-                                двор «Архитектор», второй этаж
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Время жить</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                Будни: 8:00 — 22:00<br>
-                                Выходные: 9:00 — 21:00
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Связь</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                <a href="tel:+78001234567" class="hover:underline underline-offset-4 decoration-var(--copper) transition-colors hover:text-var(--coffee)">+7 800 123-45-67</a><br>
-                                <a href="mailto:hello@slowmorning.ru" class="hover:underline underline-offset-4 decoration-var(--copper) transition-colors hover:text-var(--coffee)">hello@slowmorning.ru</a>
-                            </p>
-                        </div>
+        <section id="specs">
+            <div class="specs-container">
+                <div class="specs-hud">
+                    <div class="hud-element hud-1">
+                        <div class="value">0<span class="unit">км/ч</span></div>
+                        <div class="label">Крейсерская скорость</div>
+                    </div>
+                    <div class="hud-element hud-2">
+                        <div class="value">0<span class="unit">км</span></div>
+                        <div class="label">Дальность полёта</div>
+                    </div>
+                    <div class="hud-element hud-3">
+                        <div class="value">0<span class="unit">м</span></div>
+                        <div class="label">Потолок</div>
+                    </div>
+                    <div class="hud-element hud-4">
+                        <div class="value">0<span class="unit">л/ч</span></div>
+                        <div class="label">Расход топлива</div>
+                    </div>
+                    <div class="hud-element hud-5 hud-center">
+                        <div class="value">0</div>
+                        <div class="label">Пассажиров</div>
                     </div>
                 </div>
-                
-                <div class="reveal" style="transition-delay: 0.2s;">
-                    <!-- Sketch-style map -->
-                    <div class="map-illustration">
-                        <svg viewBox="0 0 400 300" class="map-svg" aria-label="Схема проезда к кофейне">
-                            <style>
-                                .map-line { fill: none; stroke: var(--fg-light); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-                                .map-dashed { stroke-dasharray: 8 4; }
-                                .map-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); }
-                                .map-label-main { font-family: 'Playfair Display', serif; font-size: 14px; fill: var(--coffee); }
-                                .map-dot { fill: var(--rose); }
-                            </style>
-                            
-                            <!-- Main streets -->
-                            <path class="map-line" d="M50 150 L350 150" opacity="0.25"/>
-                            <path class="map-line" d="M200 50 L200 250" opacity="0.25"/>
-                            
-                            <!-- Side streets -->
-                            <path class="map-line" d="M100 100 L100 200" opacity="0.15"/>
-                            <path class="map-line" d="M300 80 L300 220" opacity="0.15"/>
-                            
-                            <!-- Route to cafe -->
-                            <path class="map-path map-dashed" d="M80 150 L80 120 L150 120 L150 90" style="stroke: var(--copper);"/>
-                            
-                            <!-- Buildings -->
-                            <rect x="120" y="140" width="60" height="40" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            <rect x="240" y="130" width="80" height="50" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            <rect x="60" y="160" width="40" height="30" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            
-                            <!-- Trees/park -->
-                            <circle cx="320" cy="180" r="15" fill="var(--olive)" opacity="0.12"/>
-                            <circle cx="340" cy="200" r="12" fill="var(--olive)" opacity="0.08"/>
-                            
-                            <!-- Cafe location -->
-                            <circle cx="150" cy="90" r="22" fill="var(--cream)" stroke="var(--rose)" stroke-width="2"/>
-                            <circle class="map-dot" cx="150" cy="90" r="7"/>
-                            
-                            <!-- Labels -->
-                            <text x="150" y="130" class="map-label-main" text-anchor="middle">Slow Morning</text>
-                            <text x="200" y="170" class="map-label" text-anchor="middle">ул. Центральная</text>
-                            <text x="200" y="230" class="map-label" text-anchor="middle">Тихий переулок</text>
-                            <text x="80" y="180" class="map-label" text-anchor="middle">Метро</text>
-                            
-                            <!-- Walking person icon -->
-                            <g transform="translate(70, 145)" fill="var(--copper)">
-                                <circle cx="0" cy="0" r="4"/>
-                                <path d="M0 6 L0 14 M-5 10 L5 10 M-4 20 L0 14 L4 20" stroke="var(--copper)" stroke-width="2" fill="none"/>
-                            </g>
-                            
-                            <!-- Decorative arrow -->
-                            <path d="M85 110 L95 105 L95 115 Z" fill="var(--copper)"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-sm mt-5 text-center" style="color: var(--muted);">
-                        Две минуты пешком от метро, через арку с муралом
-                    </p>
+                <div class="specs-info">
+                    <p class="section-label">Технические данные</p>
+                    <h2 class="section-title">AS-350 Horizon</h2>
+                    <p>Флагман нашей линейки. Воплощение инноваций и инженерного мастерства. Каждый элемент спроектирован для максимальной эффективности и комфорта.</p>
+                    <ul class="specs-list">
+                        <li>Композитный фюзеляж нового поколения</li>
+                        <li>Турбовентиляторные двигатели с низкой эмиссией</li>
+                        <li>Активная система гашения турбулентности</li>
+                        <li>Голосовое управление бортовыми системами</li>
+                        <li>Панорамные окна с электрохромным затемнением</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="py-14 px-6" style="background: var(--coffee); color: var(--cream);">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-                <div class="text-center md:text-left">
-                    <span class="font-serif text-2xl">Slow Morning</span>
-                    <p class="mt-2 text-sm opacity-50">Культура потребления</p>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <a href="#" class="social-icon opacity-60 hover:opacity-100 transition-opacity" aria-label="Instagram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="2" y="2" width="20" height="20" rx="5"/>
-                            <circle cx="12" cy="12" r="4"/>
-                            <circle cx="18" cy="6" r="1.5" fill="currentColor" stroke="none"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-icon opacity-60 hover:opacity-100 transition-opacity" aria-label="Telegram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
-                            <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
-                        </svg>
-                    </a>
-                </div>
-                
-                <p class="text-sm opacity-50 text-center md:text-right">
-                    Замедлись. Выдохни. Насладись.
-                </p>
+        <section id="contact">
+            <div class="contact-container">
+                <p class="section-label">Свяжитесь с нами</p>
+                <h2 class="section-title">Готовы к сотрудничеству?</h2>
+                <p class="contact-desc">Оставьте заявку, и наши специалисты свяжутся с вами для обсуждения деталей вашего проекта.</p>
+                <form class="contact-form" onsubmit="return false;">
+                    <input type="email" class="contact-input" placeholder="Ваш email" aria-label="Email адрес">
+                    <button type="submit" class="hero-btn"><span>Отправить</span></button>
+                </form>
             </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Aero<span>Space</span> Dynamics</div>
+            <div class="footer-links">
+                <a href="#">О компании</a>
+                <a href="#">Карьера</a>
+                <a href="#">Пресс-центр</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+            <div class="footer-copy">2024 AeroSpace Dynamics. Все права защищены.</div>
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // ===== CONSTANTS =====
+        const EPS = 0.0001;
+        const PARTICLES_COUNT = 2000;
+        const LIGHT_COUNT = 6;
+
+        // ===== STATE =====
+        let scrollProgress = 0;
+        let targetScrollProgress = 0;
+        let time = 0;
+        let hudAnimated = false;
+        let modelReady = false;
+        const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ===== DOM ELEMENTS =====
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgress = document.getElementById('loadingProgress');
+        const progressBar = document.getElementById('progressBar');
+        const container = document.getElementById('canvas-container');
+        const journeySection = document.getElementById('journey');
+        const specsSection = document.getElementById('specs');
+        const mainNav = document.getElementById('mainNav');
+
+        // ===== THREE.JS SETUP =====
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030306, 0.008);
+
+        const camera = new THREE.PerspectiveCamera(
+            45,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        camera.position.set(20, 5, 25);
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // ===== COLORS =====
+        const colors = {
+            copper: new THREE.Color(0xc87941),
+            orange: new THREE.Color(0xff6b35),
+            violet: new THREE.Color(0x9d8ec9),
+            gold: new THREE.Color(0xd4a855),
+            teal: new THREE.Color(0x4a9d9d),
+            white: new THREE.Color(0xffffff),
+            ambient: new THREE.Color(0x0a0a15)
+        };
+
+        // ===== MATERIALS =====
+        const bodyMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x12121a,
+            metalness: 0.85,
+            roughness: 0.15,
+            clearcoat: 0.4,
+            clearcoatRoughness: 0.1,
+            envMapIntensity: 1.5
+        });
+
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x050510,
+            metalness: 0.0,
+            roughness: 0.0,
+            transmission: 0.85,
+            transparent: true,
+            thickness: 0.5,
+            ior: 1.5
+        });
+
+        const engineMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x0a0a12,
+            metalness: 0.95,
+            roughness: 0.1,
+            clearcoat: 0.3
+        });
+
+        const accentMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xc87941,
+            metalness: 0.8,
+            roughness: 0.25,
+            emissive: 0xc87941,
+            emissiveIntensity: 0.15
+        });
+
+        const wingMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x15151f,
+            metalness: 0.8,
+            roughness: 0.2,
+            clearcoat: 0.3
+        });
+
+        // ===== AIRPLANE GROUP =====
+        const airplane = new THREE.Group();
+        scene.add(airplane);
+
+        // ===== DETAILED AIRPLANE CONSTRUCTION =====
+        function createDetailedAirplane() {
+            // Fuselage - main body
+            const fuselageLength = 18;
+            const fuselageRadius = 1.2;
             
-            // Custom cursor
-            const cursorDot = document.getElementById('cursorDot');
-            const cursorRing = document.getElementById('cursorRing');
-            let mouseX = 0, mouseY = 0;
-            let ringX = 0, ringY = 0;
+            // Create smooth fuselage using lathe geometry
+            const fuselagePoints = [];
+            const segments = 40;
             
-            if (window.matchMedia('(pointer: fine)').matches) {
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                    cursorDot.style.left = mouseX - 4 + 'px';
-                    cursorDot.style.top = mouseY - 4 + 'px';
-                });
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments;
+                const x = t * fuselageLength - fuselageLength / 2;
+                let radius;
                 
-                function animateRing() {
-                    ringX += (mouseX - ringX) * 0.15;
-                    ringY += (mouseY - ringY) * 0.15;
-                    cursorRing.style.left = ringX - 20 + 'px';
-                    cursorRing.style.top = ringY - 20 + 'px';
-                    requestAnimationFrame(animateRing);
+                // Nose cone (front)
+                if (t < 0.12) {
+                    const nt = t / 0.12;
+                    radius = Math.sin(nt * Math.PI * 0.5) * fuselageRadius;
                 }
-                animateRing();
+                // Tail cone (back)
+                else if (t > 0.82) {
+                    const nt = (t - 0.82) / 0.18;
+                    radius = Math.cos(nt * Math.PI * 0.5) * fuselageRadius * 0.8;
+                }
+                // Main body
+                else {
+                    const bt = (t - 0.12) / 0.7;
+                    radius = fuselageRadius * (1 + Math.sin(bt * Math.PI) * 0.08);
+                }
                 
-                // Hover effect on interactive elements
-                const interactiveElements = document.querySelectorAll('a, button, .menu-item');
-                interactiveElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
-                    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
-                });
+                fuselagePoints.push(new THREE.Vector2(Math.max(EPS, radius), x));
             }
             
-            // Scroll reveal animation
-            const revealElements = document.querySelectorAll('.reveal, .reveal-scale');
+            const fuselageGeometry = new THREE.LatheGeometry(fuselagePoints, 48);
+            fuselageGeometry.rotateZ(-Math.PI / 2);
+            const fuselage = new THREE.Mesh(fuselageGeometry, bodyMaterial);
+            fuselage.castShadow = true;
+            fuselage.receiveShadow = true;
+            airplane.add(fuselage);
+
+            // Cockpit windows
+            const cockpitGeometry = new THREE.SphereGeometry(1.4, 32, 24, 0, Math.PI * 2, 0, Math.PI / 2.2);
+            const cockpit = new THREE.Mesh(cockpitGeometry, glassMaterial);
+            cockpit.scale.set(1.0, 0.45, 0.75);
+            cockpit.position.set(5.5, 1.0, 0);
+            cockpit.rotation.z = -0.15;
+            airplane.add(cockpit);
+
+            // Cockpit frame
+            const frameGeometry = new THREE.TorusGeometry(1.4, 0.04, 8, 32, Math.PI);
+            const frameMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x1a1a22,
+                metalness: 0.9,
+                roughness: 0.2
+            });
+            const frameLeft = new THREE.Mesh(frameGeometry, frameMaterial);
+            frameLeft.scale.set(1.0, 0.45, 0.75);
+            frameLeft.position.set(5.5, 1.0, 0.3);
+            frameLeft.rotation.set(Math.PI / 2, 0, -0.15);
+            airplane.add(frameLeft);
             
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
+            const frameRight = frameLeft.clone();
+            frameRight.position.z = -0.3;
+            frameRight.scale.z = -0.75;
+            airplane.add(frameRight);
+
+            // Main wings
+            const wingSpan = 14;
+            const wingChord = 3.5;
+            const wingThickness = 0.35;
+            
+            // Wing shape (airfoil cross-section extruded)
+            const wingShape = new THREE.Shape();
+            wingShape.moveTo(0, 0);
+            wingShape.lineTo(wingChord * 0.15, wingThickness * 0.5);
+            wingShape.lineTo(wingChord * 0.7, wingThickness * 0.3);
+            wingShape.lineTo(wingChord, 0);
+            wingShape.lineTo(wingChord * 0.7, -wingThickness * 0.15);
+            wingShape.lineTo(wingChord * 0.15, -wingThickness * 0.2);
+            wingShape.closePath();
+
+            const wingExtrudeSettings = {
+                depth: wingSpan / 2,
+                bevelEnabled: true,
+                bevelThickness: 0.02,
+                bevelSize: 0.02,
+                bevelSegments: 2
+            };
+
+            const wingGeometry = new THREE.ExtrudeGeometry(wingShape, wingExtrudeSettings);
+            
+            // Right wing
+            const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
+            rightWing.rotation.x = -Math.PI / 2;
+            rightWing.rotation.y = -0.02; // Slight dihedral
+            rightWing.position.set(-0.5, -0.3, 0);
+            rightWing.castShadow = true;
+            rightWing.receiveShadow = true;
+            airplane.add(rightWing);
+
+            // Left wing (mirror)
+            const leftWingGeometry = wingGeometry.clone();
+            const leftWing = new THREE.Mesh(leftWingGeometry, wingMaterial);
+            leftWing.rotation.x = Math.PI / 2;
+            leftWing.rotation.y = -0.02;
+            leftWing.position.set(-0.5, -0.3, 0);
+            leftWing.scale.z = -1;
+            leftWing.castShadow = true;
+            leftWing.receiveShadow = true;
+            airplane.add(leftWing);
+
+            // Winglets
+            const wingletGeometry = new THREE.BoxGeometry(0.08, 1.2, 0.6);
+            const wingletMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x12121a,
+                metalness: 0.8,
+                roughness: 0.2
+            });
+            
+            const rightWinglet = new THREE.Mesh(wingletGeometry, wingletMaterial);
+            rightWinglet.position.set(0.5, 0.5, wingSpan / 2 + 0.3);
+            rightWinglet.rotation.z = 0.15;
+            rightWinglet.rotation.y = -0.1;
+            airplane.add(rightWinglet);
+            
+            const leftWinglet = rightWinglet.clone();
+            leftWinglet.position.z = -wingSpan / 2 - 0.3;
+            leftWinglet.scale.z = -1;
+            airplane.add(leftWinglet);
+
+            // Engines (under wings)
+            function createEngine() {
+                const engineGroup = new THREE.Group();
+                
+                // Nacelle
+                const nacelleGeometry = new THREE.CylinderGeometry(0.55, 0.65, 3.5, 32);
+                nacelleGeometry.rotateZ(Math.PI / 2);
+                const nacelle = new THREE.Mesh(nacelleGeometry, engineMaterial);
+                nacelle.castShadow = true;
+                engineGroup.add(nacelle);
+
+                // Intake ring
+                const intakeGeometry = new THREE.TorusGeometry(0.58, 0.06, 8, 32);
+                const intakeMaterial = new THREE.MeshPhysicalMaterial({
+                    color: 0x2a2a35,
+                    metalness: 0.9,
+                    roughness: 0.1
+                });
+                const intake = new THREE.Mesh(intakeGeometry, intakeMaterial);
+                intake.position.x = 1.76;
+                intake.rotation.y = Math.PI / 2;
+                engineGroup.add(intake);
+
+                // Fan blades
+                const fanGeometry = new THREE.CircleGeometry(0.5, 32);
+                const fanMaterial = new THREE.MeshPhysicalMaterial({
+                    color: 0x252530,
+                    metalness: 0.95,
+                    roughness: 0.05
+                });
+                const fan = new THREE.Mesh(fanGeometry, fanMaterial);
+                fan.position.x = 1.77;
+                fan.rotation.y = Math.PI / 2;
+                engineGroup.add(fan);
+
+                // Spinner
+                const spinnerGeometry = new THREE.ConeGeometry(0.15, 0.4, 16);
+                spinnerGeometry.rotateZ(-Math.PI / 2);
+                const spinner = new THREE.Mesh(spinnerGeometry, engineMaterial);
+                spinner.position.x = 1.9;
+                engineGroup.add spinner;
+
+                // Pylon
+                const pylonGeometry = new THREE.BoxGeometry(0.15, 0.8, 0.6);
+                const pylon = new THREE.Mesh(pylonGeometry, wingMaterial);
+                pylon.position.set(0, 0.7, 0);
+                engineGroup.add(pylon);
+
+                return engineGroup;
+            }
+
+            const rightEngine = createEngine();
+            rightEngine.position.set(0.5, -1.0, 4.5);
+            airplane.add(rightEngine);
+
+            const leftEngine = createEngine();
+            leftEngine.position.set(0.5, -1.0, -4.5);
+            airplane.add(leftEngine);
+
+            // Horizontal stabilizer
+            const hStabGeometry = new THREE.BoxGeometry(1.8, 0.08, 5);
+            const hStab = new THREE.Mesh(hStabGeometry, wingMaterial);
+            hStab.position.set(-7.5, 0.3, 0);
+            hStab.castShadow = true;
+            airplane.add(hStab);
+
+            // Vertical stabilizer (tail fin)
+            const vStabShape = new THREE.Shape();
+            vStabShape.moveTo(0, 0);
+            vStabShape.lineTo(-2.5, 0);
+            vStabShape.lineTo(-3.0, 3.2);
+            vStabShape.lineTo(-0.8, 3.8);
+            vStabShape.closePath();
+
+            const vStabGeometry = new THREE.ExtrudeGeometry(vStabShape, {
+                depth: 0.12,
+                bevelEnabled: false
+            });
+            const vStab = new THREE.Mesh(vStabGeometry, wingMaterial);
+            vStab.position.set(-6.0, 0.8, -0.06);
+            vStab.castShadow = true;
+            airplane.add(vStab);
+
+            // Accent stripe
+            const stripeGeometry = new THREE.BoxGeometry(14, 0.02, 0.15);
+            const stripe = new THREE.Mesh(stripeGeometry, accentMaterial);
+            stripe.position.set(1, 1.22, 0);
+            airplane.add(stripe);
+
+            // Additional stripe
+            const stripe2Geometry = new THREE.BoxGeometry(8, 0.015, 0.1);
+            const stripe2 = new THREE.Mesh(stripe2Geometry, accentMaterial);
+            stripe2.position.set(-4, 1.15, 0);
+            airplane.add(stripe2);
+
+            // Navigation lights
+            const lightGeometry = new THREE.SphereGeometry(0.06, 8, 8);
+            
+            const redLightMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const redLight = new THREE.Mesh(lightGeometry, redLightMaterial);
+            redLight.position.set(-0.5, -0.2, wingSpan / 2 + 0.1);
+            airplane.add(redLight);
+
+            const greenLightMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const greenLight = new THREE.Mesh(lightGeometry, greenLightMaterial);
+            greenLight.position.set(-0.5, -0.2, -wingSpan / 2 - 0.1);
+            airplane.add(greenLight);
+
+            const whiteLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const whiteLight = new THREE.Mesh(lightGeometry, whiteLightMaterial);
+            whiteLight.position.set(-8.5, 1.0, 0);
+            airplane.add(whiteLight);
+
+            // Antenna
+            const antennaGeometry = new THREE.CylinderGeometry(0.02, 0.02, 0.4, 8);
+            const antenna = new THREE.Mesh(antennaGeometry, engineMaterial);
+            antenna.position.set(3, 1.3, 0);
+            airplane.add(antenna);
+
+            // Position airplane
+            airplane.position.set(0, 0, 0);
+            airplane.rotation.y = -0.3;
+            
+            modelReady = true;
+        }
+
+        createDetailedAirplane();
+
+        // ===== LIGHTING SYSTEM =====
+        // Ambient light
+        const ambientLight = new THREE.AmbientLight(0x0a0a15, 0.3);
+        scene.add(ambientLight);
+
+        // Hemisphere light for sky/ground gradient
+        const hemiLight = new THREE.HemisphereLight(0x1a1a30, 0x050508, 0.25);
+        scene.add(hemiLight);
+
+        // Dynamic lights for shadow sweeping effect
+        const dynamicLights = [];
+        const lightColors = [
+            colors.copper,
+            colors.orange,
+            colors.violet,
+            colors.gold,
+            colors.teal,
+            colors.white
+        ];
+
+        for (let i = 0; i < LIGHT_COUNT; i++) {
+            const light = new THREE.SpotLight(lightColors[i].getHex(), 0, 60, Math.PI / 5, 0.4, 1.5);
+            light.castShadow = true;
+            light.shadow.mapSize.width = 512;
+            light.shadow.mapSize.height = 512;
+            light.shadow.bias = -0.001;
+            
+            const angle = (i / LIGHT_COUNT) * Math.PI * 2;
+            light.userData.baseAngle = angle;
+            light.userData.radius = 25;
+            light.userData.height = 8;
+            light.userData.speed = 0.3 + Math.random() * 0.2;
+            
+            scene.add(light);
+            scene.add(light.target);
+            dynamicLights.push(light);
+        }
+
+        // Key light (main illumination)
+        const keyLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        keyLight.position.set(30, 20, 20);
+        keyLight.castShadow = true;
+        scene.add(keyLight);
+
+        // Rim light (edge highlight)
+        const rimLight = new THREE.SpotLight(0xc87941, 2, 80, Math.PI / 6, 0.3, 1);
+        rimLight.position.set(-30, 15, 0);
+        rimLight.target = airplane;
+        scene.add(rimLight);
+
+        // ===== PARTICLES =====
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(PARTICLES_COUNT * 3);
+        const particleSizes = new Float32Array(PARTICLES_COUNT);
+        const particleOffsets = new Float32Array(PARTICLES_COUNT);
+
+        for (let i = 0; i < PARTICLES_COUNT; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI;
+            const radius = 30 + Math.random() * 100;
+            
+            particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+            particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) - 20;
+            particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+            
+            particleSizes[i] = Math.random() * 2.5 + 0.5;
+            particleOffsets[i] = Math.random() * Math.PI * 2;
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('aSize', new THREE.BufferAttribute(particleSizes, 1));
+        particleGeometry.setAttribute('aOffset', new THREE.BufferAttribute(particleOffsets, 1));
+
+        const particleMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 },
+                uColor: { value: colors.copper },
+                uOpacity: { value: 1 },
+                uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
+            },
+            vertexShader: `
+                attribute float aSize;
+                attribute float aOffset;
+                varying float vAlpha;
+                uniform float uTime;
+                uniform float uPixelRatio;
+                
+                void main() {
+                    vAlpha = aSize / 3.0;
+                    
+                    vec3 pos = position;
+                    pos.y += sin(uTime * 0.1 + aOffset) * 1.5;
+                    pos.x += cos(uTime * 0.08 + aOffset) * 1.0;
+                    
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    gl_PointSize = aSize * uPixelRatio * (200.0 / max(-mvPosition.z, 1.0));
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uColor;
+                uniform float uOpacity;
+                varying float vAlpha;
+                
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    
+                    float alpha = smoothstep(0.5, 0.0, dist) * uOpacity * vAlpha * 0.6;
+                    gl_FragColor = vec4(uColor, alpha);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+
+        // ===== HORIZON / BACKGROUND =====
+        const horizonGeometry = new THREE.PlaneGeometry(400, 100);
+        const horizonMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 },
+                uProgress: { value: 0 }
+            },
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float uTime;
+                uniform float uProgress;
+                varying vec2 vUv;
+                
+                void main() {
+                    vec3 baseColor = vec3(0.02, 0.02, 0.04);
+                    vec3 dawnColor = vec3(0.12, 0.06, 0.08);
+                    vec3 dayColor = vec3(0.08, 0.06, 0.12);
+                    vec3 sunsetColor = vec3(0.15, 0.05, 0.02);
+                    
+                    float y = vUv.y;
+                    vec3 color = baseColor;
+                    
+                    // Dawn phase (0-0.3)
+                    if (uProgress > 0.0 && uProgress <= 0.3) {
+                        float t = uProgress / 0.3;
+                        color = mix(baseColor, dawnColor, t);
+                        float glow = smoothstep(0.2, 0.5, y) * smoothstep(0.8, 0.5, y);
+                        color += vec3(0.6, 0.3, 0.1) * glow * t * 0.4;
                     }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -80px 0px'
-            });
-            
-            revealElements.forEach(el => revealObserver.observe(el));
-            
-            // Temperature curve animation
-            const curveLine = document.querySelector('.curve-line');
-            
-            if (curveLine) {
-                const curveObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            curveLine.classList.add('animate');
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                curveObserver.observe(curveLine.closest('.texture-panel'));
-            }
-            
-            // Map path animation
-            const mapPath = document.querySelector('.map-path');
-            
-            if (mapPath) {
-                const mapObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            mapPath.classList.add('animate');
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                mapObserver.observe(mapPath.closest('.map-illustration'));
-            }
-            
-            // Navbar background on scroll
-            const navbar = document.getElementById('navbar');
-            
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                if (currentScroll > 80) {
-                    navbar.style.background = 'rgba(247, 243, 236, 0.95)';
-                    navbar.style.boxShadow = '0 2px 30px rgba(44, 24, 16, 0.06)';
-                    navbar.style.backdropFilter = 'blur(10px)';
-                } else {
-                    navbar.style.background = 'transparent';
-                    navbar.style.boxShadow = 'none';
-                    navbar.style.backdropFilter = 'none';
+                    // Day phase (0.3-0.6)
+                    else if (uProgress > 0.3 && uProgress <= 0.6) {
+                        float t = (uProgress - 0.3) / 0.3;
+                        color = mix(dawnColor, dayColor, t);
+                        float glow = smoothstep(0.25, 0.55, y) * smoothstep(0.85, 0.55, y);
+                        color += vec3(0.4, 0.2, 0.3) * glow * (1.0 - t * 0.5);
+                    }
+                    // Sunset phase (0.6-1.0)
+                    else if (uProgress > 0.6) {
+                        float t = (uProgress - 0.6) / 0.4;
+                        color = mix(dayColor, sunsetColor, t);
+                        float glow = smoothstep(0.15, 0.45, y) * smoothstep(0.75, 0.45, y);
+                        color += vec3(0.7, 0.25, 0.05) * glow * (0.3 + t * 0.4);
+                    }
+                    
+                    // Fade edges
+                    float edgeFade = smoothstep(1.0, 0.7, y) * smoothstep(0.0, 0.2, y);
+                    float sideFade = smoothstep(0.0, 0.2, vUv.x) * smoothstep(1.0, 0.8, vUv.x);
+                    
+                    gl_FragColor = vec4(color, edgeFade * sideFade * 0.85);
                 }
-            });
+            `,
+            transparent: true,
+            depthWrite: false,
+            side: THREE.DoubleSide
+        });
+
+        const horizon = new THREE.Mesh(horizonGeometry, horizonMaterial);
+        horizon.position.set(0, -15, -80);
+        horizon.rotation.x = -Math.PI / 12;
+        scene.add(horizon);
+
+        // ===== ANIMATION LOOP =====
+        function animate() {
+            requestAnimationFrame(animate);
             
-            // Mobile menu
-            const menuToggle = document.getElementById('menuToggle');
-            const closeMenu = document.getElementById('closeMenu');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuPanel = document.getElementById('menuPanel');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            
-            function openMenu() {
-                mobileMenu.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                requestAnimationFrame(() => {
-                    menuPanel.style.transform = 'translateX(0)';
-                });
+            if (isReducedMotion) {
+                renderer.render(scene, camera);
+                return;
             }
             
-            function closeMenuFn() {
-                menuPanel.style.transform = 'translateX(100%)';
+            time += 0.016;
+            
+            // Smooth scroll progress
+            scrollProgress += (targetScrollProgress - scrollProgress) * 0.05;
+
+            // Update particles
+            particleMaterial.uniforms.uTime.value = time;
+            particleMaterial.uniforms.uOpacity.value = Math.max(0.15, 1 - scrollProgress * 0.5);
+            
+            // Update horizon
+            horizonMaterial.uniforms.uTime.value = time;
+            horizonMaterial.uniforms.uProgress.value = scrollProgress;
+
+            // ===== SHADOW SWEEPING EFFECT =====
+            // Animate dynamic lights around the airplane
+            dynamicLights.forEach((light, i) => {
+                const baseAngle = light.userData.baseAngle;
+                const radius = light.userData.radius;
+                const height = light.userData.height;
+                const speed = light.userData.speed;
+                
+                // Light orbits around the airplane
+                const angle = baseAngle + time * speed + scrollProgress * Math.PI * 2;
+                
+                // Add vertical oscillation
+                const yOffset = Math.sin(time * 0.5 + i) * 3;
+                
+                // Position the light
+                light.position.x = Math.cos(angle) * radius;
+                light.position.y = height + yOffset;
+                light.position.z = Math.sin(angle) * radius;
+                
+                // Point at airplane
+                light.target.position.copy(airplane.position);
+                
+                // Intensity based on scroll progress and position
+                const intensityMod = 0.5 + Math.sin(time * 0.3 + i * 0.5) * 0.3;
+                light.intensity = 1.5 + scrollProgress * 2 * intensityMod;
+            });
+
+            // Color transition based on scroll
+            const currentColor = new THREE.Color();
+            if (scrollProgress < 0.33) {
+                currentColor.lerpColors(colors.copper, colors.orange, scrollProgress * 3);
+            } else if (scrollProgress < 0.66) {
+                currentColor.lerpColors(colors.orange, colors.violet, (scrollProgress - 0.33) * 3);
+            } else {
+                currentColor.lerpColors(colors.violet, colors.gold, (scrollProgress - 0.66) * 3);
+            }
+            
+            particleMaterial.uniforms.uColor.value = currentColor;
+            
+            // Update key light color
+            keyLight.color.copy(currentColor);
+            keyLight.intensity = 0.4 + scrollProgress * 0.6;
+            
+            // Update rim light
+            rimLight.intensity = 2 + scrollProgress * 3;
+            rimLight.color.copy(currentColor);
+
+            // ===== AIRPLANE ANIMATION =====
+            if (modelReady) {
+                // Gentle floating motion
+                airplane.position.y = Math.sin(time * 0.4) * 0.15;
+                
+                // Rotation based on scroll
+                airplane.rotation.y = -0.3 + scrollProgress * 0.4;
+                airplane.rotation.x = Math.sin(scrollProgress * Math.PI * 1.5) * 0.03;
+                airplane.rotation.z = Math.sin(time * 0.3) * 0.008;
+            }
+
+            // ===== CAMERA ANIMATION =====
+            const cameraRadius = 25 + scrollProgress * 5;
+            const cameraAngle = -0.3 + scrollProgress * 0.2;
+            
+            camera.position.x = Math.cos(cameraAngle) * cameraRadius;
+            camera.position.y = 5 + Math.sin(scrollProgress * Math.PI * 2) * 3;
+            camera.position.z = Math.sin(cameraAngle) * cameraRadius;
+            
+            camera.lookAt(airplane.position);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // ===== LOADING SIMULATION =====
+        let loadProgress = 0;
+        const loadingInterval = setInterval(() => {
+            loadProgress += 3 + Math.random() * 5;
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(loadingInterval);
                 setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 500);
+                    loadingScreen.classList.add('hidden');
+                }, 400);
+            }
+            if (loadingProgress) {
+                loadingProgress.style.width = `${loadProgress}%`;
+            }
+        }, 40);
+
+        // ===== EVENT LISTENERS =====
+        window.addEventListener('scroll', () => {
+            const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            targetScrollProgress = Math.max(0, Math.min(1, window.scrollY / totalHeight));
+            
+            if (progressBar) {
+                progressBar.style.width = `${targetScrollProgress * 100}%`;
             }
             
-            menuToggle.addEventListener('click', openMenu);
-            closeMenu.addEventListener('click', closeMenuFn);
-            menuOverlay.addEventListener('click', closeMenuFn);
-            menuLinks.forEach(link => link.addEventListener('click', closeMenuFn));
-            
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href === '#') return;
-                    
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        const offsetTop = target.offsetTop - 80;
-                        window.scrollTo({
-                            top: offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Reduced motion check
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-            
-            if (prefersReducedMotion.matches) {
-                document.querySelectorAll('.steam, .floating-bean, .origin-dot, .coffee-ripple').forEach(el => {
-                    el.style.animation = 'none';
-                });
+            // Nav background
+            if (mainNav) {
+                if (window.scrollY > 50) {
+                    mainNav.classList.add('scrolled');
+                } else {
+                    mainNav.classList.remove('scrolled');
+                }
             }
             
-            // Keyboard navigation for menu items
-            const menuItems = document.querySelectorAll('.menu-item');
+            updateJourney();
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+        });
+
+        // ===== JOURNEY SECTION =====
+        const journeyItems = document.querySelectorAll('.journey-text-item');
+        const journeyStages = document.querySelectorAll('.journey-stage');
+
+        function updateJourney() {
+            if (!journeySection) return;
             
-            menuItems.forEach(item => {
-                item.setAttribute('tabindex', '0');
-                item.setAttribute('role', 'button');
-                item.setAttribute('aria-expanded', 'false');
+            const rect = journeySection.getBoundingClientRect();
+            const sectionHeight = journeySection.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            if (rect.top < viewportHeight && rect.bottom > 0) {
+                const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / Math.max(1, sectionHeight - viewportHeight / 2)));
+                const stageIndex = Math.min(3, Math.floor(progress * 4));
                 
-                const flavorCard = item.querySelector('.flavor-card');
-                
-                item.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const isVisible = flavorCard.style.opacity === '1';
-                        flavorCard.style.opacity = isVisible ? '0' : '1';
-                        flavorCard.style.pointerEvents = isVisible ? 'none' : 'auto';
-                        flavorCard.style.transform = isVisible 
-                            ? 'translateY(-50%) translateX(20px)' 
-                            : 'translateY(-50%) translateX(0)';
-                        item.setAttribute('aria-expanded', !isVisible);
-                    }
+                journeyItems.forEach((item, i) => {
+                    item.classList.toggle('active', i <= stageIndex);
                 });
-            });
-            
-            // Parallax effect on hero (subtle)
-            const hero = document.getElementById('hero');
-            const floatingBeans = document.querySelectorAll('.floating-bean');
-            
-            if (!prefersReducedMotion.matches) {
-                window.addEventListener('scroll', () => {
-                    const scrollY = window.pageYOffset;
-                    const heroHeight = hero.offsetHeight;
-                    
-                    if (scrollY < heroHeight) {
-                        floatingBeans.forEach((bean, index) => {
-                            const speed = 0.1 + (index * 0.05);
-                            bean.style.transform = `translateY(${scrollY * speed}px)`;
-                        });
-                    }
+                
+                journeyStages.forEach((stage, i) => {
+                    stage.classList.toggle('active', i === stageIndex);
                 });
             }
+        }
+
+        // ===== HUD ANIMATION =====
+        function animateValue(element, endValue, duration, isFloat) {
+            const startTime = performance.now();
+            const valueEl = element.querySelector('.value');
+            const unitEl = element.querySelector('.unit');
+            const unit = unitEl ? unitEl.textContent : '';
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Cubic ease out
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const currentValue = eased * endValue;
+                
+                if (valueEl) {
+                    const displayValue = isFloat 
+                        ? currentValue.toFixed(1) 
+                        : Math.round(currentValue).toLocaleString('ru-RU');
+                    valueEl.innerHTML = displayValue + (unitEl ? `<span class="unit">${unit}</span>` : '');
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        const hudObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hudAnimated) {
+                hudAnimated = true;
+                
+                // Show HUD elements
+                const hudElements = document.querySelectorAll('.hud-element');
+                hudElements.forEach((el, i) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, i * 150);
+                });
+                
+                // Animate values after elements appear
+                setTimeout(() => {
+                    animateValue(document.querySelector('.hud-1'), 984, 2000, false);
+                    animateValue(document.querySelector('.hud-2'), 12500, 2500, false);
+                    animateValue(document.querySelector('.hud-3'), 13100, 2200, false);
+                    animateValue(document.querySelector('.hud-4'), 2.9, 1800, true);
+                    animateValue(document.querySelector('.hud-5'), 350, 2000, false);
+                }, 600);
+            }
+        }, { threshold: 0.4 });
+
+        if (specsSection) {
+            hudObserver.observe(specsSection);
+        }
+
+        // ===== GALLERY INTERACTION =====
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.zIndex = '10';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.zIndex = '1';
+            });
         });
     </script>
 </body>
