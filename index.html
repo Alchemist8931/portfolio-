@@ -765,6 +765,7 @@
 
     <script type="module">
         import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
         // Constants
         const EPS = 0.0001;
@@ -775,6 +776,7 @@
         let time = 0;
         let scrollProgress = 0;
         let targetScrollProgress = 0;
+        let modelLoaded = false;
 
         // DOM
         const loadingScreen = document.getElementById('loadingScreen');
@@ -839,83 +841,71 @@
             emissiveIntensity: 0.1
         });
 
-        // Simplified Airplane
-        function createAirplane() {
-            // Fuselage
-            const fuselageGeometry = new THREE.CapsuleGeometry(1.1, 14, 32, 64);
-            fuselageGeometry.rotateZ(Math.PI / 2);
-            const fuselage = new THREE.Mesh(fuselageGeometry, bodyMaterial);
-            fuselage.castShadow = true;
-            airplane.add(fuselage);
+        // Load Model
+        function loadModel() {
+            const loader = new GLTFLoader();
+            
+            // Low-poly Jet Model from pmndrs market (compatible with generic CORS setup or standard Three.js setup)
+            const modelUrl = 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/jet/model.gltf';
 
-            // Nose
-            const noseGeometry = new THREE.ConeGeometry(1.1, 3, 32);
-            noseGeometry.rotateZ(-Math.PI / 2);
-            const nose = new THREE.Mesh(noseGeometry, bodyMaterial);
-            nose.position.x = 8.5;
-            airplane.add(nose);
+            loader.load(
+                modelUrl,
+                (gltf) => {
+                    const model = gltf.scene;
+                    
+                    // Traverse and apply site-specific materials for style consistency
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            // Apply our custom materials to maintain the minimalist palette
+                            // You could also keep original materials if the model comes with perfect textures
+                            child.material = bodyMaterial;
+                            
+                            // Optional: differentiate glass if the naming allows, 
+                            // for this generic model we keep it uniform for a clean look
+                            
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
 
-            // Cockpit
-            const cockpitGeometry = new THREE.SphereGeometry(1.2, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2.5);
-            const cockpit = new THREE.Mesh(cockpitGeometry, glassMaterial);
-            cockpit.scale.set(0.8, 0.35, 0.6);
-            cockpit.position.set(5.5, 1.0, 0);
-            cockpit.rotation.z = -0.15;
-            airplane.add(cockpit);
+                    // Scale and Position adjustments
+                    // The model might be too large or small, we scale it to fit the scene
+                    // We also center it based on generic bounding box
+                    const box = new THREE.Box3().setFromObject(model);
+                    const size = box.getSize(new THREE.Vector3());
+                    const center = box.getCenter(new THREE.Vector3());
+                    
+                    // Target size roughly similar to previous procedural model (approx 15-20 units long)
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 15 / maxDim;
+                    
+                    model.scale.multiplyScalar(scale);
+                    
+                    // Reposition to center
+                    model.position.sub(center.multiplyScalar(scale));
+                    // Align with cockpit facing forward (if needed) and height adjustment
+                    model.position.y += 0.5; 
 
-            // Wings
-            const wingShape = new THREE.Shape();
-            wingShape.moveTo(0, 0);
-            wingShape.lineTo(3.2, 0.3);
-            wingShape.lineTo(3.2, -0.1);
-            wingShape.lineTo(0, -0.15);
-            wingShape.closePath();
-
-            const wingExtrudeSettings = { depth: 7, bevelEnabled: false };
-            const wingGeometry = new THREE.ExtrudeGeometry(wingShape, wingExtrudeSettings);
-
-            [1, -1].forEach(side => {
-                const wing = new THREE.Mesh(wingGeometry, bodyMaterial);
-                wing.rotation.x = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-                wing.position.set(-0.5, -0.3, 0);
-                if (side < 0) wing.scale.z = -1;
-                wing.castShadow = true;
-                airplane.add(wing);
-            });
-
-            // Engines
-            const engineGeometry = new THREE.CylinderGeometry(0.5, 0.6, 3, 32);
-            engineGeometry.rotateZ(Math.PI / 2);
-
-            [4.2, -4.2].forEach(z => {
-                const engine = new THREE.Mesh(engineGeometry, bodyMaterial);
-                engine.position.set(0.5, -0.9, z);
-                airplane.add(engine);
-            });
-
-            // Tail
-            const vTailGeometry = new THREE.BoxGeometry(3, 3.5, 0.12);
-            const vTail = new THREE.Mesh(vTailGeometry, bodyMaterial);
-            vTail.position.set(-6.5, 2, 0);
-            vTail.rotation.z = 0.15;
-            airplane.add(vTail);
-
-            const hTailGeometry = new THREE.BoxGeometry(2, 0.1, 5);
-            const hTail = new THREE.Mesh(hTailGeometry, bodyMaterial);
-            hTail.position.set(-6.5, 0.3, 0);
-            airplane.add(hTail);
-
-            // Accent line
-            const lineGeometry = new THREE.BoxGeometry(12, 0.02, 0.08);
-            const line = new THREE.Mesh(lineGeometry, accentMaterial);
-            line.position.set(1, 1.15, 0);
-            airplane.add(line);
-
-            airplane.position.set(0, 0, 0);
-            airplane.rotation.y = -0.3;
+                    airplane.add(model);
+                    modelLoaded = true;
+                    
+                    console.log('Model loaded successfully');
+                },
+                (xhr) => {
+                    const percent = (xhr.loaded / xhr.total) * 100;
+                    console.log(`Model ${percent.toFixed(2)}% loaded`);
+                },
+                (error) => {
+                    console.error('Error loading model:', error);
+                    // Fallback: if model fails, maybe add a placeholder box so the scene isn't empty
+                    const geometry = new THREE.BoxGeometry(10, 2, 5);
+                    const mesh = new THREE.Mesh(geometry, bodyMaterial);
+                    airplane.add(mesh);
+                }
+            );
         }
 
-        createAirplane();
+        loadModel();
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x0a0a0c, 0.5);
@@ -1023,11 +1013,13 @@
             // Particles
             particleMaterial.uniforms.uTime.value = time;
 
-            // Airplane
-            airplane.position.y = Math.sin(time * 0.3) * 0.15;
-            airplane.rotation.y = -0.3 + scrollProgress * 0.4;
-            airplane.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.03;
-            airplane.rotation.z = Math.sin(time * 0.2) * 0.008;
+            // Airplane Animation
+            if (modelLoaded) {
+                airplane.position.y = Math.sin(time * 0.3) * 0.15;
+                airplane.rotation.y = -0.3 + scrollProgress * 0.4;
+                airplane.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.03;
+                airplane.rotation.z = Math.sin(time * 0.2) * 0.008;
+            }
 
             // Lights
             rimLight1.intensity = 1.5 + scrollProgress * 2;
@@ -1048,7 +1040,9 @@
 
         animate();
 
-        // Loading
+        // Loading simulation (since we have external model, we wait a bit for it)
+        // The actual model loading happens asynchronously. 
+        // We keep the loading bar moving to assure the user.
         let loadProgress = 0;
         const loadingInterval = setInterval(() => {
             loadProgress += 3 + Math.random() * 5;
