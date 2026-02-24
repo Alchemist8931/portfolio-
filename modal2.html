@@ -1,1 +1,1215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Morning — Культура потребления</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F5F0E8;
+            --bg-warm: #EDE6DA;
+            --fg: #2C1810;
+            --fg-light: #4A3728;
+            --muted: #8B7355;
+            --accent: #C4A484;
+            --coffee: #3D2314;
+            --latte: #D4C4B0;
+            --cream: #FDF8F3;
+            --rose: #D4A5A5;
+            --olive: #8B9A7D;
+            --copper: #B87333;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Noise texture overlay */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--muted);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes steamRise {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-30px) translateX(5px) scale(1.2);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-60px) translateX(-3px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes grainShift {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-1%, -1%); }
+            20% { transform: translate(1%, 1%); }
+            30% { transform: translate(-1%, 1%); }
+            40% { transform: translate(1%, -1%); }
+            50% { transform: translate(-1%, 0); }
+            60% { transform: translate(1%, 0); }
+            70% { transform: translate(0, 1%); }
+            80% { transform: translate(0, -1%); }
+            90% { transform: translate(1%, 1%); }
+        }
+
+        @keyframes lightBeam {
+            0% { opacity: 0.3; transform: translateX(-20%); }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.3; transform: translateX(20%); }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .animate-fadeInUp,
+            .animate-fadeIn {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(255, 248, 240, 0.8) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(196, 164, 132, 0.3) 0%, transparent 40%),
+                linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
+        }
+
+        .light-beam {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(255, 250, 240, 0.4) 0%, 
+                rgba(255, 245, 230, 0.1) 50%,
+                transparent 100%);
+            transform: translateX(-50%) skewX(-15deg);
+            animation: lightBeam 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .coffee-cup-container {
+            position: relative;
+            width: 280px;
+            height: 340px;
+        }
+
+        .coffee-cup {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .cup-body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--cream) 0%, #F8F4EF 50%, #E8E0D5 100%);
+            border-radius: 10px 10px 50% 50%;
+            box-shadow: 
+                inset 5px 5px 15px rgba(255, 255, 255, 0.8),
+                inset -5px -5px 15px rgba(0, 0, 0, 0.05),
+                0 20px 60px rgba(44, 24, 16, 0.15);
+        }
+
+        .cup-coffee {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 140px;
+            background: radial-gradient(ellipse at 30% 30%, #5C3D2E 0%, var(--coffee) 60%, #1A0F0A 100%);
+            border-radius: 10px 10px 50% 50%;
+            overflow: hidden;
+        }
+
+        .coffee-surface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(180deg, 
+                rgba(92, 61, 46, 0.8) 0%, 
+                transparent 100%);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .latte-art {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 80px;
+            background: radial-gradient(ellipse at center, var(--latte) 0%, transparent 70%);
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+
+        .steam-container {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+        }
+
+        .steam {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.4));
+            border-radius: 50%;
+            animation: steamRise 3s ease-out infinite;
+        }
+
+        .steam:nth-child(1) {
+            left: 20%;
+            width: 20px;
+            height: 40px;
+            animation-delay: 0s;
+        }
+
+        .steam:nth-child(2) {
+            left: 50%;
+            width: 25px;
+            height: 50px;
+            animation-delay: 0.5s;
+        }
+
+        .steam:nth-child(3) {
+            left: 70%;
+            width: 18px;
+            height: 35px;
+            animation-delay: 1s;
+        }
+
+        .cup-handle {
+            position: absolute;
+            right: -35px;
+            top: 30px;
+            width: 40px;
+            height: 80px;
+            border: 12px solid var(--cream);
+            border-left: none;
+            border-radius: 0 50px 50px 0;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .saucer {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--cream) 0%, #E8E0D5 100%);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.1);
+        }
+
+        /* Coffee pour animation */
+        .pour-stream {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 100px;
+            background: linear-gradient(180deg, 
+                var(--coffee) 0%, 
+                #5C3D2E 100%);
+            border-radius: 4px;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .pour-stream::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 15px;
+            background: var(--coffee);
+            border-radius: 50%;
+        }
+
+        /* Menu cards */
+        .menu-item {
+            position: relative;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .menu-item:hover {
+            padding-left: 1rem;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: linear-gradient(90deg, var(--rose), transparent);
+            opacity: 0.1;
+            transition: width 0.4s ease;
+        }
+
+        .menu-item:hover::before {
+            width: 100%;
+        }
+
+        .flavor-card {
+            position: absolute;
+            left: calc(100% + 2rem);
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            width: 280px;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(44, 24, 16, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            z-index: 10;
+        }
+
+        .menu-item:hover .flavor-card {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .flavor-card {
+                position: fixed;
+                left: 50%;
+                top: auto;
+                bottom: 2rem;
+                transform: translateX(-50%) translateY(20px);
+                width: calc(100% - 2rem);
+                max-width: 320px;
+            }
+            
+            .menu-item:hover .flavor-card {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Split section */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        @media (max-width: 768px) {
+            .split-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .texture-panel {
+            position: relative;
+            background: var(--bg-warm);
+            overflow: hidden;
+        }
+
+        .hand-illustration {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Temperature curve */
+        .temp-curve {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .curve-line {
+            fill: none;
+            stroke: var(--copper);
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 2s ease;
+        }
+
+        .curve-line.animate {
+            stroke-dashoffset: 0;
+        }
+
+        /* Map illustration */
+        .map-illustration {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 4/3;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--coffee);
+            color: var(--cream);
+            border: none;
+            border-radius: 4px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.3);
+        }
+
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--copper);
+            outline-offset: 3px;
+        }
+
+        /* Plant decorations */
+        .plant-decoration {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--copper);
+            outline-offset: 3px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--rose);
+            color: var(--fg);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:py-6 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl md:text-3xl tracking-wide" style="color: var(--coffee);">
+                Slow Morning
+            </a>
+            <div class="hidden md:flex items-center gap-10">
+                <a href="#philosophy" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Философия</a>
+                <a href="#menu" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Меню</a>
+                <a href="#process" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Процесс</a>
+                <a href="#contact" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Найти нас</a>
+            </div>
+            <button class="md:hidden p-2" id="menuToggle" aria-label="Открыть меню">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="4" y1="8" x2="20" y2="8"></line>
+                    <line x1="4" y1="16" x2="20" y2="16"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
+        <div class="absolute inset-0 bg-black/50" id="menuOverlay"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full p-8 transform translate-x-full transition-transform duration-500" style="background: var(--cream);" id="menuPanel">
+            <div class="flex flex-col gap-8 mt-16">
+                <a href="#philosophy" class="font-serif text-2xl" style="color: var(--fg);">Философия</a>
+                <a href="#menu" class="font-serif text-2xl" style="color: var(--fg);">Меню</a>
+                <a href="#process" class="font-serif text-2xl" style="color: var(--fg);">Процесс</a>
+                <a href="#contact" class="font-serif text-2xl" style="color: var(--fg);">Найти нас</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="light-beam" aria-hidden="true"></div>
+        
+        <!-- Decorative plants -->
+        <svg class="plant-decoration" style="top: 10%; left: 5%; width: 200px;" viewBox="0 0 100 150" aria-hidden="true">
+            <path d="M50 150 Q30 100 50 50 Q70 100 50 150" fill="none" stroke="var(--olive)" stroke-width="1"/>
+            <ellipse cx="30" cy="60" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-20 30 60)"/>
+            <ellipse cx="70" cy="70" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(20 70 70)"/>
+        </svg>
+        
+        <div class="relative z-10 h-full flex flex-col">
+            <div class="flex-1 flex items-center justify-center px-6 pt-20">
+                <div class="text-center max-w-4xl">
+                    <p class="text-sm md:text-base tracking-[0.3em] uppercase mb-6 animate-fadeIn" style="color: var(--muted); animation-delay: 0.2s; opacity: 0;">
+                        Авторская кофейня
+                    </p>
+                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fadeInUp" style="color: var(--coffee); animation-delay: 0.4s; opacity: 0;">
+                        Slow Morning
+                    </h1>
+                    <p class="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.6s; opacity: 0;">
+                        Кофе — это не просто напиток для бодрости.<br>
+                        Это повод остановиться и насладиться моментом.
+                    </p>
+                    <a href="#menu" class="btn-primary animate-fadeInUp" style="animation-delay: 0.8s; opacity: 0;">
+                        <span>Исследовать вкусы</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 5v14M19 12l-7 7-7-7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Coffee cup illustration -->
+            <div class="flex justify-center pb-12 md:pb-20">
+                <div class="coffee-cup-container animate-fadeIn" style="animation-delay: 1s; opacity: 0;">
+                    <div class="pour-stream"></div>
+                    <div class="coffee-cup">
+                        <div class="steam-container">
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                        </div>
+                        <div class="cup-body">
+                            <div class="cup-coffee">
+                                <div class="coffee-surface"></div>
+                                <div class="latte-art"></div>
+                            </div>
+                        </div>
+                        <div class="cup-handle"></div>
+                    </div>
+                    <div class="saucer"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+            <span class="text-xs tracking-widest uppercase" style="color: var(--muted);">Листайте</span>
+            <div class="w-px h-12 bg-gradient-to-b from-transparent to-current" style="color: var(--muted);"></div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="philosophy" style="background: var(--bg-warm);">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                <div class="reveal">
+                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Философия</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-8" style="color: var(--coffee);">
+                        Лучший кофе — тот,<br>
+                        <em>который пьется в тишине</em>
+                    </h2>
+                    <div class="space-y-6 text-lg" style="color: var(--fg-light);">
+                        <p>
+                            Мы не торопим вас. В «Slow Morning» время течет иначе — 
+                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
+                        </p>
+                        <p>
+                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
+                            насыпает зерна, до последнего глотка, оставляющего тепло где-то внутри.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="relative">
+                        <!-- Stylized coffee bean illustration -->
+                        <svg viewBox="0 0 400 400" class="w-full max-w-md mx-auto" aria-hidden="true">
+                            <!-- Background glow -->
+                            <defs>
+                                <radialGradient id="glow" cx="50%" cy="50%">
+                                    <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.5"/>
+                                    <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
+                            
+                            <!-- Coffee beans -->
+                            <g fill="var(--coffee)" opacity="0.9">
+                                <ellipse cx="150" cy="180" rx="45" ry="65" transform="rotate(-30 150 180)"/>
+                                <path d="M150 130 Q165 180 150 230" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
+                                
+                                <ellipse cx="250" cy="200" rx="50" ry="70" transform="rotate(20 250 200)"/>
+                                <path d="M250 140 Q265 200 250 260" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
+                                
+                                <ellipse cx="180" cy="280" rx="40" ry="55" transform="rotate(10 180 280)"/>
+                                <path d="M180 235 Q195 280 180 325" stroke="var(--bg-warm)" stroke-width="2" fill="none"/>
+                            </g>
+                            
+                            <!-- Texture lines -->
+                            <g stroke="var(--accent)" stroke-width="0.5" opacity="0.3">
+                                <line x1="100" y1="100" x2="300" y2="100"/>
+                                <line x1="80" y1="150" x2="320" y2="150"/>
+                                <line x1="90" y1="320" x2="310" y2="320"/>
+                            </g>
+                        </svg>
+                        
+                        <!-- Floating text -->
+                        <div class="absolute top-4 right-4 font-serif italic text-lg" style="color: var(--muted);">
+                            Обжарено с душой
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="py-24 md:py-32 px-6 relative" id="menu" style="background: var(--cream);">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Не просто напитки</span>
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4" style="color: var(--coffee);">
+                    Наши вкусы
+                </h2>
+                <p class="mt-6 text-lg max-w-xl mx-auto" style="color: var(--muted);">
+                    Наведите на название, чтобы узнать вкусовой профиль — 
+                    как если бы вы спросили бариста
+                </p>
+            </div>
+            
+            <div class="space-y-0 reveal" style="transition-delay: 0.2s;">
+                <!-- Menu items -->
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Эфиопия Иргачеффе</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, V60</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">280 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--olive), var(--rose));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Ноты жасмина, спелого персика и легкая цитрусовая кислинка. 
+                            Чашка весеннего сада.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Цветочный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Фруктовый</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Колумбия Уила</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, doppio</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">220 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--copper), var(--coffee));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Карамельная сладость, ноты горького шоколада и ореховое послевкусие. 
+                            Утро в горах.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Нутовый</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Шоколадный</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Кения Абердар</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Kalita</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">320 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--rose), var(--accent));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Яркая смородиновая кислинка, томное послевкусие сушеных ягод. 
+                            Африка в каждой чашке.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Ягодный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Сбалансированный</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Бразилия Серрадо</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, лунго</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">200 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--accent), var(--coffee));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Мягкий, с нотами молочного шоколада и жареного фундука. 
+                            Идеальный компаньон для неторопливой беседы.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--accent);">Мягкий</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Ореховый</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Гватемала Антигуа</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Chemex</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">350 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--fg), var(--copper));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Дымные ноты, пряности и темный шоколад. 
+                            Вкус вулканических почв и древних городов.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--fg-light);">Пряный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Насыщенный</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-12 reveal">
+                <p class="text-sm" style="color: var(--muted);">
+                    Также спросите бариста о сезонных альтернативах и дрип-пакетах домой
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="split-section" id="process">
+        <div class="texture-panel relative">
+            <!-- Stylized hand/tamper illustration -->
+            <div class="hand-illustration p-8 md:p-12">
+                <svg viewBox="0 0 400 500" class="w-full h-full max-w-md" aria-hidden="true">
+                    <!-- Background warmth -->
+                    <defs>
+                        <radialGradient id="warmth" cx="50%" cy="50%">
+                            <stop offset="0%" stop-color="var(--copper)" stop-opacity="0.15"/>
+                            <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="200" cy="250" r="200" fill="url(#warmth)"/>
+                    
+                    <!-- Tamper -->
+                    <g transform="translate(120, 100)">
+                        <!-- Handle -->
+                        <rect x="60" y="0" width="40" height="180" rx="20" fill="var(--coffee)"/>
+                        <ellipse cx="80" cy="180" rx="50" ry="15" fill="var(--coffee)"/>
+                        
+                        <!-- Base -->
+                        <rect x="30" y="180" width="100" height="30" rx="2" fill="var(--fg)"/>
+                        
+                        <!-- Coffee grounds texture -->
+                        <g fill="var(--coffee)" opacity="0.6">
+                            <circle cx="55" cy="215" r="3"/>
+                            <circle cx="75" cy="218" r="2"/>
+                            <circle cx="95" cy="214" r="2.5"/>
+                            <circle cx="115" cy="217" r="2"/>
+                            <circle cx="45" cy="220" r="1.5"/>
+                            <circle cx="105" cy="222" r="2"/>
+                        </g>
+                        
+                        <!-- Portafilter basket -->
+                        <ellipse cx="80" cy="230" rx="55" ry="12" fill="none" stroke="var(--muted)" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Decorative elements -->
+                    <g stroke="var(--accent)" stroke-width="0.5" opacity="0.4">
+                        <line x1="50" y1="350" x2="350" y2="350"/>
+                        <line x1="70" y1="380" x2="330" y2="380"/>
+                        <line x1="100" y1="410" x2="300" y2="410"/>
+                    </g>
+                    
+                    <!-- Steam/aroma lines -->
+                    <g stroke="var(--muted)" stroke-width="1" fill="none" opacity="0.3">
+                        <path d="M180 80 Q175 60 185 40 Q195 20 180 0"/>
+                        <path d="M200 70 Q195 50 205 30 Q215 10 200 -10"/>
+                        <path d="M220 80 Q215 60 225 40 Q235 20 220 0"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- Temperature curve overlay -->
+            <svg class="temp-curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <path class="curve-line" d="M0 90 Q25 85 40 60 Q55 35 70 40 Q85 45 100 20"/>
+            </svg>
+        </div>
+        
+        <div class="flex items-center p-8 md:p-12 lg:p-20" style="background: var(--cream);">
+            <div class="reveal">
+                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Процесс</span>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mt-4 mb-8" style="color: var(--coffee);">
+                    Обжарка маленькими партиями
+                </h2>
+                <div class="space-y-6 text-lg" style="color: var(--fg-light);">
+                    <p>
+                        Мы обжариваем зерно маленькими партиями, чтобы сохранить 
+                        аромат и раскрыть характер каждого региона.
+                    </p>
+                    <p>
+                        Каждый день наши бариста калибруют оборудование, 
+                        пробуют эспрессо и настраивают рецепты — 
+                        чтобы ваша чашка была идеальной.
+                    </p>
+                    <p class="font-serif italic text-xl" style="color: var(--muted);">
+                        «Кофе — это не продукт. Это отношение.»
+                    </p>
+                </div>
+                
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">12</span>
+                        <span class="text-sm" style="color: var(--muted);">регионов мира</span>
+                    </div>
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">4</span>
+                        <span class="text-sm" style="color: var(--muted);">года обжарки</span>
+                    </div>
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">∞</span>
+                        <span class="text-sm" style="color: var(--muted);">внимания</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="contact" style="background: var(--bg-warm);">
+        <!-- Decorative plant -->
+        <svg class="plant-decoration" style="bottom: 5%; right: 5%; width: 250px; opacity: 0.1;" viewBox="0 0 150 200" aria-hidden="true">
+            <path d="M75 200 Q60 150 75 100 Q90 150 75 200" fill="none" stroke="var(--olive)" stroke-width="1"/>
+            <ellipse cx="40" cy="80" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-15 40 80)"/>
+            <ellipse cx="110" cy="90" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(15 110 90)"/>
+            <ellipse cx="75" cy="50" rx="30" ry="45" fill="none" stroke="var(--olive)" stroke-width="0.5"/>
+        </svg>
+        
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20">
+                <div class="reveal">
+                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Найти нас</span>
+                    <h2 class="font-serif text-4xl md:text-5xl mt-4 mb-8" style="color: var(--coffee);">
+                        Приходите за тишиной
+                    </h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Адрес</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                ул. Тихая, 14<br>
+                                двор «Архитектор», второй этаж
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Время жить</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                Будни: 8:00 — 22:00<br>
+                                Выходные: 9:00 — 21:00
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Связь</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                <a href="tel:+78001234567" class="hover:underline">+7 800 123-45-67</a><br>
+                                <a href="mailto:hello@slowmorning.ru" class="hover:underline">hello@slowmorning.ru</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <!-- Sketch-style map -->
+                    <div class="map-illustration">
+                        <svg viewBox="0 0 400 300" class="map-svg" aria-label="Схема проезда к кофейне">
+                            <style>
+                                .map-line { fill: none; stroke: var(--fg-light); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+                                .map-dashed { stroke-dasharray: 8 4; }
+                                .map-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); }
+                                .map-label-main { font-family: 'Playfair Display', serif; font-size: 14px; fill: var(--coffee); }
+                                .map-dot { fill: var(--rose); }
+                            </style>
+                            
+                            <!-- Main streets -->
+                            <path class="map-line" d="M50 150 L350 150" opacity="0.3"/>
+                            <path class="map-line" d="M200 50 L200 250" opacity="0.3"/>
+                            
+                            <!-- Side streets -->
+                            <path class="map-line" d="M100 100 L100 200" opacity="0.2"/>
+                            <path class="map-line" d="M300 80 L300 220" opacity="0.2"/>
+                            
+                            <!-- Route to cafe -->
+                            <path class="map-line map-dashed" d="M80 150 L80 120 L150 120 L150 90" style="stroke: var(--copper);"/>
+                            
+                            <!-- Buildings -->
+                            <rect x="120" y="140" width="60" height="40" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            <rect x="240" y="130" width="80" height="50" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            <rect x="60" y="160" width="40" height="30" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            
+                            <!-- Trees/park -->
+                            <circle cx="320" cy="180" r="15" fill="var(--olive)" opacity="0.15"/>
+                            <circle cx="340" cy="200" r="12" fill="var(--olive)" opacity="0.1"/>
+                            
+                            <!-- Cafe location -->
+                            <circle cx="150" cy="90" r="20" fill="var(--cream)" stroke="var(--rose)" stroke-width="2"/>
+                            <circle class="map-dot" cx="150" cy="90" r="6"/>
+                            
+                            <!-- Labels -->
+                            <text x="150" y="130" class="map-label-main" text-anchor="middle">Slow Morning</text>
+                            <text x="200" y="170" class="map-label" text-anchor="middle">ул. Центральная</text>
+                            <text x="200" y="230" class="map-label" text-anchor="middle">Тихий переулок</text>
+                            <text x="80" y="180" class="map-label" text-anchor="middle">Метро</text>
+                            
+                            <!-- Walking person icon -->
+                            <g transform="translate(70, 145)" fill="var(--copper)">
+                                <circle cx="0" cy="0" r="4"/>
+                                <path d="M0 6 L0 14 M-5 10 L5 10 M-4 20 L0 14 L4 20" stroke="var(--copper)" stroke-width="2" fill="none"/>
+                            </g>
+                            
+                            <!-- Decorative arrow -->
+                            <path d="M85 110 L95 105 L95 115 Z" fill="var(--copper)"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-sm mt-4 text-center" style="color: var(--muted);">
+                        Две минуты пешком от метро, через арку с муралом
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6" style="background: var(--coffee); color: var(--cream);">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="text-center md:text-left">
+                    <span class="font-serif text-2xl">Slow Morning</span>
+                    <p class="mt-2 text-sm opacity-60">Культура потребления</p>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Instagram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="2" width="20" height="20" rx="5"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <circle cx="18" cy="6" r="1" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Telegram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
+                            <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <p class="text-sm opacity-60">
+                    Замедлись. Выдохни. Насладись.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize all functionality after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            // Temperature curve animation
+            const curveLine = document.querySelector('.curve-line');
+            
+            if (curveLine) {
+                const curveObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            curveLine.classList.add('animate');
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                curveObserver.observe(curveLine.closest('.texture-panel'));
+            }
+            
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    navbar.style.background = 'rgba(245, 240, 232, 0.95)';
+                    navbar.style.boxShadow = '0 2px 20px rgba(44, 24, 16, 0.05)';
+                } else {
+                    navbar.style.background = 'transparent';
+                    navbar.style.boxShadow = 'none';
+                }
+                
+                lastScroll = currentScroll;
+            });
+            
+            // Mobile menu
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuPanel = document.getElementById('menuPanel');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            
+            function openMenu() {
+                mobileMenu.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    menuPanel.style.transform = 'translateX(0)';
+                });
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeMenu() {
+                menuPanel.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 500);
+            }
+            
+            menuToggle.addEventListener('click', openMenu);
+            menuOverlay.addEventListener('click', closeMenu);
+            menuLinks.forEach(link => link.addEventListener('click', closeMenu));
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Reduced motion check
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            
+            if (prefersReducedMotion.matches) {
+                document.querySelectorAll('.steam').forEach(steam => {
+                    steam.style.animation = 'none';
+                });
+            }
+            
+            // Keyboard navigation for menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.setAttribute('tabindex', '0');
+                item.setAttribute('role', 'button');
+                
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const flavorCard = item.querySelector('.flavor-card');
+                        if (flavorCard) {
+                            if (flavorCard.style.opacity === '1') {
+                                flavorCard.style.opacity = '0';
+                                flavorCard.style.pointerEvents = 'none';
+                            } else {
+                                flavorCard.style.opacity = '1';
+                                flavorCard.style.pointerEvents = 'auto';
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
