@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Morning — Культура потребления</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8F4EE;
+            --bg-warm: #F2EBE0;
+            --bg-dark: #1A1612;
+            --fg: #1C1815;
+            --fg-light: #3D3832;
+            --muted: #7A7167;
+            --accent: #8B6914;
+            --accent-warm: #C4933A;
+            --gold: #D4A84B;
+            --gold-light: #E8C97A;
+            --cream: #FFFCF5;
+            --border: rgba(28, 24, 21, 0.08);
+            --border-gold: rgba(212, 168, 75, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            line-height: 1.7;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+
+        /* Warm texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .font-serif {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: var(--bg-dark);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-warm);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-warm);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+
+        @keyframes steam {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scaleX(1);
+            }
+            15% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.3;
+                transform: translateY(-20px) scaleX(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-45px) scaleX(0.8);
+            }
+        }
+
+        @keyframes steam2 {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scaleX(1) translateX(0);
+            }
+            20% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scaleX(1.4) translateX(10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-1%, -1%); }
+            20% { transform: translate(1%, 1%); }
+            30% { transform: translate(-1%, 1%); }
+            40% { transform: translate(1%, -1%); }
+            50% { transform: translate(-1%, 0%); }
+            60% { transform: translate(1%, 0%); }
+            70% { transform: translate(0%, 1%); }
+            80% { transform: translate(0%, -1%); }
+            90% { transform: translate(1%, 1%); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(212, 168, 75, 0.1); }
+            50% { box-shadow: 0 0 50px rgba(212, 168, 75, 0.2); }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 1.4s ease-out forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), 
+                        transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .animate-fadeInUp, .animate-fadeIn {
+                opacity: 1;
+                transform: none;
+                animation: none;
+            }
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 1.5rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(212, 168, 75, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--fg) 0%, #2A2520 100%);
+            color: var(--cream);
+            border: none;
+            border-radius: 2px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 168, 75, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(28, 24, 21, 0.2);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 4px;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--accent);
+            background: rgba(212, 168, 75, 0.05);
+        }
+
+        /* Coffee Cup with Steam */
+        .coffee-container {
+            position: relative;
+            animation: gentleFloat 8s ease-in-out infinite;
+        }
+
+        .coffee-cup {
+            width: 160px;
+            height: 180px;
+            position: relative;
+        }
+
+        .cup-body {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 100px;
+            background: linear-gradient(180deg, var(--cream) 0%, #F5F0E8 100%);
+            border-radius: 4px 4px 50px 50px;
+            box-shadow: 
+                inset 0 -20px 40px rgba(0,0,0,0.03),
+                0 10px 40px rgba(0,0,0,0.08),
+                0 0 0 1px rgba(28, 24, 21, 0.05);
+        }
+
+        .cup-coffee {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 80px;
+            background: linear-gradient(180deg, #2C1810 0%, #1A1612 50%, #3D2820 100%);
+            border-radius: 2px 2px 45px 45px;
+            box-shadow: inset 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .cup-coffee::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 30px;
+            height: 15px;
+            background: rgba(212, 168, 75, 0.15);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+
+        .cup-handle {
+            position: absolute;
+            right: -25px;
+            top: 50px;
+            width: 30px;
+            height: 50px;
+            border: 3px solid var(--cream);
+            border-left: none;
+            border-radius: 0 30px 30px 0;
+            box-shadow: 
+                3px 3px 10px rgba(0,0,0,0.05),
+                inset -3px 0 10px rgba(0,0,0,0.02);
+        }
+
+        .saucer {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 20px;
+            background: linear-gradient(180deg, var(--cream) 0%, #EDE8E0 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 5px 30px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(28, 24, 21, 0.04);
+        }
+
+        .saucer::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 10px;
+            background: rgba(28, 24, 21, 0.03);
+            border-radius: 50%;
+        }
+
+        .plate {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 12px;
+            background: linear-gradient(180deg, #EDE8E0 0%, #E5E0D8 100%);
+            border-radius: 50%;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Steam */
+        .steam-container {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            pointer-events: none;
+        }
+
+        .steam {
+            position: absolute;
+            bottom: 0;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(to top, rgba(255,255,255,0.4), transparent);
+            border-radius: 50%;
+            filter: blur(8px);
+            animation: steam 3s ease-out infinite;
+        }
+
+        .steam:nth-child(1) {
+            left: 15px;
+            animation-delay: 0s;
+        }
+
+        .steam:nth-child(2) {
+            left: 35px;
+            animation-delay: 0.5s;
+            animation-duration: 3.5s;
+        }
+
+        .steam:nth-child(3) {
+            left: 55px;
+            animation-delay: 1s;
+        }
+
+        .steam:nth-child(4) {
+            left: 25px;
+            animation: steam2 4s ease-out infinite;
+            animation-delay: 1.5s;
+        }
+
+        /* Golden accent line */
+        .gold-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        /* Cards */
+        .card {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, var(--cream) 0%, rgba(255, 252, 245, 0.8) 100%);
+            border: 1px solid var(--border);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(28, 24, 21, 0.08);
+            border-color: var(--border-gold);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        /* Menu items */
+        .menu-item {
+            position: relative;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .menu-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .menu-item:hover {
+            padding-left: 1.5rem;
+            background: linear-gradient(90deg, rgba(212, 168, 75, 0.03), transparent);
+        }
+
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .menu-item-title {
+            transition: color 0.4s ease;
+        }
+
+        .menu-item:hover .menu-item-title {
+            color: var(--accent);
+        }
+
+        /* Nav link */
+        .nav-link {
+            position: relative;
+            color: var(--muted);
+            transition: color 0.4s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold), var(--accent-warm));
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--fg);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 4px;
+        }
+
+        /* Quote */
+        .quote-text {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid var(--gold-light);
+        }
+
+        /* Stats */
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Origin card */
+        .origin-card {
+            padding: 1.75rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+
+        .origin-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 168, 75, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .origin-card:hover {
+            background: var(--cream);
+            border-color: var(--border-gold);
+            transform: translateX(4px);
+        }
+
+        .origin-card:hover::after {
+            opacity: 1;
+        }
+
+        .origin-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* Section divider */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 4rem 0;
+        }
+
+        .divider-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .divider-diamond {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+
+        /* Dark section */
+        .dark-section {
+            background: var(--bg-dark);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(212, 168, 75, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(196, 147, 58, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* Map placeholder */
+        .map-container {
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-warm), var(--cream));
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .map-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        /* Coffee beans decoration */
+        .coffee-bean {
+            position: absolute;
+            width: 12px;
+            height: 16px;
+            background: var(--fg);
+            border-radius: 50%;
+            opacity: 0.03;
+            transform: rotate(45deg);
+        }
+
+        .coffee-bean::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 2px;
+            right: 2px;
+            height: 1px;
+            background: var(--bg);
+            transform: translateY(-50%);
+            border-radius: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 transition-all duration-700" id="navbar">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl tracking-wide relative" style="color: var(--fg);">
+                <span class="relative z-10">Slow Morning</span>
+                <span class="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-20"></span>
+            </a>
+            <div class="hidden md:flex items-center gap-12">
+                <a href="#philosophy" class="nav-link text-xs tracking-[0.2em] uppercase font-medium">Философия</a>
+                <a href="#menu" class="nav-link text-xs tracking-[0.2em] uppercase font-medium">Меню</a>
+                <a href="#process" class="nav-link text-xs tracking-[0.2em] uppercase font-medium">Процесс</a>
+                <a href="#contact" class="nav-link text-xs tracking-[0.2em] uppercase font-medium">Найти нас</a>
+            </div>
+            <button class="md:hidden p-2 -mr-2" id="menuToggle" aria-label="Открыть меню">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" id="menuOverlay"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full transform translate-x-full transition-transform duration-700" style="background: var(--cream);" id="menuPanel">
+            <div class="p-8 h-full flex flex-col">
+                <button class="absolute top-6 right-6 p-2" id="closeMenu" aria-label="Закрыть меню">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                        <line x1="6" y1="18" x2="18" y2="6"></line>
+                    </svg>
+                </button>
+                <div class="flex flex-col gap-8 mt-20">
+                    <a href="#philosophy" class="font-serif text-2xl hover:text-[var(--accent)] transition-colors">Философия</a>
+                    <a href="#menu" class="font-serif text-2xl hover:text-[var(--accent)] transition-colors">Меню</a>
+                    <a href="#process" class="font-serif text-2xl hover:text-[var(--accent)] transition-colors">Процесс</a>
+                    <a href="#contact" class="font-serif text-2xl hover:text-[var(--accent)] transition-colors">Найти нас</a>
+                </div>
+                <div class="mt-auto pt-8 border-t border-[var(--border)]">
+                    <p class="text-xs tracking-widest uppercase" style="color: var(--muted);">Slow Morning</p>
+                    <p class="text-sm mt-2 font-serif italic" style="color: var(--fg-light);">Замедлись. Выдохни. Насладись.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="relative z-10 max-w-6xl mx-auto w-full">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+                <div>
+                    <p class="text-xs tracking-[0.3em] uppercase mb-10 animate-fadeIn" style="color: var(--accent); animation-delay: 0.1s; opacity: 0; font-weight: 500;">
+                        Авторская кофейня
+                    </p>
+                    <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-8 animate-fadeInUp" style="animation-delay: 0.2s; opacity: 0;">
+                        Slow Morning
+                    </h1>
+                    <p class="text-base md:text-lg max-w-md mb-12 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.4s; opacity: 0; line-height: 2;">
+                        Кофе — это повод остановиться и насладиться моментом. Место, где время течёт мягко и размеренно.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-start gap-5 animate-fadeInUp" style="animation-delay: 0.6s; opacity: 0;">
+                        <a href="#menu" class="btn-primary">Исследовать вкусы</a>
+                        <a href="#philosophy" class="btn-secondary">О нас</a>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center animate-fadeIn" style="animation-delay: 0.8s; opacity: 0;">
+                    <div class="coffee-container">
+                        <div class="coffee-cup">
+                            <div class="steam-container">
+                                <div class="steam"></div>
+                                <div class="steam"></div>
+                                <div class="steam"></div>
+                                <div class="steam"></div>
+                            </div>
+                            <div class="cup-body">
+                                <div class="cup-coffee"></div>
+                            </div>
+                            <div class="cup-handle"></div>
+                            <div class="saucer"></div>
+                            <div class="plate"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 animate-fadeIn" style="animation-delay: 1.2s; opacity: 0.4;">
+            <span class="text-xs tracking-[0.2em] uppercase font-medium" style="color: var(--muted);">Листайте</span>
+            <div class="w-px h-12 bg-gradient-to-b from-[var(--accent-warm)] to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="py-32 md:py-48 px-6 relative" id="philosophy" style="background: var(--bg-warm);">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-20 md:gap-32 items-center">
+                <div class="reveal">
+                    <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--accent);">Философия</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8 mb-12 leading-tight">
+                        Лучший кофе — тот,<br>
+                        <em class="font-light opacity-70" style="color: var(--fg-light);">который пьётся в тишине</em>
+                    </h2>
+                    <div class="space-y-6 text-base" style="color: var(--fg-light);">
+                        <p>
+                            Мы не торопим вас. В «Slow Morning» время течёт иначе — 
+                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
+                        </p>
+                        <p>
+                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
+                            насыпает зёрна, до последнего глотка.
+                        </p>
+                    </div>
+                    
+                    <div class="quote-text mt-12 font-serif text-xl italic" style="color: var(--muted);">
+                        Кофе — это не продукт.<br>Это отношение.
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="aspect-[4/5] relative">
+                        <div class="absolute inset-0 border border-current opacity-10 rounded-sm"></div>
+                        <div class="absolute inset-6 border border-[var(--gold)] opacity-20 rounded-sm"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/5"></div>
+                        <div class="absolute bottom-10 left-10 right-10">
+                            <div class="gold-line mb-4"></div>
+                            <p class="text-xs tracking-[0.2em] uppercase mb-3 font-medium" style="color: var(--muted);">Основано в 2020</p>
+                            <p class="font-serif text-2xl">Москва, Россия</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-32 md:py-48 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-24 reveal">
+                <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--accent);">Ценности</span>
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8">
+                    Во что мы верим
+                </h2>
+                <div class="gold-line mx-auto mt-8"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 reveal" style="transition-delay: 0.15s;">
+                <div class="card">
+                    <div class="w-12 h-12 mb-8 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, rgba(212, 168, 75, 0.1), transparent);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent);">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-4">Тишина</h3>
+                    <p class="text-sm leading-relaxed" style="color: var(--fg-light);">
+                        Место, где можно замедлиться. Без громкой музыки и суеты — только приглушённый свет и мягкие тени.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="w-12 h-12 mb-8 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, rgba(212, 168, 75, 0.1), transparent);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent);">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-4">Качество</h3>
+                    <p class="text-sm leading-relaxed" style="color: var(--fg-light);">
+                        Спешелти-кофе, обжаренный небольшими партиями с заботой и вниманием к каждой детали.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="w-12 h-12 mb-8 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, rgba(212, 168, 75, 0.1), transparent);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent);">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-4">Забота</h3>
+                    <p class="text-sm leading-relaxed" style="color: var(--fg-light);">
+                        О вас, о фермерах, об экологии. Честные отношения, построенные на уважении.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Origin Section -->
+    <section class="py-32 md:py-48 px-6 relative" style="background: var(--bg-warm);">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-24 reveal">
+                <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--accent);">Происхождение</span>
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8">
+                    Откуда наш кофе
+                </h2>
+                <div class="gold-line mx-auto mt-8"></div>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay: 0.15s;">
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--accent-warm); background: var(--accent-warm);"></div>
+                        <span class="font-serif text-xl">Эфиопия</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Иргачеффе, Сидамо</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Цветочные ноты и цитрусовая кислотность</p>
+                </div>
+                
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--fg); background: var(--fg);"></div>
+                        <span class="font-serif text-xl">Колумбия</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Уила, Нариньо</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Карамельная сладость, мягкое тело</p>
+                </div>
+                
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--muted); background: var(--muted);"></div>
+                        <span class="font-serif text-xl">Кения</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Абердар, Ньери</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Яркая ягодная кислотность</p>
+                </div>
+                
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--gold); background: var(--gold);"></div>
+                        <span class="font-serif text-xl">Бразилия</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Серрадо</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Ореховый, молочный шоколад</p>
+                </div>
+                
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--fg-light); background: var(--fg-light);"></div>
+                        <span class="font-serif text-xl">Гватемала</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Антигуа</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Дымные ноты, пряности</p>
+                </div>
+                
+                <div class="origin-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="origin-dot" style="color: var(--accent-warm); background: var(--accent-warm);"></div>
+                        <span class="font-serif text-xl">Коста-Рика</span>
+                    </div>
+                    <p class="text-xs mb-2 tracking-wide uppercase" style="color: var(--muted);">Тарразу</p>
+                    <p class="text-sm" style="color: var(--fg-light);">Чистый, яркий, медовая сладость</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="py-32 md:py-48 px-6" id="menu">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-24 reveal">
+                <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--accent);">Меню</span>
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8">
+                    Наши вкусы
+                </h2>
+                <div class="gold-line mx-auto mt-8"></div>
+            </div>
+            
+            <div class="reveal" style="transition-delay: 0.15s;">
+                <article class="menu-item">
+                    <div class="flex justify-between items-start gap-6">
+                        <div>
+                            <h3 class="menu-item-title font-serif text-2xl md:text-3xl">Эфиопия Иргачеффе</h3>
+                            <p class="text-sm mt-2 tracking-wide" style="color: var(--muted);">Фильтр, V60</p>
+                        </div>
+                        <span class="font-serif text-xl" style="color: var(--accent);">280 ₽</span>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start gap-6">
+                        <div>
+                            <h3 class="menu-item-title font-serif text-2xl md:text-3xl">Колумбия Уила</h3>
+                            <p class="text-sm mt-2 tracking-wide" style="color: var(--muted);">Эспрессо, doppio</p>
+                        </div>
+                        <span class="font-serif text-xl" style="color: var(--accent);">220 ₽</span>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start gap-6">
+                        <div>
+                            <h3 class="menu-item-title font-serif text-2xl md:text-3xl">Кения Абердар</h3>
+                            <p class="text-sm mt-2 tracking-wide" style="color: var(--muted);">Фильтр, Kalita</p>
+                        </div>
+                        <span class="font-serif text-xl" style="color: var(--accent);">320 ₽</span>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start gap-6">
+                        <div>
+                            <h3 class="menu-item-title font-serif text-2xl md:text-3xl">Бразилия Серрадо</h3>
+                            <p class="text-sm mt-2 tracking-wide" style="color: var(--muted);">Эспрессо, лунго</p>
+                        </div>
+                        <span class="font-serif text-xl" style="color: var(--accent);">200 ₽</span>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start gap-6">
+                        <div>
+                            <h3 class="menu-item-title font-serif text-2xl md:text-3xl">Гватемала Антигуа</h3>
+                            <p class="text-sm mt-2 tracking-wide" style="color: var(--muted);">Фильтр, Chemex</p>
+                        </div>
+                        <span class="font-serif text-xl" style="color: var(--accent);">350 ₽</span>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-16 reveal">
+                <p class="text-sm font-serif italic" style="color: var(--muted);">
+                    Спросите бариста о сезонных альтернативах
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section (Dark) -->
+    <section class="py-32 md:py-48 px-6 dark-section" id="process">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="grid md:grid-cols-2 gap-20 md:gap-32 items-center">
+                <div class="reveal">
+                    <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--gold);">Процесс</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8 mb-12 leading-tight" style="color: var(--cream);">
+                        Обжарка маленькими партиями
+                    </h2>
+                    <div class="space-y-6 text-base" style="color: rgba(255, 252, 245, 0.7);">
+                        <p>
+                            Мы обжариваем зерно небольшими партиями, чтобы сохранить 
+                            аромат и раскрыть характер каждого региона.
+                        </p>
+                        <p>
+                            Каждый день наши бариста калибруют оборудование и настраивают рецепты — 
+                            чтобы ваша чашка была идеальной.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-14 flex flex-wrap gap-12">
+                        <div>
+                            <span class="stat-number font-serif">12</span>
+                            <span class="block text-xs mt-3 tracking-[0.2em] uppercase" style="color: var(--gold);">регионов мира</span>
+                        </div>
+                        <div>
+                            <span class="stat-number font-serif">4</span>
+                            <span class="block text-xs mt-3 tracking-[0.2em] uppercase" style="color: var(--gold);">года обжарки</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="grid grid-cols-2 gap-5">
+                        <div class="aspect-square rounded-sm" style="background: linear-gradient(135deg, rgba(212, 168, 75, 0.1), transparent); border: 1px solid rgba(212, 168, 75, 0.15);"></div>
+                        <div class="aspect-square rounded-sm" style="background: linear-gradient(225deg, rgba(196, 147, 58, 0.08), transparent);"></div>
+                        <div class="aspect-square rounded-sm" style="background: linear-gradient(45deg, rgba(139, 105, 20, 0.1), transparent);"></div>
+                        <div class="aspect-square rounded-sm" style="background: linear-gradient(315deg, rgba(212, 168, 75, 0.05), transparent); border: 1px solid rgba(212, 168, 75, 0.1);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-32 md:py-48 px-6" id="contact">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-20 md:gap-32">
+                <div class="reveal">
+                    <span class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--accent);">Найти нас</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-8 mb-12">
+                        Приходите за тишиной
+                    </h2>
+                    
+                    <div class="space-y-10">
+                        <div>
+                            <h3 class="text-xs tracking-[0.2em] uppercase mb-4 font-medium" style="color: var(--muted);">Адрес</h3>
+                            <p class="text-lg font-serif">
+                                ул. Тихая, 14<br>
+                                <span class="text-base" style="color: var(--fg-light);">двор «Архитектор», второй этаж</span>
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xs tracking-[0.2em] uppercase mb-4 font-medium" style="color: var(--muted);">Часы работы</h3>
+                            <p class="text-lg font-serif">
+                                Будни: 8:00 — 22:00<br>
+                                Выходные: 9:00 — 21:00
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xs tracking-[0.2em] uppercase mb-4 font-medium" style="color: var(--muted);">Связь</h3>
+                            <p class="text-lg font-serif">
+                                <a href="tel:+78001234567" class="hover:text-[var(--accent)] underline underline-offset-4 decoration-[var(--border)] hover:decoration-[var(--gold)] transition-colors">+7 800 123-45-67</a><br>
+                                <a href="mailto:hello@slowmorning.ru" class="hover:text-[var(--accent)] underline underline-offset-4 decoration-[var(--border)] hover:decoration-[var(--gold)] transition-colors">hello@slowmorning.ru</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="map-container aspect-[4/3] rounded-sm relative">
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background: linear-gradient(135deg, var(--gold), var(--accent-warm)); box-shadow: 0 10px 40px rgba(212, 168, 75, 0.3);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <p class="text-xs tracking-[0.2em] uppercase font-medium" style="color: var(--muted);">
+                                Две минуты от метро
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 px-6 border-t relative" style="border-color: var(--border); background: var(--bg-warm);">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
+                <div class="text-center md:text-left">
+                    <span class="font-serif text-3xl">Slow Morning</span>
+                    <p class="mt-3 text-sm font-serif italic" style="color: var(--muted);">Культура потребления</p>
+                </div>
+                
+                <div class="flex items-center gap-8">
+                    <a href="#" class="group opacity-50 hover:opacity-100 transition-all duration-300" aria-label="Instagram">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center border border-current opacity-30 group-hover:opacity-100 group-hover:border-[var(--gold)] transition-all duration-300">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                <circle cx="12" cy="12" r="4"/>
+                                <circle cx="18" cy="6" r="1"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a href="#" class="group opacity-50 hover:opacity-100 transition-all duration-300" aria-label="Telegram">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center border border-current opacity-30 group-hover:opacity-100 group-hover:border-[var(--gold)] transition-all duration-300">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                
+                <p class="text-sm font-serif" style="color: var(--muted);">
+                    Замедлись. Выдохни. Насладись.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -60px 0px'
+            });
+            
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            
+            function updateNavbar() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 50) {
+                    navbar.style.background = 'rgba(248, 244, 238, 0.95)';
+                    navbar.style.backdropFilter = 'blur(12px)';
+                    navbar.style.boxShadow = '0 1px 0 rgba(28, 24, 21, 0.05)';
+                } else {
+                    navbar.style.background = 'transparent';
+                    navbar.style.backdropFilter = 'none';
+                    navbar.style.boxShadow = 'none';
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbar);
+            updateNavbar();
+            
+            // Mobile menu
+            const menuToggle = document.getElementById('menuToggle');
+            const closeMenu = document.getElementById('closeMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuPanel = document.getElementById('menuPanel');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            
+            function openMenu() {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                requestAnimationFrame(() => {
+                    menuPanel.style.transform = 'translateX(0)';
+                });
+            }
+            
+            function closeMenuFn() {
+                menuPanel.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 700);
+            }
+            
+            menuToggle.addEventListener('click', openMenu);
+            closeMenu.addEventListener('click', closeMenuFn);
+            menuOverlay.addEventListener('click', closeMenuFn);
+            menuLinks.forEach(link => link.addEventListener('click', closeMenuFn));
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const offsetTop = target.offsetTop - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Reduced motion check
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            
+            if (prefersReducedMotion.matches) {
+                document.querySelectorAll('.coffee-container').forEach(el => {
+                    el.style.animation = 'none';
+                });
+                document.querySelectorAll('.steam').forEach(el => {
+                    el.style.animation = 'none';
+                    el.style.opacity = '0.2';
+                });
+            }
+            
+            // Parallax effect for hero
+            const hero = document.querySelector('.hero');
+            const coffeeContainer = document.querySelector('.coffee-container');
+            
+            if (!prefersReducedMotion.matches && window.innerWidth > 768) {
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.pageYOffset;
+                    if (scrolled < window.innerHeight) {
+                        coffeeContainer.style.transform = `translateY(${scrolled * 0.1}px)`;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
