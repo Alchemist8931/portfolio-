@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroSpace Dynamics — Величие инженерной мысли</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Slow Morning — Культура потребления</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #F5F0E8;
+            --bg-warm: #EDE6DA;
+            --fg: #2C1810;
+            --fg-light: #4A3728;
+            --muted: #8B7355;
+            --accent: #C4A484;
+            --coffee: #3D2314;
+            --latte: #D4C4B0;
+            --cream: #FDF8F3;
+            --rose: #D4A5A5;
+            --olive: #8B9A7D;
+            --copper: #B87333;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --bg-deep: #050508;
-            --bg-night: #0a0a12;
-            --bg-dawn: #1a1520;
-            --bg-day: #2a2535;
-            --fg: #e8e8f0;
-            --fg-muted: #8a8a9a;
-            --accent-copper: #c87941;
-            --accent-orange: #ff6b35;
-            --accent-violet: #9d8ec9;
-            --accent-gold: #d4a855;
         }
 
         html {
@@ -30,1788 +35,1181 @@
         }
 
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-deep);
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg);
             color: var(--fg);
             overflow-x: hidden;
             line-height: 1.7;
         }
 
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-copper);
-            border-radius: 2px;
+        .font-serif {
+            font-family: 'Playfair Display', Georgia, serif;
         }
 
-        #canvas-container {
+        /* Noise texture overlay */
+        .noise-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            background: linear-gradient(to bottom, rgba(5,5,8,0.95) 0%, transparent 100%);
-        }
-
-        .logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            color: var(--fg);
-            text-transform: uppercase;
-        }
-
-        .logo span {
-            color: var(--accent-copper);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--fg-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent-copper);
-            transition: width 0.4s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--fg);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            z-index: 10;
+            inset: 0;
             pointer-events: none;
+            opacity: 0.03;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-        section > * {
-            pointer-events: auto;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        #hero {
-            height: 100vh;
-            justify-content: flex-start;
-            padding: 0 8%;
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
         }
 
-        .hero-content {
-            max-width: 600px;
-            opacity: 0;
-            transform: translateY(60px);
-            animation: heroReveal 1.5s ease 0.5s forwards;
+        ::-webkit-scrollbar-thumb {
+            background: var(--muted);
+            border-radius: 4px;
         }
 
-        @keyframes heroReveal {
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .hero-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: var(--accent-copper);
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: fadeIn 1s ease 1s forwards;
-        }
-
-        .hero-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 300;
-            line-height: 1.1;
-            letter-spacing: 0.05em;
-            margin-bottom: 2rem;
-        }
-
-        .hero-title strong {
-            font-weight: 700;
-            display: block;
-        }
-
-        .hero-desc {
-            font-size: 1rem;
-            color: var(--fg-muted);
-            margin-bottom: 3rem;
-            letter-spacing: 0.05em;
-            max-width: 450px;
-        }
-
-        .hero-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 2.5rem;
-            background: transparent;
-            border: 1px solid var(--accent-copper);
-            color: var(--fg);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(200,121,65,0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .hero-btn:hover::before {
-            left: 100%;
-        }
-
-        .hero-btn:hover {
-            background: var(--accent-copper);
-            box-shadow: 0 0 30px rgba(200,121,65,0.3);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            animation: fadeIn 1s ease 2s forwards;
-        }
-
-        .scroll-indicator span {
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--fg-muted);
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--accent-copper), transparent);
-            animation: scrollPulse 2s ease infinite;
-        }
-
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
-            50% { opacity: 1; transform: scaleY(1); }
-        }
-
         @keyframes fadeIn {
+            from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        #gallery {
-            min-height: 100vh;
-            padding: 8rem 8%;
-            flex-direction: column;
-            justify-content: center;
+        @keyframes steamRise {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-30px) translateX(5px) scale(1.2);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-60px) translateX(-3px) scale(0.8);
+                opacity: 0;
+            }
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .section-label {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            color: var(--accent-copper);
-            margin-bottom: 1rem;
+        @keyframes grainShift {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-1%, -1%); }
+            20% { transform: translate(1%, 1%); }
+            30% { transform: translate(-1%, 1%); }
+            40% { transform: translate(1%, -1%); }
+            50% { transform: translate(-1%, 0); }
+            60% { transform: translate(1%, 0); }
+            70% { transform: translate(0, 1%); }
+            80% { transform: translate(0, -1%); }
+            90% { transform: translate(1%, 1%); }
         }
 
-        .section-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 300;
-            letter-spacing: 0.1em;
+        @keyframes lightBeam {
+            0% { opacity: 0.3; transform: translateX(-20%); }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.3; transform: translateX(20%); }
         }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
         }
 
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 4/3;
-            background: linear-gradient(145deg, rgba(10,10,18,0.9) 0%, rgba(5,5,8,0.95) 100%);
-            border: 1px solid rgba(200,121,65,0.1);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.6s ease;
+        .animate-fadeIn {
+            animation: fadeIn 1.5s ease-out forwards;
         }
 
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(200,121,65,0.1) 0%, transparent 50%);
+        .reveal {
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .gallery-item:hover::before {
+        .reveal.active {
             opacity: 1;
-        }
-
-        .gallery-item:hover {
-            border-color: var(--accent-copper);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(200,121,65,0.1);
-        }
-
-        .gallery-visual {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 4rem;
-            font-weight: 300;
-            color: rgba(200,121,65,0.1);
-            transition: all 0.6s ease;
-        }
-
-        .gallery-item:hover .gallery-visual {
-            color: rgba(200,121,65,0.3);
-            transform: scale(1.1);
-        }
-
-        .gallery-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem;
-            background: linear-gradient(to top, rgba(5,5,8,0.95) 0%, transparent 100%);
-            transform: translateY(100%);
-            transition: transform 0.4s ease;
-        }
-
-        .gallery-item:hover .gallery-info {
             transform: translateY(0);
         }
 
-        .gallery-info h3 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .animate-fadeInUp,
+            .animate-fadeIn {
+                animation: none;
+                opacity: 1;
+            }
         }
 
-        .gallery-info p {
-            font-size: 0.85rem;
-            color: var(--fg-muted);
-        }
-
-        #journey {
-            min-height: 300vh;
-            padding: 10rem 8%;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-        .journey-container {
-            display: flex;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            position: sticky;
-            top: 10rem;
-        }
-
-        .journey-text {
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .journey-visual {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            position: relative;
-        }
-
-        .journey-stage {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        .journey-stage.active {
-            opacity: 1;
-        }
-
-        .stage-sketch {
-            width: 80%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-copper), transparent);
-            position: relative;
-        }
-
-        .stage-sketch::before,
-        .stage-sketch::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border: 1px solid var(--accent-copper);
-            border-radius: 50%;
-        }
-
-        .stage-sketch::before {
-            top: -50px;
-            left: 20%;
-            opacity: 0.3;
-        }
-
-        .stage-sketch::after {
-            top: -50px;
-            right: 20%;
-            opacity: 0.5;
-        }
-
-        .stage-draft {
-            width: 60%;
-            aspect-ratio: 16/9;
-            border: 1px solid var(--accent-copper);
-            position: relative;
-            background: linear-gradient(135deg, rgba(200,121,65,0.05) 0%, transparent 50%);
-        }
-
-        .stage-draft::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            right: 10%;
-            height: 1px;
-            background: var(--accent-copper);
-        }
-
-        .stage-complete {
-            width: 70%;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, rgba(200,121,65,0.1) 0%, rgba(157,142,201,0.05) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
-            color: var(--accent-copper);
-            border: 1px solid rgba(200,121,65,0.3);
-        }
-
-        .journey-text-item {
-            margin-bottom: 3rem;
-            opacity: 0.3;
-            transform: translateX(-30px);
-            transition: all 0.6s ease;
-        }
-
-        .journey-text-item.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .journey-text-item h3 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            color: var(--accent-copper);
-        }
-
-        .journey-text-item p {
-            color: var(--fg-muted);
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
-
-        #specs {
+        /* Hero section */
+        .hero {
             min-height: 100vh;
-            padding: 8rem 8%;
-            justify-content: center;
-        }
-
-        .specs-container {
-            max-width: 1400px;
-            width: 100%;
-            display: flex;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .specs-hud {
-            flex: 1;
             position: relative;
-            min-height: 500px;
-        }
-
-        .hud-element {
-            position: absolute;
-            padding: 1.5rem;
-            border: 1px solid rgba(200,121,65,0.3);
-            background: rgba(5,5,8,0.85);
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.6s ease;
-        }
-
-        .hud-element.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .hud-element::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 20px;
-            right: 20px;
-            height: 1px;
-            background: var(--accent-copper);
-        }
-
-        .hud-element .value {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-copper);
-            line-height: 1;
-        }
-
-        .hud-element .unit {
-            font-size: 1rem;
-            font-weight: 300;
-            color: var(--fg-muted);
-            margin-left: 0.25rem;
-        }
-
-        .hud-element .label {
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--fg-muted);
-            margin-top: 0.5rem;
-        }
-
-        .hud-1 { top: 0; left: 0; transition-delay: 0.1s; }
-        .hud-2 { top: 0; right: 0; transition-delay: 0.2s; }
-        .hud-3 { bottom: 100px; left: 50px; transition-delay: 0.3s; }
-        .hud-4 { bottom: 100px; right: 50px; transition-delay: 0.4s; }
-        .hud-5 { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); transition-delay: 0.5s; }
-        .hud-5.visible { transform: translate(-50%, -50%) scale(1); }
-
-        .hud-center {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border: 1px solid var(--accent-copper);
-            background: radial-gradient(circle, rgba(200,121,65,0.1) 0%, transparent 70%);
-        }
-
-        .hud-center .value {
-            font-size: 3.5rem;
-        }
-
-        .specs-info {
-            flex: 1;
-        }
-
-        .specs-info .section-label {
-            text-align: left;
-        }
-
-        .specs-info .section-title {
-            text-align: left;
-            margin-bottom: 2rem;
-        }
-
-        .specs-info p {
-            color: var(--fg-muted);
-            margin-bottom: 2rem;
-            max-width: 500px;
-        }
-
-        .specs-list {
-            list-style: none;
-        }
-
-        .specs-list li {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .specs-list li::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--accent-copper);
-            transform: rotate(45deg);
-        }
-
-        footer {
-            position: relative;
-            padding: 6rem 8%;
-            background: linear-gradient(to top, rgba(5,5,8,1) 0%, transparent 100%);
-            z-index: 20;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-        }
-
-        .footer-logo span {
-            color: var(--accent-copper);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--fg-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-copper);
-        }
-
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-copper), var(--accent-orange), var(--accent-violet));
-            z-index: 1000;
-            transition: width 0.1s linear;
-        }
-
-        .loading-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-deep);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        .loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            margin-bottom: 2rem;
-        }
-
-        .loading-logo span {
-            color: var(--accent-copper);
-        }
-
-        .loading-bar {
-            width: 200px;
-            height: 2px;
-            background: rgba(200,121,65,0.2);
             overflow: hidden;
         }
 
-        .loading-progress {
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(255, 248, 240, 0.8) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(196, 164, 132, 0.3) 0%, transparent 40%),
+                linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
+        }
+
+        .light-beam {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 60%;
             height: 100%;
-            background: var(--accent-copper);
-            width: 0%;
-            transition: width 0.3s ease;
+            background: linear-gradient(180deg, 
+                rgba(255, 250, 240, 0.4) 0%, 
+                rgba(255, 245, 230, 0.1) 50%,
+                transparent 100%);
+            transform: translateX(-50%) skewX(-15deg);
+            animation: lightBeam 8s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        @media (max-width: 1024px) {
-            nav {
-                padding: 1rem 2rem;
-            }
+        .coffee-cup-container {
+            position: relative;
+            width: 280px;
+            height: 340px;
+        }
 
-            .nav-links {
-                display: none;
-            }
+        .coffee-cup {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
 
-            #hero, #gallery, #journey, #specs {
-                padding: 4rem 5%;
-            }
+        .cup-body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--cream) 0%, #F8F4EF 50%, #E8E0D5 100%);
+            border-radius: 10px 10px 50% 50%;
+            box-shadow: 
+                inset 5px 5px 15px rgba(255, 255, 255, 0.8),
+                inset -5px -5px 15px rgba(0, 0, 0, 0.05),
+                0 20px 60px rgba(44, 24, 16, 0.15);
+        }
 
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .cup-coffee {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 140px;
+            background: radial-gradient(ellipse at 30% 30%, #5C3D2E 0%, var(--coffee) 60%, #1A0F0A 100%);
+            border-radius: 10px 10px 50% 50%;
+            overflow: hidden;
+        }
 
-            .journey-container {
-                flex-direction: column;
-                gap: 2rem;
-            }
+        .coffee-surface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(180deg, 
+                rgba(92, 61, 46, 0.8) 0%, 
+                transparent 100%);
+            border-radius: 10px 10px 0 0;
+        }
 
-            .specs-container {
-                flex-direction: column;
-            }
+        .latte-art {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 80px;
+            background: radial-gradient(ellipse at center, var(--latte) 0%, transparent 70%);
+            opacity: 0.7;
+            border-radius: 50%;
+        }
 
-            .specs-hud {
-                width: 100%;
-                min-height: 400px;
+        .steam-container {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+        }
+
+        .steam {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.4));
+            border-radius: 50%;
+            animation: steamRise 3s ease-out infinite;
+        }
+
+        .steam:nth-child(1) {
+            left: 20%;
+            width: 20px;
+            height: 40px;
+            animation-delay: 0s;
+        }
+
+        .steam:nth-child(2) {
+            left: 50%;
+            width: 25px;
+            height: 50px;
+            animation-delay: 0.5s;
+        }
+
+        .steam:nth-child(3) {
+            left: 70%;
+            width: 18px;
+            height: 35px;
+            animation-delay: 1s;
+        }
+
+        .cup-handle {
+            position: absolute;
+            right: -35px;
+            top: 30px;
+            width: 40px;
+            height: 80px;
+            border: 12px solid var(--cream);
+            border-left: none;
+            border-radius: 0 50px 50px 0;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .saucer {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--cream) 0%, #E8E0D5 100%);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.1);
+        }
+
+        /* Coffee pour animation */
+        .pour-stream {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 100px;
+            background: linear-gradient(180deg, 
+                var(--coffee) 0%, 
+                #5C3D2E 100%);
+            border-radius: 4px;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .pour-stream::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 15px;
+            background: var(--coffee);
+            border-radius: 50%;
+        }
+
+        /* Menu cards */
+        .menu-item {
+            position: relative;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .menu-item:hover {
+            padding-left: 1rem;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: linear-gradient(90deg, var(--rose), transparent);
+            opacity: 0.1;
+            transition: width 0.4s ease;
+        }
+
+        .menu-item:hover::before {
+            width: 100%;
+        }
+
+        .flavor-card {
+            position: absolute;
+            left: calc(100% + 2rem);
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            width: 280px;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(44, 24, 16, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            z-index: 10;
+        }
+
+        .menu-item:hover .flavor-card {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .flavor-card {
+                position: fixed;
+                left: 50%;
+                top: auto;
+                bottom: 2rem;
+                transform: translateX(-50%) translateY(20px);
+                width: calc(100% - 2rem);
+                max-width: 320px;
+            }
+            
+            .menu-item:hover .flavor-card {
+                transform: translateX(-50%) translateY(0);
             }
         }
 
-        @media (max-width: 640px) {
-            .gallery-grid {
+        /* Split section */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        @media (max-width: 768px) {
+            .split-section {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .hero-title {
-                font-size: 2rem;
-            }
+        .texture-panel {
+            position: relative;
+            background: var(--bg-warm);
+            overflow: hidden;
+        }
 
-            .hud-element {
-                padding: 1rem;
-            }
+        .hand-illustration {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            .hud-element .value {
-                font-size: 1.8rem;
-            }
+        /* Temperature curve */
+        .temp-curve {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
 
-            .hud-center {
-                width: 100px;
-                height: 100px;
-            }
+        .curve-line {
+            fill: none;
+            stroke: var(--copper);
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 2s ease;
+        }
 
-            .hud-center .value {
-                font-size: 2rem;
-            }
+        .curve-line.animate {
+            stroke-dashoffset: 0;
+        }
+
+        /* Map illustration */
+        .map-illustration {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 4/3;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--coffee);
+            color: var(--cream);
+            border: none;
+            border-radius: 4px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.3);
+        }
+
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--copper);
+            outline-offset: 3px;
+        }
+
+        /* Plant decorations */
+        .plant-decoration {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--copper);
+            outline-offset: 3px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--rose);
+            color: var(--fg);
         }
     </style>
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-logo">Aero<span>Space</span></div>
-        <div class="loading-bar">
-            <div class="loading-progress" id="loadingProgress"></div>
-        </div>
-    </div>
+    <div class="noise-overlay" aria-hidden="true"></div>
 
-    <div class="progress-bar" id="progressBar"></div>
-
-    <nav>
-        <div class="logo">Aero<span>Space</span></div>
-        <ul class="nav-links">
-            <li><a href="#hero">Главная</a></li>
-            <li><a href="#gallery">Производство</a></li>
-            <li><a href="#journey">Путь к небу</a></li>
-            <li><a href="#specs">Характеристики</a></li>
-        </ul>
-    </nav>
-
-    <div id="canvas-container"></div>
-
-    <section id="hero">
-        <div class="hero-content">
-            <p class="hero-subtitle">Инженерное искусство</p>
-            <h1 class="hero-title">
-                Величие мысли,
-                <strong>эстетика высоты</strong>
-            </h1>
-            <p class="hero-desc">
-                Мы создаем не просто самолеты — мы проектируем будущее. 
-                Каждая линия, каждый изгиб — это симфония технологий и красоты.
-            </p>
-            <button class="hero-btn">
-                <span>Открыть горизонты</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:py-6 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl md:text-3xl tracking-wide" style="color: var(--coffee);">
+                Slow Morning
+            </a>
+            <div class="hidden md:flex items-center gap-10">
+                <a href="#philosophy" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Философия</a>
+                <a href="#menu" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Меню</a>
+                <a href="#process" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Процесс</a>
+                <a href="#contact" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Найти нас</a>
+            </div>
+            <button class="md:hidden p-2" id="menuToggle" aria-label="Открыть меню">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="4" y1="8" x2="20" y2="8"></line>
+                    <line x1="4" y1="16" x2="20" y2="16"></line>
                 </svg>
             </button>
         </div>
-        <div class="scroll-indicator">
-            <span>Прокрутите</span>
-            <div class="scroll-line"></div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
+        <div class="absolute inset-0 bg-black/50" id="menuOverlay"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full p-8 transform translate-x-full transition-transform duration-500" style="background: var(--cream);" id="menuPanel">
+            <div class="flex flex-col gap-8 mt-16">
+                <a href="#philosophy" class="font-serif text-2xl" style="color: var(--fg);">Философия</a>
+                <a href="#menu" class="font-serif text-2xl" style="color: var(--fg);">Меню</a>
+                <a href="#process" class="font-serif text-2xl" style="color: var(--fg);">Процесс</a>
+                <a href="#contact" class="font-serif text-2xl" style="color: var(--fg);">Найти нас</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="light-beam" aria-hidden="true"></div>
+        
+        <!-- Decorative plants -->
+        <svg class="plant-decoration" style="top: 10%; left: 5%; width: 200px;" viewBox="0 0 100 150" aria-hidden="true">
+            <path d="M50 150 Q30 100 50 50 Q70 100 50 150" fill="none" stroke="var(--olive)" stroke-width="1"/>
+            <ellipse cx="30" cy="60" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-20 30 60)"/>
+            <ellipse cx="70" cy="70" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(20 70 70)"/>
+        </svg>
+        
+        <div class="relative z-10 h-full flex flex-col">
+            <div class="flex-1 flex items-center justify-center px-6 pt-20">
+                <div class="text-center max-w-4xl">
+                    <p class="text-sm md:text-base tracking-[0.3em] uppercase mb-6 animate-fadeIn" style="color: var(--muted); animation-delay: 0.2s; opacity: 0;">
+                        Авторская кофейня
+                    </p>
+                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fadeInUp" style="color: var(--coffee); animation-delay: 0.4s; opacity: 0;">
+                        Slow Morning
+                    </h1>
+                    <p class="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.6s; opacity: 0;">
+                        Кофе — это не просто напиток для бодрости.<br>
+                        Это повод остановиться и насладиться моментом.
+                    </p>
+                    <a href="#menu" class="btn-primary animate-fadeInUp" style="animation-delay: 0.8s; opacity: 0;">
+                        <span>Исследовать вкусы</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 5v14M19 12l-7 7-7-7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Coffee cup illustration -->
+            <div class="flex justify-center pb-12 md:pb-20">
+                <div class="coffee-cup-container animate-fadeIn" style="animation-delay: 1s; opacity: 0;">
+                    <div class="pour-stream"></div>
+                    <div class="coffee-cup">
+                        <div class="steam-container">
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                        </div>
+                        <div class="cup-body">
+                            <div class="cup-coffee">
+                                <div class="coffee-surface"></div>
+                                <div class="latte-art"></div>
+                            </div>
+                        </div>
+                        <div class="cup-handle"></div>
+                    </div>
+                    <div class="saucer"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+            <span class="text-xs tracking-widest uppercase" style="color: var(--muted);">Листайте</span>
+            <div class="w-px h-12 bg-gradient-to-b from-transparent to-current" style="color: var(--muted);"></div>
         </div>
     </section>
 
-    <section id="gallery">
-        <div class="section-header">
-            <p class="section-label">Производственные мощности</p>
-            <h2 class="section-title">Там, где рождается полет</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <div class="gallery-visual">T</div>
-                <div class="gallery-info">
-                    <h3>Турбинный цех</h3>
-                    <p>Точность до микрона. Каждая лопатка — произведение инженерного искусства.</p>
+    <!-- Philosophy Section -->
+    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="philosophy" style="background: var(--bg-warm);">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                <div class="reveal">
+                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Философия</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-8" style="color: var(--coffee);">
+                        Лучший кофе — тот,<br>
+                        <em>который пьется в тишине</em>
+                    </h2>
+                    <div class="space-y-6 text-lg" style="color: var(--fg-light);">
+                        <p>
+                            Мы не торопим вас. В «Slow Morning» время течет иначе — 
+                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
+                        </p>
+                        <p>
+                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
+                            насыпает зерна, до последнего глотка, оставляющего тепло где-то внутри.
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-visual">C</div>
-                <div class="gallery-info">
-                    <h3>Композитные материалы</h3>
-                    <p>Углепластик, сотканный из света и прочности.</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-visual">W</div>
-                <div class="gallery-info">
-                    <h3>Сборка крыла</h3>
-                    <p>Аэродинамическое совершенство в каждом заклепочном шве.</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-visual">A</div>
-                <div class="gallery-info">
-                    <h3>Авионика</h3>
-                    <p>Мозг самолета — нейронная сеть из кремния и света.</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-visual">F</div>
-                <div class="gallery-info">
-                    <h3>Фюзеляж</h3>
-                    <p>Гармония формы и функции, выкованная в тишине ангара.</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <div class="gallery-visual">P</div>
-                <div class="gallery-info">
-                    <h3>Испытания</h3>
-                    <p>Каждый узел проходит через тысячи часов стресс-тестов.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="journey">
-        <div class="journey-container">
-            <div class="journey-text">
-                <div class="journey-text-item" data-stage="0">
-                    <h3>Замысел</h3>
-                    <p>Каждый проект начинается с чистого листа. Инженеры и дизайнеры работают в тишине, создавая первые контуры будущего крыла.</p>
-                </div>
-                <div class="journey-text-item" data-stage="1">
-                    <h3>Проектирование</h3>
-                    <p>Цифровая модель рождается в суперкомпьютерах. Миллионы расчетов, тысячи итераций — чтобы каждая линия была идеальной.</p>
-                </div>
-                <div class="journey-text-item" data-stage="2">
-                    <h3>Создание</h3>
-                    <p>Рождаются компоненты. Титан и композит сплетаются в единое целое. Ангары наполняются тихим гулом прецизионных станков.</p>
-                </div>
-                <div class="journey-text-item" data-stage="3">
-                    <h3>Первый полет</h3>
-                    <p>Рассвет. Взлетная полоса. И момент, когда творение человеческих рук впервые отрывается от земли — чтобы больше никогда не касаться её.</p>
-                </div>
-            </div>
-            <div class="journey-visual">
-                <div class="journey-stage active" data-stage="0">
-                    <div class="stage-sketch"></div>
-                </div>
-                <div class="journey-stage" data-stage="1">
-                    <div class="stage-draft"></div>
-                </div>
-                <div class="journey-stage" data-stage="2">
-                    <div class="stage-complete">AS-1</div>
-                </div>
-                <div class="journey-stage" data-stage="3">
-                    <div class="stage-complete" style="background: linear-gradient(135deg, rgba(255,107,53,0.2) 0%, rgba(200,121,65,0.1) 100%);">FLIGHT</div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="relative">
+                        <!-- Stylized coffee bean illustration -->
+                        <svg viewBox="0 0 400 400" class="w-full max-w-md mx-auto" aria-hidden="true">
+                            <!-- Background glow -->
+                            <defs>
+                                <radialGradient id="glow" cx="50%" cy="50%">
+                                    <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.5"/>
+                                    <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
+                            
+                            <!-- Coffee beans -->
+                            <g fill="var(--coffee)" opacity="0.9">
+                                <ellipse cx="150" cy="180" rx="45" ry="65" transform="rotate(-30 150 180)"/>
+                                <path d="M150 130 Q165 180 150 230" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
+                                
+                                <ellipse cx="250" cy="200" rx="50" ry="70" transform="rotate(20 250 200)"/>
+                                <path d="M250 140 Q265 200 250 260" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
+                                
+                                <ellipse cx="180" cy="280" rx="40" ry="55" transform="rotate(10 180 280)"/>
+                                <path d="M180 235 Q195 280 180 325" stroke="var(--bg-warm)" stroke-width="2" fill="none"/>
+                            </g>
+                            
+                            <!-- Texture lines -->
+                            <g stroke="var(--accent)" stroke-width="0.5" opacity="0.3">
+                                <line x1="100" y1="100" x2="300" y2="100"/>
+                                <line x1="80" y1="150" x2="320" y2="150"/>
+                                <line x1="90" y1="320" x2="310" y2="320"/>
+                            </g>
+                        </svg>
+                        
+                        <!-- Floating text -->
+                        <div class="absolute top-4 right-4 font-serif italic text-lg" style="color: var(--muted);">
+                            Обжарено с душой
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="specs">
-        <div class="specs-container">
-            <div class="specs-hud">
-                <div class="hud-element hud-1">
-                    <div class="value">984<span class="unit">км/ч</span></div>
-                    <div class="label">Крейсерская скорость</div>
-                </div>
-                <div class="hud-element hud-2">
-                    <div class="value">12 500<span class="unit">км</span></div>
-                    <div class="label">Дальность полета</div>
-                </div>
-                <div class="hud-element hud-3">
-                    <div class="value">13 100<span class="unit">м</span></div>
-                    <div class="label">Практический потолок</div>
-                </div>
-                <div class="hud-element hud-4">
-                    <div class="value">2.9<span class="unit">л/100пкм</span></div>
-                    <div class="label">Расход топлива</div>
-                </div>
-                <div class="hud-element hud-5 hud-center">
-                    <div class="value">350</div>
-                    <div class="label">Пассажиров</div>
-                </div>
-            </div>
-            <div class="specs-info">
-                <p class="section-label">Технические данные</p>
-                <h2 class="section-title">AS-350 Horizon</h2>
-                <p>
-                    Флагман нашей линейки. Воплощение десятилетий исследований и инноваций. 
-                    Каждый параметр — результат стремления к совершенству.
+    <!-- Menu Section -->
+    <section class="py-24 md:py-32 px-6 relative" id="menu" style="background: var(--cream);">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Не просто напитки</span>
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4" style="color: var(--coffee);">
+                    Наши вкусы
+                </h2>
+                <p class="mt-6 text-lg max-w-xl mx-auto" style="color: var(--muted);">
+                    Наведите на название, чтобы узнать вкусовой профиль — 
+                    как если бы вы спросили бариста
                 </p>
-                <ul class="specs-list">
-                    <li>Композитный фюзеляж нового поколения</li>
-                    <li>Турбовентиляторные двигатели с пониженным выбросом</li>
-                    <li>Активная система гашения турбулентности</li>
-                    <li>Система управления голосовыми командами</li>
-                </ul>
+            </div>
+            
+            <div class="space-y-0 reveal" style="transition-delay: 0.2s;">
+                <!-- Menu items -->
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Эфиопия Иргачеффе</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, V60</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">280 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--olive), var(--rose));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Ноты жасмина, спелого персика и легкая цитрусовая кислинка. 
+                            Чашка весеннего сада.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Цветочный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Фруктовый</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Колумбия Уила</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, doppio</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">220 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--copper), var(--coffee));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Карамельная сладость, ноты горького шоколада и ореховое послевкусие. 
+                            Утро в горах.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Нутовый</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Шоколадный</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Кения Абердар</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Kalita</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">320 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--rose), var(--accent));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Яркая смородиновая кислинка, томное послевкусие сушеных ягод. 
+                            Африка в каждой чашке.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Ягодный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Сбалансированный</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Бразилия Серрадо</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, лунго</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">200 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--accent), var(--coffee));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Мягкий, с нотами молочного шоколада и жареного фундука. 
+                            Идеальный компаньон для неторопливой беседы.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--accent);">Мягкий</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Ореховый</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Гватемала Антигуа</h3>
+                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Chemex</p>
+                        </div>
+                        <span class="font-serif text-lg" style="color: var(--copper);">350 ₽</span>
+                    </div>
+                    <div class="flavor-card">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--fg), var(--copper));"></div>
+                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
+                        </div>
+                        <p class="font-serif text-lg" style="color: var(--fg);">
+                            Дымные ноты, пряности и темный шоколад. 
+                            Вкус вулканических почв и древних городов.
+                        </p>
+                        <div class="flex gap-2 mt-4">
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--fg-light);">Пряный</span>
+                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Насыщенный</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-12 reveal">
+                <p class="text-sm" style="color: var(--muted);">
+                    Также спросите бариста о сезонных альтернативах и дрип-пакетах домой
+                </p>
             </div>
         </div>
     </section>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Aero<span>Space</span> Dynamics</div>
-            <div class="footer-links">
-                <a href="#">О компании</a>
-                <a href="#">Карьера</a>
-                <a href="#">Контакты</a>
-                <a href="#">Пресс-центр</a>
+    <!-- Process Section -->
+    <section class="split-section" id="process">
+        <div class="texture-panel relative">
+            <!-- Stylized hand/tamper illustration -->
+            <div class="hand-illustration p-8 md:p-12">
+                <svg viewBox="0 0 400 500" class="w-full h-full max-w-md" aria-hidden="true">
+                    <!-- Background warmth -->
+                    <defs>
+                        <radialGradient id="warmth" cx="50%" cy="50%">
+                            <stop offset="0%" stop-color="var(--copper)" stop-opacity="0.15"/>
+                            <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="200" cy="250" r="200" fill="url(#warmth)"/>
+                    
+                    <!-- Tamper -->
+                    <g transform="translate(120, 100)">
+                        <!-- Handle -->
+                        <rect x="60" y="0" width="40" height="180" rx="20" fill="var(--coffee)"/>
+                        <ellipse cx="80" cy="180" rx="50" ry="15" fill="var(--coffee)"/>
+                        
+                        <!-- Base -->
+                        <rect x="30" y="180" width="100" height="30" rx="2" fill="var(--fg)"/>
+                        
+                        <!-- Coffee grounds texture -->
+                        <g fill="var(--coffee)" opacity="0.6">
+                            <circle cx="55" cy="215" r="3"/>
+                            <circle cx="75" cy="218" r="2"/>
+                            <circle cx="95" cy="214" r="2.5"/>
+                            <circle cx="115" cy="217" r="2"/>
+                            <circle cx="45" cy="220" r="1.5"/>
+                            <circle cx="105" cy="222" r="2"/>
+                        </g>
+                        
+                        <!-- Portafilter basket -->
+                        <ellipse cx="80" cy="230" rx="55" ry="12" fill="none" stroke="var(--muted)" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Decorative elements -->
+                    <g stroke="var(--accent)" stroke-width="0.5" opacity="0.4">
+                        <line x1="50" y1="350" x2="350" y2="350"/>
+                        <line x1="70" y1="380" x2="330" y2="380"/>
+                        <line x1="100" y1="410" x2="300" y2="410"/>
+                    </g>
+                    
+                    <!-- Steam/aroma lines -->
+                    <g stroke="var(--muted)" stroke-width="1" fill="none" opacity="0.3">
+                        <path d="M180 80 Q175 60 185 40 Q195 20 180 0"/>
+                        <path d="M200 70 Q195 50 205 30 Q215 10 200 -10"/>
+                        <path d="M220 80 Q215 60 225 40 Q235 20 220 0"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- Temperature curve overlay -->
+            <svg class="temp-curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <path class="curve-line" d="M0 90 Q25 85 40 60 Q55 35 70 40 Q85 45 100 20"/>
+            </svg>
+        </div>
+        
+        <div class="flex items-center p-8 md:p-12 lg:p-20" style="background: var(--cream);">
+            <div class="reveal">
+                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Процесс</span>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mt-4 mb-8" style="color: var(--coffee);">
+                    Обжарка маленькими партиями
+                </h2>
+                <div class="space-y-6 text-lg" style="color: var(--fg-light);">
+                    <p>
+                        Мы обжариваем зерно маленькими партиями, чтобы сохранить 
+                        аромат и раскрыть характер каждого региона.
+                    </p>
+                    <p>
+                        Каждый день наши бариста калибруют оборудование, 
+                        пробуют эспрессо и настраивают рецепты — 
+                        чтобы ваша чашка была идеальной.
+                    </p>
+                    <p class="font-serif italic text-xl" style="color: var(--muted);">
+                        «Кофе — это не продукт. Это отношение.»
+                    </p>
+                </div>
+                
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">12</span>
+                        <span class="text-sm" style="color: var(--muted);">регионов мира</span>
+                    </div>
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">4</span>
+                        <span class="text-sm" style="color: var(--muted);">года обжарки</span>
+                    </div>
+                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
+                        <span class="block text-2xl font-serif" style="color: var(--coffee);">∞</span>
+                        <span class="text-sm" style="color: var(--muted);">внимания</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="contact" style="background: var(--bg-warm);">
+        <!-- Decorative plant -->
+        <svg class="plant-decoration" style="bottom: 5%; right: 5%; width: 250px; opacity: 0.1;" viewBox="0 0 150 200" aria-hidden="true">
+            <path d="M75 200 Q60 150 75 100 Q90 150 75 200" fill="none" stroke="var(--olive)" stroke-width="1"/>
+            <ellipse cx="40" cy="80" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-15 40 80)"/>
+            <ellipse cx="110" cy="90" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(15 110 90)"/>
+            <ellipse cx="75" cy="50" rx="30" ry="45" fill="none" stroke="var(--olive)" stroke-width="0.5"/>
+        </svg>
+        
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-20">
+                <div class="reveal">
+                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Найти нас</span>
+                    <h2 class="font-serif text-4xl md:text-5xl mt-4 mb-8" style="color: var(--coffee);">
+                        Приходите за тишиной
+                    </h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Адрес</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                ул. Тихая, 14<br>
+                                двор «Архитектор», второй этаж
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Время жить</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                Будни: 8:00 — 22:00<br>
+                                Выходные: 9:00 — 21:00
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Связь</h3>
+                            <p class="text-lg" style="color: var(--muted);">
+                                <a href="tel:+78001234567" class="hover:underline">+7 800 123-45-67</a><br>
+                                <a href="mailto:hello@slowmorning.ru" class="hover:underline">hello@slowmorning.ru</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <!-- Sketch-style map -->
+                    <div class="map-illustration">
+                        <svg viewBox="0 0 400 300" class="map-svg" aria-label="Схема проезда к кофейне">
+                            <style>
+                                .map-line { fill: none; stroke: var(--fg-light); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+                                .map-dashed { stroke-dasharray: 8 4; }
+                                .map-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); }
+                                .map-label-main { font-family: 'Playfair Display', serif; font-size: 14px; fill: var(--coffee); }
+                                .map-dot { fill: var(--rose); }
+                            </style>
+                            
+                            <!-- Main streets -->
+                            <path class="map-line" d="M50 150 L350 150" opacity="0.3"/>
+                            <path class="map-line" d="M200 50 L200 250" opacity="0.3"/>
+                            
+                            <!-- Side streets -->
+                            <path class="map-line" d="M100 100 L100 200" opacity="0.2"/>
+                            <path class="map-line" d="M300 80 L300 220" opacity="0.2"/>
+                            
+                            <!-- Route to cafe -->
+                            <path class="map-line map-dashed" d="M80 150 L80 120 L150 120 L150 90" style="stroke: var(--copper);"/>
+                            
+                            <!-- Buildings -->
+                            <rect x="120" y="140" width="60" height="40" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            <rect x="240" y="130" width="80" height="50" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            <rect x="60" y="160" width="40" height="30" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
+                            
+                            <!-- Trees/park -->
+                            <circle cx="320" cy="180" r="15" fill="var(--olive)" opacity="0.15"/>
+                            <circle cx="340" cy="200" r="12" fill="var(--olive)" opacity="0.1"/>
+                            
+                            <!-- Cafe location -->
+                            <circle cx="150" cy="90" r="20" fill="var(--cream)" stroke="var(--rose)" stroke-width="2"/>
+                            <circle class="map-dot" cx="150" cy="90" r="6"/>
+                            
+                            <!-- Labels -->
+                            <text x="150" y="130" class="map-label-main" text-anchor="middle">Slow Morning</text>
+                            <text x="200" y="170" class="map-label" text-anchor="middle">ул. Центральная</text>
+                            <text x="200" y="230" class="map-label" text-anchor="middle">Тихий переулок</text>
+                            <text x="80" y="180" class="map-label" text-anchor="middle">Метро</text>
+                            
+                            <!-- Walking person icon -->
+                            <g transform="translate(70, 145)" fill="var(--copper)">
+                                <circle cx="0" cy="0" r="4"/>
+                                <path d="M0 6 L0 14 M-5 10 L5 10 M-4 20 L0 14 L4 20" stroke="var(--copper)" stroke-width="2" fill="none"/>
+                            </g>
+                            
+                            <!-- Decorative arrow -->
+                            <path d="M85 110 L95 105 L95 115 Z" fill="var(--copper)"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-sm mt-4 text-center" style="color: var(--muted);">
+                        Две минуты пешком от метро, через арку с муралом
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6" style="background: var(--coffee); color: var(--cream);">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="text-center md:text-left">
+                    <span class="font-serif text-2xl">Slow Morning</span>
+                    <p class="mt-2 text-sm opacity-60">Культура потребления</p>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Instagram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="2" width="20" height="20" rx="5"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <circle cx="18" cy="6" r="1" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Telegram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
+                            <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <p class="text-sm opacity-60">
+                    Замедлись. Выдохни. Насладись.
+                </p>
             </div>
         </div>
     </footer>
 
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-
-        // Loading screen
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingProgress = document.getElementById('loadingProgress');
-
-        // Scene setup
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(18, 6, 22);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ 
-            antialias: true, 
-            alpha: true,
-            powerPreference: "high-performance"
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-        container.appendChild(renderer.domElement);
-
-        // Colors
-        const colors = {
-            night: new THREE.Color(0x050508),
-            dawn: new THREE.Color(0x1a1520),
-            day: new THREE.Color(0x2a2535),
-            copper: new THREE.Color(0xc87941),
-            orange: new THREE.Color(0xff6b35),
-            violet: new THREE.Color(0x9d8ec9),
-            white: new THREE.Color(0xffffff)
-        };
-
-        // Create environment map
-        function createEnvironmentMap() {
-            const pmremGenerator = new THREE.PMREMGenerator(renderer);
-            pmremGenerator.compileEquirectangularShader();
+    <script>
+        // Initialize all functionality after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
             
-            // Create a simple gradient environment
-            const envScene = new THREE.Scene();
+            // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
             
-            // Create gradient sphere for environment
-            const envGeometry = new THREE.SphereGeometry(100, 32, 32);
-            const envMaterial = new THREE.ShaderMaterial({
-                side: THREE.BackSide,
-                uniforms: {
-                    uTopColor: { value: new THREE.Color(0x0a0a15) },
-                    uBottomColor: { value: new THREE.Color(0x000003) },
-                    uHorizonColor: { value: new THREE.Color(0x1a1020) }
-                },
-                vertexShader: `
-                    varying vec3 vWorldPosition;
-                    void main() {
-                        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-                        vWorldPosition = worldPosition.xyz;
-                        gl_Position = projectionMatrix * viewMatrix * worldPosition;
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
                     }
-                `,
-                fragmentShader: `
-                    uniform vec3 uTopColor;
-                    uniform vec3 uBottomColor;
-                    uniform vec3 uHorizonColor;
-                    varying vec3 vWorldPosition;
-                    
-                    void main() {
-                        float h = normalize(vWorldPosition).y;
-                        vec3 color;
-                        if (h > 0.0) {
-                            color = mix(uHorizonColor, uTopColor, pow(h, 0.5));
-                        } else {
-                            color = mix(uHorizonColor, uBottomColor, pow(-h, 0.5));
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            // Temperature curve animation
+            const curveLine = document.querySelector('.curve-line');
+            
+            if (curveLine) {
+                const curveObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            curveLine.classList.add('animate');
                         }
-                        gl_FragColor = vec4(color, 1.0);
-                    }
-                `
-            });
-            
-            const envMesh = new THREE.Mesh(envGeometry, envMaterial);
-            envScene.add(envMesh);
-            
-            // Add some lights to environment
-            const envLight1 = new THREE.PointLight(0xc87941, 50, 200);
-            envLight1.position.set(50, 10, 50);
-            envScene.add(envLight1);
-            
-            const envLight2 = new THREE.PointLight(0x9d8ec9, 30, 200);
-            envLight2.position.set(-50, 20, -50);
-            envScene.add(envLight2);
-            
-            const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
-            cubeRenderTarget.texture.type = THREE.HalfFloatType;
-            
-            const cubeCamera = new THREE.CubeCamera(0.1, 200, cubeRenderTarget);
-            cubeCamera.update(renderer, envScene);
-            
-            const envMap = pmremGenerator.fromCubemap(cubeRenderTarget.texture).texture;
-            pmremGenerator.dispose();
-            
-            return envMap;
-        }
-
-        // Airplane group
-        const airplane = new THREE.Group();
-        scene.add(airplane);
-
-        // Environment map
-        let envMap = null;
-
-        // Materials with proper PBR settings
-        const bodyMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x151520,
-            metalness: 0.7,
-            roughness: 0.25,
-            clearcoat: 0.3,
-            clearcoatRoughness: 0.2,
-            reflectivity: 1
-        });
-
-        const glassMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x080815,
-            metalness: 0.0,
-            roughness: 0.05,
-            transmission: 0.6,
-            thickness: 0.5,
-            transparent: true,
-            opacity: 0.9,
-            ior: 1.5
-        });
-
-        const engineMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x101018,
-            metalness: 0.9,
-            roughness: 0.15,
-            clearcoat: 0.5
-        });
-
-        const accentMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xc87941,
-            metalness: 0.8,
-            roughness: 0.3,
-            emissive: 0xc87941,
-            emissiveIntensity: 0.1
-        });
-
-        // Build detailed airplane
-        function createDetailedAirplane() {
-            // Main fuselage - more aerodynamic shape
-            const fuselagePoints = [];
-            for (let i = 0; i <= 20; i++) {
-                const t = i / 20;
-                const x = t * 14 - 7;
-                let radius;
+                    });
+                }, { threshold: 0.5 });
                 
-                if (t < 0.15) {
-                    // Nose cone
-                    radius = Math.sin((t / 0.15) * Math.PI / 2) * 0.85;
-                } else if (t > 0.85) {
-                    // Tail cone
-                    const tailT = (t - 0.85) / 0.15;
-                    radius = Math.cos(tailT * Math.PI / 2) * 0.85;
+                curveObserver.observe(curveLine.closest('.texture-panel'));
+            }
+            
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    navbar.style.background = 'rgba(245, 240, 232, 0.95)';
+                    navbar.style.boxShadow = '0 2px 20px rgba(44, 24, 16, 0.05)';
                 } else {
-                    // Main body with slight variation
-                    radius = 0.85 + Math.sin((t - 0.15) / 0.7 * Math.PI) * 0.05;
+                    navbar.style.background = 'transparent';
+                    navbar.style.boxShadow = 'none';
                 }
                 
-                fuselagePoints.push(new THREE.Vector2(radius, x));
+                lastScroll = currentScroll;
+            });
+            
+            // Mobile menu
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuPanel = document.getElementById('menuPanel');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            
+            function openMenu() {
+                mobileMenu.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    menuPanel.style.transform = 'translateX(0)';
+                });
+                document.body.style.overflow = 'hidden';
             }
             
-            const fuselageGeometry = new THREE.LatheGeometry(fuselagePoints, 48);
-            const fuselage = new THREE.Mesh(fuselageGeometry, bodyMaterial);
-            fuselage.rotation.x = Math.PI / 2;
-            airplane.add(fuselage);
-
-            // Cockpit glass - more curved
-            const cockpitGeometry = new THREE.SphereGeometry(1, 32, 24, 0, Math.PI * 2, 0, Math.PI / 2.5);
-            const cockpit = new THREE.Mesh(cockpitGeometry, glassMaterial);
-            cockpit.scale.set(1.2, 0.6, 0.9);
-            cockpit.position.set(4, 0.65, 0);
-            cockpit.rotation.x = -0.2;
-            airplane.add(cockpit);
-
-            // Wing geometry - airfoil profile
-            function createWing(isLeft) {
-                const wingGroup = new THREE.Group();
-                
-                // Wing shape with airfoil profile
-                const wingShape = new THREE.Shape();
-                wingShape.moveTo(0, 0);
-                wingShape.lineTo(8, -0.3);
-                wingShape.lineTo(8.5, -0.1);
-                wingShape.lineTo(8.5, 0.05);
-                wingShape.lineTo(0.5, 0.15);
-                wingShape.closePath();
-
-                const wingExtrudeSettings = {
-                    depth: 0.12,
-                    bevelEnabled: true,
-                    bevelThickness: 0.02,
-                    bevelSize: 0.02,
-                    bevelSegments: 3
-                };
-
-                const wingGeometry = new THREE.ExtrudeGeometry(wingShape, wingExtrudeSettings);
-                const wing = new THREE.Mesh(wingGeometry, bodyMaterial);
-                
-                wing.rotation.x = isLeft ? Math.PI / 2 : -Math.PI / 2;
-                wing.rotation.y = 0.05;
-                wing.position.y = -0.1;
-                
-                if (isLeft) {
-                    wing.scale.z = -1;
-                }
-                
-                wingGroup.add(wing);
-                
-                // Winglet
-                const wingletGeometry = new THREE.BoxGeometry(0.08, 1.2, 0.5);
-                const winglet = new THREE.Mesh(wingletGeometry, bodyMaterial);
-                winglet.position.set(isLeft ? -8 : 8, 0.5, isLeft ? 0.3 : -0.3);
-                winglet.rotation.z = isLeft ? 0.3 : -0.3;
-                wingGroup.add(winglet);
-                
-                return wingGroup;
-            }
-
-            const wingRight = createWing(false);
-            wingRight.position.set(-1, -0.2, 0);
-            airplane.add(wingRight);
-
-            const wingLeft = createWing(true);
-            wingLeft.position.set(-1, -0.2, 0);
-            airplane.add(wingLeft);
-
-            // Tail fin
-            const finShape = new THREE.Shape();
-            finShape.moveTo(0, 0);
-            finShape.bezierCurveTo(-1, 2, -2.5, 3.5, -3.5, 4);
-            finShape.lineTo(-4, 3.8);
-            finShape.bezierCurveTo(-3, 3, -1.5, 1.5, -0.5, 0);
-            finShape.closePath();
-
-            const finExtrudeSettings = {
-                depth: 0.08,
-                bevelEnabled: true,
-                bevelThickness: 0.01,
-                bevelSize: 0.01,
-                bevelSegments: 2
-            };
-
-            const finGeometry = new THREE.ExtrudeGeometry(finShape, finExtrudeSettings);
-            const fin = new THREE.Mesh(finGeometry, bodyMaterial);
-            fin.position.set(-5.5, 0.7, -0.04);
-            airplane.add(fin);
-
-            // Horizontal stabilizers
-            const stabShape = new THREE.Shape();
-            stabShape.moveTo(0, 0);
-            stabShape.lineTo(3.5, -0.4);
-            stabShape.lineTo(3.7, -0.2);
-            stabShape.lineTo(0.3, 0.1);
-            stabShape.closePath();
-
-            const stabExtrudeSettings = {
-                depth: 0.04,
-                bevelEnabled: true,
-                bevelThickness: 0.01,
-                bevelSize: 0.01,
-                bevelSegments: 2
-            };
-
-            const stabGeometry = new THREE.ExtrudeGeometry(stabShape, stabExtrudeSettings);
-
-            const stabRight = new THREE.Mesh(stabGeometry, bodyMaterial);
-            stabRight.rotation.x = Math.PI / 2;
-            stabRight.position.set(-5, 0.8, 0);
-            airplane.add(stabRight);
-
-            const stabLeft = new THREE.Mesh(stabGeometry, bodyMaterial);
-            stabLeft.rotation.x = -Math.PI / 2;
-            stabLeft.scale.z = -1;
-            stabLeft.position.set(-5, 0.8, 0);
-            airplane.add(stabLeft);
-
-            // Engines with more detail
-            function createEngine(isLeft) {
-                const engineGroup = new THREE.Group();
-
-                // Nacelle
-                const nacellePoints = [];
-                for (let i = 0; i <= 15; i++) {
-                    const t = i / 15;
-                    const radius = 0.55 + Math.sin(t * Math.PI) * 0.08;
-                    nacellePoints.push(new THREE.Vector2(radius, t * 3 - 1.5));
-                }
-                
-                const nacelleGeometry = new THREE.LatheGeometry(nacellePoints, 32);
-                const nacelle = new THREE.Mesh(nacelleGeometry, engineMaterial);
-                nacelle.rotation.x = Math.PI / 2;
-                engineGroup.add(nacelle);
-
-                // Intake ring
-                const intakeGeometry = new THREE.TorusGeometry(0.58, 0.06, 16, 32);
-                const intake = new THREE.Mesh(intakeGeometry, accentMaterial);
-                intake.position.x = 1.5;
-                intake.rotation.y = Math.PI / 2;
-                engineGroup.add(intake);
-
-                // Fan blades
-                const fanGeometry = new THREE.CircleGeometry(0.5, 32);
-                const fanMaterial = new THREE.MeshPhysicalMaterial({
-                    color: 0x202030,
-                    metalness: 0.95,
-                    roughness: 0.1
-                });
-                const fan = new THREE.Mesh(fanGeometry, fanMaterial);
-                fan.position.x = 1.45;
-                fan.rotation.y = Math.PI / 2;
-                engineGroup.add(fan);
-
-                // Spinner cone
-                const spinnerGeometry = new THREE.ConeGeometry(0.2, 0.4, 24);
-                const spinner = new THREE.Mesh(spinnerGeometry, engineMaterial);
-                spinner.rotation.z = -Math.PI / 2;
-                spinner.position.x = 1.6;
-                engineGroup.add(spinner);
-
-                // Pylon
-                const pylonGeometry = new THREE.BoxGeometry(1.5, 0.5, 0.15);
-                const pylon = new THREE.Mesh(pylonGeometry, bodyMaterial);
-                pylon.position.set(0, 0.65, 0);
-                engineGroup.add(pylon);
-
-                engineGroup.position.set(-0.5, -0.5, isLeft ? -3.2 : 3.2);
-                return engineGroup;
-            }
-
-            airplane.add(createEngine(true));
-            airplane.add(createEngine(false));
-
-            // Landing gear bays (visual detail)
-            const gearBayGeometry = new THREE.BoxGeometry(0.8, 0.15, 0.4);
-            const gearBayMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x080810,
-                metalness: 0.8,
-                roughness: 0.3
-            });
-
-            const gearBay1 = new THREE.Mesh(gearBayGeometry, gearBayMaterial);
-            gearBay1.position.set(2, -0.9, 0);
-            airplane.add(gearBay1);
-
-            const gearBay2 = new THREE.Mesh(gearBayGeometry, gearBayMaterial);
-            gearBay2.position.set(-2, -0.9, 1.5);
-            airplane.add(gearBay2);
-
-            const gearBay3 = new THREE.Mesh(gearBayGeometry, gearBayMaterial);
-            gearBay3.position.set(-2, -0.9, -1.5);
-            airplane.add(gearBay3);
-
-            // Accent stripe
-            const stripeGeometry = new THREE.BoxGeometry(10, 0.02, 0.15);
-            const stripe = new THREE.Mesh(stripeGeometry, accentMaterial);
-            stripe.position.set(0, 0.87, 0);
-            airplane.add(stripe);
-
-            // Position airplane
-            airplane.position.y = -1;
-            airplane.rotation.y = -0.35;
-            airplane.rotation.x = 0.05;
-        }
-
-        createDetailedAirplane();
-
-        // Lighting setup - fixed and enhanced
-        const ambientLight = new THREE.AmbientLight(0x0a0a18, 0.4);
-        scene.add(ambientLight);
-
-        // Hemisphere light for natural sky simulation
-        const hemiLight = new THREE.HemisphereLight(0x1a1a30, 0x050508, 0.3);
-        scene.add(hemiLight);
-
-        // Main rim light from behind
-        const rimLight = new THREE.SpotLight(0xffffff, 3, 60, Math.PI / 4, 0.3, 1);
-        rimLight.position.set(-25, 10, 0);
-        rimLight.target = airplane;
-        scene.add(rimLight);
-
-        // Secondary rim light
-        const rimLight2 = new THREE.SpotLight(0x9d8ec9, 1.5, 50, Math.PI / 5, 0.4, 1);
-        rimLight2.position.set(-20, -5, 15);
-        rimLight2.target = airplane;
-        scene.add(rimLight2);
-
-        // Key light (sunrise) - starts off, increases with scroll
-        const keyLight = new THREE.DirectionalLight(0xff6b35, 0);
-        keyLight.position.set(30, 8, -15);
-        scene.add(keyLight);
-
-        // Fill light with cool color
-        const fillLight = new THREE.DirectionalLight(0x6080ff, 0.15);
-        fillLight.position.set(-15, 5, 20);
-        scene.add(fillLight);
-
-        // Ground bounce light
-        const bounceLight = new THREE.PointLight(0xc87941, 0, 40);
-        bounceLight.position.set(0, -12, 0);
-        scene.add(bounceLight);
-
-        // Accent lights on engines
-        const engineGlow1 = new THREE.PointLight(0xff6b35, 0, 15);
-        engineGlow1.position.set(-0.5, -0.5, 3.2);
-        airplane.add(engineGlow1);
-
-        const engineGlow2 = new THREE.PointLight(0xff6b35, 0, 15);
-        engineGlow2.position.set(-0.5, -0.5, -3.2);
-        airplane.add(engineGlow2);
-
-        // Create environment map after scene is set up
-        envMap = createEnvironmentMap();
-        scene.environment = envMap;
-
-        // Particles system
-        const particlesCount = 1500;
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesPositions = new Float32Array(particlesCount * 3);
-        const particlesSizes = new Float32Array(particlesCount);
-
-        for (let i = 0; i < particlesCount; i++) {
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.random() * Math.PI;
-            const r = 40 + Math.random() * 80;
-
-            particlesPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-            particlesPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) - 15;
-            particlesPositions[i * 3 + 2] = r * Math.cos(phi);
-
-            particlesSizes[i] = Math.random() * 2 + 0.5;
-        }
-
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
-        particlesGeometry.setAttribute('aSize', new THREE.BufferAttribute(particlesSizes, 1));
-
-        const particlesMaterial = new THREE.ShaderMaterial({
-            uniforms: {
-                uTime: { value: 0 },
-                uColor: { value: colors.copper },
-                uOpacity: { value: 1 }
-            },
-            vertexShader: `
-                attribute float aSize;
-                varying float vAlpha;
-                uniform float uTime;
-                
-                void main() {
-                    vAlpha = aSize / 2.5;
-                    vec3 pos = position;
-                    pos.y += sin(uTime * 0.15 + position.x * 0.02) * 0.8;
-                    pos.x += cos(uTime * 0.1 + position.z * 0.01) * 0.5;
-                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                    gl_PointSize = aSize * (180.0 / -mvPosition.z);
-                    gl_Position = projectionMatrix * mvPosition;
-                }
-            `,
-            fragmentShader: `
-                uniform vec3 uColor;
-                uniform float uOpacity;
-                varying float vAlpha;
-                
-                void main() {
-                    float dist = length(gl_PointCoord - vec2(0.5));
-                    if (dist > 0.5) discard;
-                    
-                    float alpha = smoothstep(0.5, 0.1, dist) * uOpacity * vAlpha;
-                    vec3 finalColor = uColor + vec3(0.2) * (1.0 - dist * 2.0);
-                    gl_FragColor = vec4(finalColor, alpha * 0.7);
-                }
-            `,
-            transparent: true,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
-        });
-
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particles);
-
-        // Horizon plane with shader
-        const horizonGeometry = new THREE.PlaneGeometry(200, 60, 1, 1);
-        const horizonMaterial = new THREE.ShaderMaterial({
-            uniforms: {
-                uTime: { value: 0 },
-                uProgress: { value: 0 },
-                uColorNight: { value: new THREE.Color(0x030308) },
-                uColorDawn: { value: new THREE.Color(0x1a1020) },
-                uColorDay: { value: new THREE.Color(0x252035) },
-                uAccent1: { value: colors.copper },
-                uAccent2: { value: colors.orange },
-                uAccent3: { value: colors.violet }
-            },
-            vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform float uTime;
-                uniform float uProgress;
-                uniform vec3 uColorNight;
-                uniform vec3 uColorDawn;
-                uniform vec3 uColorDay;
-                uniform vec3 uAccent1;
-                uniform vec3 uAccent2;
-                uniform vec3 uAccent3;
-                varying vec2 vUv;
-                
-                void main() {
-                    vec3 color = uColorNight;
-                    float y = vUv.y;
-                    
-                    // Night to dawn transition
-                    if (uProgress > 0.0 && uProgress <= 0.5) {
-                        float t = uProgress * 2.0;
-                        color = mix(uColorNight, uColorDawn, t);
-                        
-                        // Horizon glow
-                        float horizonGlow = smoothstep(0.25, 0.45, y) * smoothstep(0.75, 0.45, y);
-                        vec3 glowColor = mix(uAccent1, uAccent2, t);
-                        
-                        // Add pulsing
-                        float pulse = 0.8 + 0.2 * sin(uTime * 0.5);
-                        color = mix(color, glowColor * pulse, horizonGlow * t * 0.6);
-                    }
-                    // Dawn to day transition
-                    else if (uProgress > 0.5) {
-                        float t = (uProgress - 0.5) * 2.0;
-                        color = mix(uColorDawn, uColorDay, t);
-                        
-                        // Sunrise gradient
-                        float horizonGlow = smoothstep(0.15, 0.4, y) * smoothstep(0.85, 0.4, y);
-                        vec3 glowColor = mix(uAccent2, uAccent3, t);
-                        color = mix(color, glowColor, horizonGlow * (1.0 - t * 0.3) * 0.7);
-                        
-                        // Add sun disk
-                        float sunY = 0.35 + t * 0.15;
-                        float sunDist = length(vUv - vec2(0.5, sunY));
-                        float sun = smoothstep(0.08, 0.02, sunDist);
-                        color = mix(color, vec3(1.0, 0.9, 0.7), sun * t * 0.8);
-                    }
-                    
-                    // Fade edges
-                    float fade = smoothstep(1.0, 0.6, y) * smoothstep(0.0, 0.3, y);
-                    float sideFade = smoothstep(0.0, 0.2, vUv.x) * smoothstep(1.0, 0.8, vUv.x);
-                    
-                    gl_FragColor = vec4(color, fade * sideFade * 0.9);
-                }
-            `,
-            transparent: true,
-            depthWrite: false,
-            side: THREE.DoubleSide
-        });
-
-        const horizon = new THREE.Mesh(horizonGeometry, horizonMaterial);
-        horizon.position.set(0, -18, -60);
-        horizon.rotation.x = -Math.PI / 10;
-        scene.add(horizon);
-
-        // Ground reflection plane
-        const groundGeometry = new THREE.PlaneGeometry(100, 100);
-        const groundMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x050508,
-            metalness: 0.9,
-            roughness: 0.4,
-            transparent: true,
-            opacity: 0.3
-        });
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2;
-        ground.position.y = -10;
-        scene.add(ground);
-
-        // Loading complete
-        let loadProgress = 0;
-        const loadingInterval = setInterval(() => {
-            loadProgress += 5;
-            loadingProgress.style.width = `${loadProgress}%`;
-            if (loadProgress >= 100) {
-                clearInterval(loadingInterval);
+            function closeMenu() {
+                menuPanel.style.transform = 'translateX(100%)';
                 setTimeout(() => {
-                    loadingScreen.classList.add('hidden');
-                }, 300);
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 500);
             }
-        }, 30);
-
-        // Scroll state
-        let scrollProgress = 0;
-        let targetScrollProgress = 0;
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-        function updateScroll() {
-            targetScrollProgress = Math.max(0, Math.min(1, window.scrollY / totalHeight));
-        }
-
-        window.addEventListener('scroll', updateScroll, { passive: true });
-
-        // Progress bar
-        const progressBar = document.getElementById('progressBar');
-        function updateProgressBar() {
-            const progress = (window.scrollY / totalHeight) * 100;
-            progressBar.style.width = `${Math.min(100, progress)}%`;
-        }
-        window.addEventListener('scroll', updateProgressBar, { passive: true });
-
-        // Animation loop
-        let time = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.016;
-
-            // Smooth scroll interpolation
-            scrollProgress += (targetScrollProgress - scrollProgress) * 0.04;
-
-            // Update shader uniforms
-            particlesMaterial.uniforms.uTime.value = time;
-            particlesMaterial.uniforms.uOpacity.value = Math.max(0.1, 1 - scrollProgress * 0.7);
-            horizonMaterial.uniforms.uProgress.value = scrollProgress;
-            horizonMaterial.uniforms.uTime.value = time;
-
-            // Lighting updates based on scroll
-            const scrollIntensity = Math.min(1, scrollProgress * 1.5);
             
-            // Rim lights - always visible but enhanced
-            rimLight.intensity = 2 + scrollIntensity * 2;
-            rimLight2.intensity = 1 + scrollIntensity * 1.5;
+            menuToggle.addEventListener('click', openMenu);
+            menuOverlay.addEventListener('click', closeMenu);
+            menuLinks.forEach(link => link.addEventListener('click', closeMenu));
             
-            // Key light (sunrise) grows with scroll
-            keyLight.intensity = scrollIntensity * 3;
-            
-            // Key light color shift: orange -> violet
-            const keyColor = new THREE.Color();
-            if (scrollProgress < 0.5) {
-                keyColor.lerpColors(new THREE.Color(0xff8844), new THREE.Color(0xff6b35), scrollProgress * 2);
-            } else {
-                keyColor.lerpColors(new THREE.Color(0xff6b35), new THREE.Color(0x9d8ec9), (scrollProgress - 0.5) * 2);
-            }
-            keyLight.color = keyColor;
-
-            // Bounce light follows sunrise
-            bounceLight.intensity = scrollIntensity * 1.5;
-            bounceLight.color = keyColor;
-
-            // Engine glow at dawn
-            engineGlow1.intensity = scrollIntensity * 0.8;
-            engineGlow2.intensity = scrollIntensity * 0.8;
-
-            // Hemisphere light shift
-            const hemiTopColor = new THREE.Color();
-            hemiTopColor.lerpColors(new THREE.Color(0x1a1a30), new THREE.Color(0x3a3050), scrollIntensity);
-            hemiLight.color = hemiTopColor;
-            hemiLight.intensity = 0.3 + scrollIntensity * 0.3;
-
-            // Particle color shift
-            const particleColor = new THREE.Color();
-            if (scrollProgress < 0.4) {
-                particleColor.lerpColors(colors.copper, colors.orange, scrollProgress / 0.4);
-            } else {
-                particleColor.lerpColors(colors.orange, colors.violet, (scrollProgress - 0.4) / 0.6);
-            }
-            particlesMaterial.uniforms.uColor.value = particleColor;
-
-            // Airplane rotation
-            airplane.rotation.y = -0.35 + scrollProgress * 0.25;
-            airplane.rotation.x = 0.05 + Math.sin(scrollProgress * Math.PI) * 0.08;
-            airplane.rotation.z = Math.sin(time * 0.3) * 0.01;
-
-            // Camera movement
-            camera.position.x = 18 + scrollProgress * 8;
-            camera.position.y = 6 + Math.sin(scrollProgress * Math.PI * 1.5) * 3;
-            camera.position.z = 22 - scrollProgress * 5;
-            camera.lookAt(
-                airplane.position.x,
-                airplane.position.y + Math.sin(time * 0.2) * 0.1,
-                airplane.position.z
-            );
-
-            // Rotate particles
-            particles.rotation.y += 0.00015;
-            particles.rotation.x = Math.sin(time * 0.1) * 0.02;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Journey section animation
-        const journeySection = document.getElementById('journey');
-        const journeyItems = document.querySelectorAll('.journey-text-item');
-        const journeyStages = document.querySelectorAll('.journey-stage');
-
-        function updateJourney() {
-            const rect = journeySection.getBoundingClientRect();
-            const sectionHeight = journeySection.offsetHeight;
-            const viewportHeight = window.innerHeight;
-            
-            if (rect.top < viewportHeight && rect.bottom > 0) {
-                const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / (sectionHeight - viewportHeight / 2)));
-                const stageIndex = Math.min(3, Math.floor(progress * 4));
-                
-                journeyItems.forEach((item) => {
-                    const itemStage = parseInt(item.dataset.stage);
-                    if (itemStage <= stageIndex) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
                 });
-
-                journeyStages.forEach((stage) => {
-                    const stageNum = parseInt(stage.dataset.stage);
-                    if (stageNum === stageIndex) {
-                        stage.classList.add('active');
-                    } else {
-                        stage.classList.remove('active');
+            });
+            
+            // Reduced motion check
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            
+            if (prefersReducedMotion.matches) {
+                document.querySelectorAll('.steam').forEach(steam => {
+                    steam.style.animation = 'none';
+                });
+            }
+            
+            // Keyboard navigation for menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.setAttribute('tabindex', '0');
+                item.setAttribute('role', 'button');
+                
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const flavorCard = item.querySelector('.flavor-card');
+                        if (flavorCard) {
+                            if (flavorCard.style.opacity === '1') {
+                                flavorCard.style.opacity = '0';
+                                flavorCard.style.pointerEvents = 'none';
+                            } else {
+                                flavorCard.style.opacity = '1';
+                                flavorCard.style.pointerEvents = 'auto';
+                            }
+                        }
                     }
                 });
-            }
-        }
-
-        window.addEventListener('scroll', updateJourney, { passive: true });
-
-        // HUD elements animation
-        const hudElements = document.querySelectorAll('.hud-element');
-        const specsSection = document.getElementById('specs');
-
-        function updateHUD() {
-            const rect = specsSection.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            if (rect.top < viewportHeight * 0.7 && rect.bottom > 0) {
-                hudElements.forEach((el) => {
-                    el.classList.add('visible');
-                });
-            } else {
-                hudElements.forEach((el) => {
-                    el.classList.remove('visible');
-                });
-            }
-        }
-
-        window.addEventListener('scroll', updateHUD, { passive: true });
-
-        // Counter animation
-        function animateValue(element, start, end, duration) {
-            const startTime = performance.now();
-            const valueEl = element.querySelector('.value');
-            const unitEl = element.querySelector('.unit');
-            const unit = unitEl ? unitEl.textContent : '';
-            
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const current = start + (end - start) * easeOut;
-                
-                if (Number.isInteger(end)) {
-                    valueEl.innerHTML = Math.round(current).toLocaleString() + (unitEl ? `<span class="unit">${unit}</span>` : '');
-                } else {
-                    valueEl.innerHTML = current.toFixed(1) + (unitEl ? `<span class="unit">${unit}</span>` : '');
-                }
-                
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-            
-            requestAnimationFrame(update);
-        }
-
-        let hudAnimated = false;
-        const hudObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !hudAnimated) {
-                    hudAnimated = true;
-                    setTimeout(() => {
-                        animateValue(document.querySelector('.hud-1'), 0, 984, 2000);
-                        animateValue(document.querySelector('.hud-2'), 0, 12500, 2500);
-                        animateValue(document.querySelector('.hud-3'), 0, 13100, 2200);
-                        animateValue(document.querySelector('.hud-4'), 0, 2.9, 1800);
-                        animateValue(document.querySelector('.hud-5'), 0, 350, 2000);
-                    }, 500);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        hudObserver.observe(specsSection);
-
-        // Smooth scroll for nav links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
             });
         });
-
-        // Initial calls
-        setTimeout(() => {
-            updateJourney();
-            updateHUD();
-        }, 100);
     </script>
 </body>
 </html>
