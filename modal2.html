@@ -1,1734 +1,1275 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slow Morning — Культура потребления</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #F7F3EC;
-            --bg-warm: #EDE6DA;
-            --fg: #2C1810;
-            --fg-light: #4A3728;
-            --muted: #8B7355;
-            --accent: #C4A484;
-            --coffee: #3D2314;
-            --latte: #D4C4B0;
-            --cream: #FDF8F3;
-            --rose: #D4A5A5;
-            --olive: #8B9A7D;
-            --copper: #B87333;
-            --gold: #C9A962;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--fg);
-            overflow-x: hidden;
-            line-height: 1.7;
-        }
-
-        .font-serif {
-            font-family: 'Playfair Display', Georgia, serif;
-        }
-
-        /* Noise texture overlay */
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.035;
-            z-index: 9999;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Custom cursor */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--coffee);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10001;
-            transition: transform 0.15s ease;
-        }
-
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--coffee);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all 0.2s ease-out;
-            opacity: 0.5;
-        }
-
-        .cursor-ring.hover {
-            transform: scale(1.5);
-            border-color: var(--copper);
-            opacity: 0.8;
-        }
-
-        @media (pointer: coarse) {
-            .cursor-dot, .cursor-ring { display: none; }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--muted);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--coffee);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes steamRise {
-            0% {
-                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(-40px) translateX(8px) scale(1.3) rotate(5deg);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-80px) translateX(-5px) scale(0.6) rotate(-3deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-
-        @keyframes gentleFloatReverse {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(10px) rotate(-2deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.05); }
-        }
-
-        @keyframes lightBeam {
-            0% { opacity: 0.2; transform: translateX(-30%) skewX(-15deg); }
-            50% { opacity: 0.5; }
-            100% { opacity: 0.2; transform: translateX(30%) skewX(-15deg); }
-        }
-
-        @keyframes rotateBean {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes drawLine {
-            to { stroke-dashoffset: 0; }
-        }
-
-        @keyframes rippleExpand {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .animate-fadeInUp {
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn 1.2s ease-out forwards;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .reveal-scale.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .reveal, .reveal-scale {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-            .animate-fadeInUp,
-            .animate-fadeIn {
-                animation: none;
-                opacity: 1;
-            }
-        }
-
-        /* Hero section */
-        .hero {
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse at 20% 10%, rgba(255, 250, 245, 0.9) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 90%, rgba(196, 164, 132, 0.2) 0%, transparent 40%),
-                radial-gradient(ellipse at 60% 40%, rgba(201, 169, 98, 0.08) 0%, transparent 30%),
-                linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
-        }
-
-        .light-beam {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            width: 50%;
-            height: 120%;
-            background: linear-gradient(180deg, 
-                rgba(255, 252, 245, 0.5) 0%, 
-                rgba(255, 248, 235, 0.2) 40%,
-                transparent 100%);
-            transform: translateX(-50%) skewX(-12deg);
-            animation: lightBeam 12s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Floating beans decoration */
-        .floating-bean {
-            position: absolute;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-
-        .floating-bean.slow {
-            animation: gentleFloat 8s ease-in-out infinite;
-        }
-
-        .floating-bean.medium {
-            animation: gentleFloatReverse 6s ease-in-out infinite;
-        }
-
-        .floating-bean.fast {
-            animation: gentleFloat 4s ease-in-out infinite;
-        }
-
-        /* Coffee cup */
-        .coffee-cup-container {
-            position: relative;
-            width: 300px;
-            height: 380px;
-            perspective: 1000px;
-        }
-
-        .coffee-cup {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-        }
-
-        .coffee-cup-container:hover .coffee-cup {
-            transform: rotateY(-5deg) rotateX(2deg);
-        }
-
-        .cup-body {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px;
-            height: 200px;
-            background: linear-gradient(145deg, 
-                var(--cream) 0%, 
-                #FAF6F1 30%,
-                #F0EBE3 70%,
-                #E8E2D8 100%);
-            border-radius: 12px 12px 55% 55%;
-            box-shadow: 
-                inset 8px 8px 20px rgba(255, 255, 255, 0.9),
-                inset -4px -4px 15px rgba(0, 0, 0, 0.03),
-                0 25px 60px rgba(44, 24, 16, 0.12),
-                0 10px 20px rgba(44, 24, 16, 0.08);
-        }
-
-        .cup-coffee {
-            position: absolute;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 160px;
-            background: radial-gradient(ellipse at 35% 35%, 
-                #6B4A38 0%, 
-                var(--coffee) 50%, 
-                #1A0F0A 100%);
-            border-radius: 12px 12px 55% 55%;
-            overflow: hidden;
-        }
-
-        .coffee-surface {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, 
-                rgba(107, 74, 56, 0.7) 0%, 
-                transparent 100%);
-            border-radius: 12px 12px 0 0;
-        }
-
-        .latte-art {
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 110px;
-            height: 90px;
-        }
-
-        /* Steam */
-        .steam-container {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-        }
-
-        .steam {
-            position: absolute;
-            bottom: 0;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.3) 50%,
-                rgba(255, 255, 255, 0.1) 100%);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: steamRise 4s ease-out infinite;
-        }
-
-        .steam:nth-child(1) {
-            left: 15%;
-            width: 25px;
-            height: 50px;
-            animation-delay: 0s;
-        }
-
-        .steam:nth-child(2) {
-            left: 45%;
-            width: 30px;
-            height: 60px;
-            animation-delay: 0.7s;
-        }
-
-        .steam:nth-child(3) {
-            left: 70%;
-            width: 22px;
-            height: 45px;
-            animation-delay: 1.4s;
-        }
-
-        .steam:nth-child(4) {
-            left: 30%;
-            width: 18px;
-            height: 35px;
-            animation-delay: 2.1s;
-        }
-
-        .cup-handle {
-            position: absolute;
-            right: -40px;
-            top: 35px;
-            width: 45px;
-            height: 90px;
-            border: 14px solid var(--cream);
-            border-left: none;
-            border-radius: 0 60px 60px 0;
-            box-shadow: 
-                6px 4px 15px rgba(0, 0, 0, 0.08),
-                inset -2px 0 10px rgba(0, 0, 0, 0.02);
-        }
-
-        .saucer {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 280px;
-            height: 35px;
-            background: linear-gradient(145deg, var(--cream) 0%, #E8E2D8 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 15px 40px rgba(44, 24, 16, 0.1),
-                0 5px 15px rgba(44, 24, 16, 0.05);
-        }
-
-        .saucer::before {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 15px;
-            background: linear-gradient(145deg, 
-                rgba(255, 255, 255, 0.5) 0%, 
-                transparent 100%);
-            border-radius: 50%;
-        }
-
-        /* Ripple effect on coffee */
-        .coffee-ripple {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: rippleExpand 3s ease-out infinite;
-        }
-
-        .coffee-ripple:nth-child(2) { animation-delay: 1s; }
-        .coffee-ripple:nth-child(3) { animation-delay: 2s; }
-
-        /* Menu cards */
-        .menu-item {
-            position: relative;
-            padding: 1.75rem 0;
-            border-bottom: 1px solid rgba(139, 115, 85, 0.15);
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0;
-            background: linear-gradient(90deg, 
-                rgba(201, 169, 98, 0.1) 0%, 
-                transparent 100%);
-            transition: width 0.5s ease;
-        }
-
-        .menu-item:hover {
-            padding-left: 1.5rem;
-        }
-
-        .menu-item:hover::before {
-            width: 100%;
-        }
-
-        .menu-item:hover .menu-item-title {
-            color: var(--coffee);
-        }
-
-        .menu-item-price {
-            transition: transform 0.3s ease;
-        }
-
-        .menu-item:hover .menu-item-price {
-            transform: scale(1.1);
-        }
-
-        .flavor-card {
-            position: absolute;
-            left: calc(100% + 2rem);
-            top: 50%;
-            transform: translateY(-50%) translateX(20px);
-            width: 300px;
-            padding: 1.75rem;
-            background: var(--cream);
-            border-radius: 16px;
-            box-shadow: 
-                0 20px 60px rgba(44, 24, 16, 0.12),
-                0 8px 25px rgba(44, 24, 16, 0.08);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 10;
-            border: 1px solid rgba(196, 164, 132, 0.2);
-        }
-
-        .flavor-card::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%) rotate(45deg);
-            width: 16px;
-            height: 16px;
-            background: var(--cream);
-            border-left: 1px solid rgba(196, 164, 132, 0.2);
-            border-bottom: 1px solid rgba(196, 164, 132, 0.2);
-        }
-
-        .menu-item:hover .flavor-card {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-            pointer-events: auto;
-        }
-
-        @media (max-width: 768px) {
-            .flavor-card {
-                position: fixed;
-                left: 50%;
-                top: auto;
-                bottom: 2rem;
-                transform: translateX(-50%) translateY(30px);
-                width: calc(100% - 2rem);
-                max-width: 340px;
-            }
-            
-            .flavor-card::before {
-                display: none;
-            }
-            
-            .menu-item:hover .flavor-card {
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        /* Flavor tag animation */
-        .flavor-tag {
-            display: inline-block;
-            padding: 0.375rem 0.875rem;
-            font-size: 0.75rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .flavor-tag:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Split section */
-        .split-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 85vh;
-        }
-
-        @media (max-width: 768px) {
-            .split-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .texture-panel {
-            position: relative;
-            background: var(--bg-warm);
-            overflow: hidden;
-        }
-
-        /* Temperature curve */
-        .temp-curve {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .curve-line {
-            fill: none;
-            stroke: var(--copper);
-            stroke-width: 2;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-        }
-
-        .curve-line.animate {
-            animation: drawLine 2s ease forwards;
-        }
-
-        /* Stats counter */
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 400;
-            color: var(--coffee);
-            line-height: 1;
-        }
-
-        /* Map illustration */
-        .map-illustration {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            aspect-ratio: 4/3;
-        }
-
-        .map-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .map-path {
-            stroke-dasharray: 500;
-            stroke-dashoffset: 500;
-            transition: stroke-dashoffset 1.5s ease;
-        }
-
-        .map-path.animate {
-            stroke-dashoffset: 0;
-        }
-
-        /* Button styles */
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 1.125rem 2.25rem;
-            background: var(--coffee);
-            color: var(--cream);
-            border: none;
-            border-radius: 4px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.15), 
-                transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        .btn-primary:hover::before {
-            transform: translateX(100%);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(44, 24, 16, 0.25);
-        }
-
-        .btn-primary:focus-visible {
-            outline: 2px solid var(--gold);
-            outline-offset: 4px;
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
-        }
-
-        /* Secondary button */
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            color: var(--fg);
-            border: 1px solid var(--muted);
-            border-radius: 4px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--coffee);
-            color: var(--coffee);
-            background: rgba(61, 35, 20, 0.03);
-        }
-
-        /* Decorative elements */
-        .plant-decoration {
-            position: absolute;
-            opacity: 0.12;
-            pointer-events: none;
-        }
-
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            pointer-events: none;
-        }
-
-        /* Quote styling */
-        .quote-text {
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .quote-text::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--copper), var(--rose));
-            border-radius: 2px;
-        }
-
-        /* Focus states */
-        a:focus-visible,
-        button:focus-visible {
-            outline: 2px solid var(--copper);
-            outline-offset: 3px;
-        }
-
-        /* Selection */
-        ::selection {
-            background: var(--rose);
-            color: var(--fg);
-        }
-
-        /* Section divider */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--muted) 20%, 
-                var(--muted) 80%, 
-                transparent);
-            opacity: 0.2;
-        }
-
-        /* Origin map section */
-        .origin-card {
-            position: relative;
-            padding: 2rem;
-            background: var(--cream);
-            border-radius: 20px;
-            border: 1px solid rgba(196, 164, 132, 0.15);
-            transition: all 0.4s ease;
-        }
-
-        .origin-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(44, 24, 16, 0.1);
-        }
-
-        .origin-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        /* Social icons */
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(253, 248, 243, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            background: rgba(253, 248, 243, 0.2);
-            transform: translateY(-3px);
-        }
-
-        /* Nav link underline */
-        .nav-link {
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--copper);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>АкваЧист — Чистая вода с доставкой</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --water-deep: #005577;
+      --water-light: #00aadd;
+      --water-glow: #66eeff;
+      --water-foam: #aaeeff;
+      --bg-dark: #020a0f;
+      --bg-medium: #041218;
+      --text-primary: #e8f8ff;
+      --text-secondary: #88ccee;
+      --text-muted: #447788;
+      --accent: #00ddff;
+      --accent-warm: #00ffaa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Onest', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Unbounded', sans-serif;
+    }
+
+    #water-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .section {
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-warm) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      color: var(--bg-dark);
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 40px rgba(0, 221, 255, 0.4);
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Products Section */
+    .products-section {
+      padding: 6rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 85, 119, 0.1) 50%, transparent 100%);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: rgba(0, 170, 221, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.15);
+      border-radius: 24px;
+      padding: 2rem;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--water-light), var(--accent), var(--accent-warm));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 221, 255, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 170, 221, 0.15);
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }
+
+    .product-image {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(0, 221, 255, 0.2) 0%, rgba(0, 255, 170, 0.1) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .product-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--accent);
+    }
+
+    .product-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .product-volume {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .product-price span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    /* Equipment Section */
+    .equipment-section {
+      padding: 6rem 2rem;
+    }
+
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .equipment-card {
+      background: linear-gradient(145deg, rgba(0, 85, 119, 0.15) 0%, rgba(0, 170, 221, 0.05) 100%);
+      border: 1px solid rgba(0, 221, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .equipment-card:hover {
+      border-color: rgba(0, 221, 255, 0.3);
+      background: linear-gradient(145deg, rgba(0, 85, 119, 0.25) 0%, rgba(0, 170, 221, 0.1) 100%);
+    }
+
+    .equipment-icon {
+      width: 70px;
+      height: 70px;
+      min-width: 70px;
+      background: rgba(0, 221, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .equipment-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--accent);
+    }
+
+    .equipment-info h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .equipment-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .equipment-price {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      color: var(--accent-warm);
+    }
+
+    /* Delivery Section */
+    .delivery-section {
+      padding: 6rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 170, 0.03) 50%, transparent 100%);
+    }
+
+    .delivery-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .delivery-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .delivery-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .delivery-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    .step-content h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .delivery-form {
+      background: rgba(0, 85, 119, 0.1);
+      border: 1px solid rgba(0, 221, 255, 0.15);
+      border-radius: 24px;
+      padding: 2.5rem;
+    }
+
+    .form-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Onest', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(0, 221, 255, 0.2);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ddff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
+      color: var(--bg-dark);
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.3);
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 6rem 2rem;
+    }
+
+    .contact-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .contact-card {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: rgba(0, 221, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--accent);
+    }
+
+    .contact-card h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-card p {
+      font-size: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .contact-card a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-card a:hover {
+      color: var(--accent-warm);
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(0, 221, 255, 0.1);
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(2, 10, 15, 0.9) 0%, transparent 100%);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--bg-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .phone-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .phone-link svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="noise-overlay" aria-hidden="true"></div>
-    
-    <!-- Custom cursor -->
-    <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-    <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <!-- Water Animation Canvas -->
+  <canvas id="water-canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 md:py-6 transition-all duration-500" id="navbar">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="font-serif text-2xl md:text-3xl tracking-wide transition-opacity hover:opacity-70" style="color: var(--coffee);">
-                Slow Morning
-            </a>
-            <div class="hidden md:flex items-center gap-12">
-                <a href="#philosophy" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Философия</a>
-                <a href="#menu" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Меню</a>
-                <a href="#process" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Процесс</a>
-                <a href="#contact" class="nav-link text-sm tracking-widest uppercase transition-colors" style="color: var(--fg-light);">Найти нас</a>
-            </div>
-            <button class="md:hidden p-2 -mr-2" id="menuToggle" aria-label="Открыть меню">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                    <line x1="4" y1="7" x2="20" y2="7"></line>
-                    <line x1="4" y1="17" x2="20" y2="17"></line>
-                </svg>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="menuOverlay"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full p-8 transform translate-x-full transition-transform duration-500" style="background: var(--cream);" id="menuPanel">
-            <button class="absolute top-6 right-6 p-2" id="closeMenu" aria-label="Закрыть меню">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                    <line x1="6" y1="18" x2="18" y2="6"></line>
-                </svg>
-            </button>
-            <div class="flex flex-col gap-8 mt-20">
-                <a href="#philosophy" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Философия</a>
-                <a href="#menu" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Меню</a>
-                <a href="#process" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Процесс</a>
-                <a href="#contact" class="font-serif text-2xl transition-colors hover:text-var(--copper)" style="color: var(--fg);">Найти нас</a>
-            </div>
-        </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+        </svg>
+      </div>
+      АкваЧист
     </div>
+    <nav class="nav-links">
+      <a href="#products">Продукция</a>
+      <a href="#equipment">Оборудование</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a href="tel:+78001234567" class="phone-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      8 800 123-45-67
+    </a>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="light-beam" aria-hidden="true"></div>
-        
-        <!-- Glow orbs -->
-        <div class="glow-orb" style="top: 20%; left: 10%; width: 300px; height: 300px; background: var(--gold); opacity: 0.08;" aria-hidden="true"></div>
-        <div class="glow-orb" style="bottom: 30%; right: 5%; width: 250px; height: 250px; background: var(--rose); opacity: 0.06;" aria-hidden="true"></div>
-        
-        <!-- Floating beans -->
-        <svg class="floating-bean slow" style="top: 15%; left: 8%; width: 50px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none"/>
+  <!-- Hero Section -->
+  <section class="section hero-section">
+    <div class="reveal">
+      <h1 class="hero-title">Чистая вода<br>с доставкой</h1>
+      <p class="hero-subtitle">Кристально чистая артезианская вода для вашего дома и офиса. Добываем из глубин 250 метров, очищаем и доставляем в удобное для вас время.</p>
+      <a href="#delivery" class="cta-button">
+        Заказать воду
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
-        
-        <svg class="floating-bean medium" style="top: 25%; right: 12%; width: 35px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(30 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(30 20 30)"/>
-        </svg>
-        
-        <svg class="floating-bean fast" style="bottom: 35%; left: 15%; width: 25px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(-20 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(-20 20 30)"/>
-        </svg>
-        
-        <svg class="floating-bean slow" style="bottom: 25%; right: 20%; width: 40px;" viewBox="0 0 40 60" aria-hidden="true">
-            <ellipse cx="20" cy="30" rx="18" ry="28" fill="var(--coffee)" transform="rotate(45 20 30)"/>
-            <path d="M20 5 Q25 30 20 55" stroke="var(--bg)" stroke-width="2" fill="none" transform="rotate(45 20 30)"/>
-        </svg>
-        
-        <!-- Decorative plant -->
-        <svg class="plant-decoration" style="top: 8%; left: 3%; width: 180px;" viewBox="0 0 100 150" aria-hidden="true">
-            <path d="M50 150 Q35 100 50 50 Q65 100 50 150" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="28" cy="55" rx="22" ry="38" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-25 28 55)"/>
-            <ellipse cx="72" cy="65" rx="22" ry="38" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(25 72 65)"/>
-        </svg>
-        
-        <div class="relative z-10 h-full flex flex-col">
-            <div class="flex-1 flex items-center justify-center px-6 pt-24">
-                <div class="text-center max-w-4xl">
-                    <p class="text-sm md:text-base tracking-[0.35em] uppercase mb-8 animate-fadeIn" style="color: var(--muted); animation-delay: 0.3s; opacity: 0;">
-                        Авторская кофейня
-                    </p>
-                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-10 animate-fadeInUp" style="color: var(--coffee); animation-delay: 0.5s; opacity: 0;">
-                        Slow Morning
-                    </h1>
-                    <p class="text-lg md:text-xl max-w-xl mx-auto mb-14 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.7s; opacity: 0; line-height: 1.8;">
-                        Кофе — это не просто напиток для бодрости.<br>
-                        Это повод остановиться и насладиться моментом.
-                    </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fadeInUp" style="animation-delay: 0.9s; opacity: 0;">
-                        <a href="#menu" class="btn-primary">
-                            <span>Исследовать вкусы</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M19 12l-7 7-7-7"/>
-                            </svg>
-                        </a>
-                        <a href="#philosophy" class="btn-secondary">
-                            <span>О нас</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Coffee cup illustration -->
-            <div class="flex justify-center pb-16 md:pb-24">
-                <div class="coffee-cup-container animate-fadeIn" style="animation-delay: 1.1s; opacity: 0;">
-                    <div class="coffee-cup">
-                        <div class="steam-container">
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                        </div>
-                        <div class="cup-body">
-                            <div class="cup-coffee">
-                                <div class="coffee-surface"></div>
-                                <div class="coffee-ripple"></div>
-                                <div class="coffee-ripple"></div>
-                                <div class="coffee-ripple"></div>
-                                <svg class="latte-art" viewBox="0 0 110 90" aria-hidden="true">
-                                    <defs>
-                                        <radialGradient id="latteGrad" cx="50%" cy="50%">
-                                            <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.9"/>
-                                            <stop offset="70%" stop-color="var(--latte)" stop-opacity="0.5"/>
-                                            <stop offset="100%" stop-color="var(--latte)" stop-opacity="0"/>
-                                        </radialGradient>
-                                    </defs>
-                                    <!-- Rosetta pattern -->
-                                    <ellipse cx="55" cy="50" rx="40" ry="30" fill="url(#latteGrad)"/>
-                                    <path d="M55 20 Q45 35 55 50 Q65 35 55 20" fill="var(--latte)" opacity="0.7"/>
-                                    <path d="M55 30 Q48 42 55 55 Q62 42 55 30" fill="var(--latte)" opacity="0.6"/>
-                                    <path d="M55 40 Q50 48 55 58 Q60 48 55 40" fill="var(--latte)" opacity="0.5"/>
-                                    <path d="M35 45 Q40 55 55 60 Q70 55 75 45" stroke="var(--latte)" stroke-width="3" fill="none" opacity="0.4"/>
-                                    <path d="M30 50 Q38 60 55 65 Q72 60 80 50" stroke="var(--latte)" stroke-width="2" fill="none" opacity="0.3"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="cup-handle"></div>
-                    </div>
-                    <div class="saucer"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-40 animate-fadeIn" style="animation-delay: 1.5s;">
-            <span class="text-xs tracking-[0.25em] uppercase" style="color: var(--muted);">Листайте</span>
-            <div class="w-px h-10 bg-gradient-to-b from-current to-transparent" style="color: var(--muted);"></div>
-        </div>
-    </section>
+      </a>
+    </div>
+    
+    <div class="stats-bar reveal">
+      <div class="stat-item">
+        <div class="stat-value">15+</div>
+        <div class="stat-label">Лет на рынке</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">50K+</div>
+        <div class="stat-label">Клиентов</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">250м</div>
+        <div class="stat-label">Глубина скважины</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">24ч</div>
+        <div class="stat-label">Доставка</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Philosophy Section -->
-    <section class="py-28 md:py-36 px-6 relative overflow-hidden" id="philosophy" style="background: var(--bg-warm);">
-        <div class="glow-orb" style="top: -10%; right: -5%; width: 400px; height: 400px; background: var(--accent); opacity: 0.1;" aria-hidden="true"></div>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Философия</span>
-                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5 mb-10 leading-tight" style="color: var(--coffee);">
-                        Лучший кофе — тот,<br>
-                        <em class="opacity-80">который пьётся в тишине</em>
-                    </h2>
-                    <div class="space-y-7 text-lg" style="color: var(--fg-light);">
-                        <p>
-                            Мы не торопим вас. В «Slow Morning» время течёт иначе — 
-                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
-                        </p>
-                        <p>
-                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
-                            насыпает зёрна, до последнего глотка, оставляющего тепло где-то внутри.
-                        </p>
-                    </div>
-                    
-                    <div class="quote-text mt-10 font-serif text-xl italic" style="color: var(--muted);">
-                        Кофе — это не продукт.<br>Это отношение.
-                    </div>
-                </div>
-                
-                <div class="reveal-scale" style="transition-delay: 0.2s;">
-                    <div class="relative">
-                        <!-- Stylized coffee bean illustration -->
-                        <svg viewBox="0 0 400 400" class="w-full max-w-md mx-auto" aria-hidden="true">
-                            <!-- Background glow -->
-                            <defs>
-                                <radialGradient id="glow" cx="50%" cy="50%">
-                                    <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.4"/>
-                                    <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                                </radialGradient>
-                                <linearGradient id="beanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#5C3D2E"/>
-                                    <stop offset="50%" stop-color="var(--coffee)"/>
-                                    <stop offset="100%" stop-color="#1A0F0A"/>
-                                </linearGradient>
-                            </defs>
-                            <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
-                            
-                            <!-- Decorative circles -->
-                            <circle cx="200" cy="200" r="140" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.3"/>
-                            <circle cx="200" cy="200" r="100" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-                            
-                            <!-- Coffee beans -->
-                            <g fill="url(#beanGrad)" opacity="0.95">
-                                <ellipse cx="150" cy="180" rx="48" ry="70" transform="rotate(-35 150 180)"/>
-                                <path d="M150 120 Q168 180 150 240" stroke="var(--bg-warm)" stroke-width="4" fill="none"/>
-                                
-                                <ellipse cx="255" cy="195" rx="52" ry="75" transform="rotate(25 255 195)"/>
-                                <path d="M255 130 Q275 195 255 260" stroke="var(--bg-warm)" stroke-width="4" fill="none"/>
-                                
-                                <ellipse cx="180" cy="290" rx="42" ry="60" transform="rotate(15 180 290)"/>
-                                <path d="M180 240 Q198 290 180 340" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
-                            </g>
-                            
-                            <!-- Texture lines -->
-                            <g stroke="var(--gold)" stroke-width="0.5" opacity="0.25">
-                                <line x1="80" y1="100" x2="320" y2="100"/>
-                                <line x1="60" y1="160" x2="340" y2="160"/>
-                                <line x1="70" y1="330" x2="330" y2="330"/>
-                            </g>
-                            
-                            <!-- Accent dots -->
-                            <circle cx="320" cy="120" r="4" fill="var(--gold)" opacity="0.4"/>
-                            <circle cx="90" cy="280" r="3" fill="var(--gold)" opacity="0.3"/>
-                        </svg>
-                        
-                        <!-- Floating label -->
-                        <div class="absolute top-8 right-0 font-serif italic text-lg px-4 py-2 rounded-lg" style="color: var(--muted); background: rgba(253, 248, 243, 0.8);">
-                            Обжарено с душой
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Origin Map Section -->
-    <section class="py-24 md:py-32 px-6 relative" style="background: var(--cream);">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Происхождение</span>
-                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5" style="color: var(--coffee);">
-                    Откуда наш кофе
-                </h2>
-            </div>
-            
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay: 0.2s;">
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--olive);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Эфиопия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Иргачеффе, Сидамо</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Колыбель кофе. Цветочные ноты и яркая цитрусовая кислотность.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--copper);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Колумбия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Уила, Нариньо</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Карамельная сладость, сбалансированность и мягкое тело.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--rose);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Кения</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Абердар, Ньери</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Яркая ягодная кислотность, сложный вкусовой профиль.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--accent);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Бразилия</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Серрадо, Сул-де-Минас</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Мягкий, ореховый, с нотами молочного шоколада.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--fg);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Гватемала</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Антигуа, Уэуэтенанго</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Дымные ноты, пряности, вулканические почвы.</p>
-                </div>
-                
-                <div class="origin-card">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="origin-dot" style="background: var(--gold);"></div>
-                        <span class="font-serif text-lg" style="color: var(--fg);">Коста-Рика</span>
-                    </div>
-                    <p class="text-sm mb-3" style="color: var(--muted);">Тарразу, Центральная долина</p>
-                    <p class="text-sm" style="color: var(--fg-light);">Чистый, яркий, с медовой сладостью.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Menu Section -->
-    <section class="py-28 md:py-36 px-6 relative" id="menu" style="background: var(--bg);">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Не просто напитки</span>
-                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-5" style="color: var(--coffee);">
-                    Наши вкусы
-                </h2>
-                <p class="mt-8 text-lg max-w-xl mx-auto" style="color: var(--muted);">
-                    Наведите на название, чтобы узнать вкусовой профиль
-                </p>
-            </div>
-            
-            <div class="reveal" style="transition-delay: 0.15s;">
-                <!-- Menu items -->
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Эфиопия Иргачеффе</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, V60</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">280 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--olive), var(--rose));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Ноты жасмина, спелого персика и лёгкая цитрусовая кислинка. 
-                            Чашка весеннего сада.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(139, 154, 125, 0.15); color: var(--olive);">Цветочный</span>
-                            <span class="flavor-tag" style="background: rgba(212, 165, 165, 0.2); color: var(--rose);">Фруктовый</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Колумбия Уила</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Эспрессо, doppio</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">220 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--copper), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Карамельная сладость, ноты горького шоколада и ореховое послевкусие. 
-                            Утро в горах.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(184, 115, 51, 0.15); color: var(--copper);">Нутовый</span>
-                            <span class="flavor-tag" style="background: rgba(61, 35, 20, 0.1); color: var(--coffee);">Шоколадный</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Кения Абердар</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, Kalita</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">320 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--rose), var(--accent));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Яркая смородиновая кислинка, томное послевкусие сушеных ягод. 
-                            Африка в каждой чашке.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(212, 165, 165, 0.2); color: var(--rose);">Ягодный</span>
-                            <span class="flavor-tag" style="background: rgba(139, 154, 125, 0.15); color: var(--olive);">Сбалансированный</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Бразилия Серрадо</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Эспрессо, лунго</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">200 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--accent), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Мягкий, с нотами молочного шоколада и жареного фундука. 
-                            Идеальный компаньон для неторопливой беседы.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(196, 164, 132, 0.2); color: var(--accent);">Мягкий</span>
-                            <span class="flavor-tag" style="background: rgba(184, 115, 51, 0.15); color: var(--copper);">Ореховый</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item" style="border-bottom: none;">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="menu-item-title font-serif text-xl md:text-2xl transition-colors" style="color: var(--fg);">Гватемала Антигуа</h3>
-                            <p class="text-sm mt-2" style="color: var(--muted);">Фильтр, Chemex</p>
-                        </div>
-                        <span class="menu-item-price font-serif text-xl" style="color: var(--copper);">350 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full" style="background: linear-gradient(135deg, var(--fg), var(--copper));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg leading-relaxed" style="color: var(--fg);">
-                            Дымные ноты, пряности и темный шоколад. 
-                            Вкус вулканических почв и древних городов.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-5">
-                            <span class="flavor-tag" style="background: rgba(74, 55, 40, 0.12); color: var(--fg-light);">Пряный</span>
-                            <span class="flavor-tag" style="background: rgba(61, 35, 20, 0.1); color: var(--coffee);">Насыщенный</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-            
-            <div class="text-center mt-16 reveal">
-                <p class="text-sm" style="color: var(--muted);">
-                    Также спросите бариста о сезонных альтернативах и дрип-пакетах домой
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section class="split-section" id="process">
-        <div class="texture-panel relative flex items-center justify-center p-8 md:p-12">
-            <!-- Stylized hand/tamper illustration -->
-            <svg viewBox="0 0 400 500" class="w-full h-full max-w-sm" aria-hidden="true">
-                <!-- Background warmth -->
-                <defs>
-                    <radialGradient id="warmth" cx="50%" cy="50%">
-                        <stop offset="0%" stop-color="var(--copper)" stop-opacity="0.12"/>
-                        <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                    </radialGradient>
-                </defs>
-                <circle cx="200" cy="250" r="200" fill="url(#warmth)"/>
-                
-                <!-- Decorative rings -->
-                <circle cx="200" cy="250" r="150" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-                <circle cx="200" cy="250" r="100" fill="none" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-                
-                <!-- Tamper -->
-                <g transform="translate(120, 80)">
-                    <!-- Handle -->
-                    <rect x="60" y="0" width="40" height="200" rx="20" fill="var(--coffee)"/>
-                    <rect x="65" y="10" width="15" height="180" rx="7" fill="rgba(255,255,255,0.05)"/>
-                    <ellipse cx="80" cy="200" rx="55" ry="18" fill="var(--coffee)"/>
-                    
-                    <!-- Base -->
-                    <rect x="25" y="200" width="110" height="35" rx="3" fill="var(--fg)"/>
-                    <rect x="30" y="205" width="100" height="5" rx="2" fill="rgba(255,255,255,0.08)"/>
-                    
-                    <!-- Coffee grounds texture -->
-                    <g fill="var(--coffee)" opacity="0.5">
-                        <circle cx="45" cy="240" r="3"/>
-                        <circle cx="65" cy="244" r="2"/>
-                        <circle cx="85" cy="238" r="2.5"/>
-                        <circle cx="105" cy="242" r="2"/>
-                        <circle cx="125" cy="239" r="2"/>
-                        <circle cx="55" cy="248" r="1.5"/>
-                        <circle cx="95" cy="250" r="2"/>
-                        <circle cx="115" cy="247" r="1.5"/>
-                    </g>
-                    
-                    <!-- Portafilter basket -->
-                    <ellipse cx="80" cy="250" rx="60" ry="15" fill="none" stroke="var(--muted)" stroke-width="2"/>
-                </g>
-                
-                <!-- Decorative elements -->
-                <g stroke="var(--gold)" stroke-width="0.5" opacity="0.3">
-                    <line x1="50" y1="380" x2="350" y2="380"/>
-                    <line x1="70" y1="410" x2="330" y2="410"/>
-                    <line x1="100" y1="440" x2="300" y2="440"/>
-                </g>
-                
-                <!-- Steam/aroma lines -->
-                <g stroke="var(--muted)" stroke-width="1" fill="none" opacity="0.25">
-                    <path d="M170 60 Q165 40 175 20 Q185 0 170 -20"/>
-                    <path d="M200 50 Q195 30 205 10 Q215 -10 200 -30"/>
-                    <path d="M230 60 Q225 40 235 20 Q245 0 230 -20"/>
-                </g>
+  <!-- Products Section -->
+  <section id="products" class="section products-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Наша вода</h2>
+      <p class="section-subtitle">Артезианская вода высшей категории для всей семьи</p>
+    </div>
+    
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2h8l4 10H4L8 2z"/>
+              <path d="M12 12v10"/>
+              <path d="M8 22h8"/>
             </svg>
-            
-            <!-- Temperature curve overlay -->
-            <svg class="temp-curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <path class="curve-line" d="M0 90 Q25 85 40 60 Q55 35 70 40 Q85 45 100 20"/>
+          </div>
+        </div>
+        <h3 class="product-title">Стандарт</h3>
+        <p class="product-volume">Бутыль 19 литров</p>
+        <div class="product-price">350 <span>руб.</span></div>
+      </div>
+      
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2h8l4 10H4L8 2z"/>
+              <path d="M12 12v10"/>
+              <path d="M8 22h8"/>
+              <circle cx="12" cy="6" r="2"/>
             </svg>
+          </div>
         </div>
-        
-        <div class="flex items-center p-8 md:p-12 lg:p-20" style="background: var(--cream);">
-            <div class="reveal">
-                <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Процесс</span>
-                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mt-5 mb-10 leading-tight" style="color: var(--coffee);">
-                    Обжарка маленькими партиями
-                </h2>
-                <div class="space-y-7 text-lg" style="color: var(--fg-light);">
-                    <p>
-                        Мы обжариваем зерно маленькими партиями, чтобы сохранить 
-                        аромат и раскрыть характер каждого региона.
-                    </p>
-                    <p>
-                        Каждый день наши бариста калибруют оборудование, 
-                        пробуют эспрессо и настраивают рецепты — 
-                        чтобы ваша чашка была идеальной.
-                    </p>
-                </div>
-                
-                <div class="mt-12 flex flex-wrap gap-5">
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">12</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">регионов мира</span>
-                    </div>
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">4</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">года обжарки</span>
-                    </div>
-                    <div class="px-5 py-4 rounded-xl" style="background: var(--bg);">
-                        <span class="stat-number font-serif">∞</span>
-                        <span class="block text-sm mt-1" style="color: var(--muted);">внимания</span>
-                    </div>
-                </div>
-            </div>
+        <h3 class="product-title">Премиум</h3>
+        <p class="product-volume">Бутыль 19 литров</p>
+        <div class="product-price">450 <span>руб.</span></div>
+      </div>
+      
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+              <line x1="15" y1="3" x2="15" y2="21"/>
+            </svg>
+          </div>
         </div>
-    </section>
+        <h3 class="product-title">Комплект 6 шт</h3>
+        <p class="product-volume">6 бутылей по 19 литров</p>
+        <div class="product-price">1 900 <span>руб.</span></div>
+      </div>
+      
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="product-title">Маленькая</h3>
+        <p class="product-volume">Бутылка 5 литров</p>
+        <div class="product-price">120 <span>руб.</span></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section class="py-28 md:py-36 px-6 relative overflow-hidden" id="contact" style="background: var(--bg-warm);">
-        <!-- Decorative plant -->
-        <svg class="plant-decoration" style="bottom: 5%; right: 5%; width: 220px;" viewBox="0 0 150 200" aria-hidden="true">
-            <path d="M75 200 Q60 150 75 100 Q90 150 75 200" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="40" cy="80" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-15 40 80)"/>
-            <ellipse cx="110" cy="90" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(15 110 90)"/>
-            <ellipse cx="75" cy="50" rx="30" ry="45" fill="none" stroke="var(--olive)" stroke-width="0.5"/>
-        </svg>
-        
-        <div class="glow-orb" style="top: 10%; left: -5%; width: 300px; height: 300px; background: var(--gold); opacity: 0.06;" aria-hidden="true"></div>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-16 md:gap-24">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.35em] uppercase" style="color: var(--copper);">Найти нас</span>
-                    <h2 class="font-serif text-4xl md:text-5xl mt-5 mb-10" style="color: var(--coffee);">
-                        Приходите за тишиной
-                    </h2>
-                    
-                    <div class="space-y-10">
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Адрес</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                ул. Тихая, 14<br>
-                                двор «Архитектор», второй этаж
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Время жить</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                Будни: 8:00 — 22:00<br>
-                                Выходные: 9:00 — 21:00
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-3" style="color: var(--fg);">Связь</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                <a href="tel:+78001234567" class="hover:underline underline-offset-4 decoration-var(--copper) transition-colors hover:text-var(--coffee)">+7 800 123-45-67</a><br>
-                                <a href="mailto:hello@slowmorning.ru" class="hover:underline underline-offset-4 decoration-var(--copper) transition-colors hover:text-var(--coffee)">hello@slowmorning.ru</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="reveal" style="transition-delay: 0.2s;">
-                    <!-- Sketch-style map -->
-                    <div class="map-illustration">
-                        <svg viewBox="0 0 400 300" class="map-svg" aria-label="Схема проезда к кофейне">
-                            <style>
-                                .map-line { fill: none; stroke: var(--fg-light); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-                                .map-dashed { stroke-dasharray: 8 4; }
-                                .map-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); }
-                                .map-label-main { font-family: 'Playfair Display', serif; font-size: 14px; fill: var(--coffee); }
-                                .map-dot { fill: var(--rose); }
-                            </style>
-                            
-                            <!-- Main streets -->
-                            <path class="map-line" d="M50 150 L350 150" opacity="0.25"/>
-                            <path class="map-line" d="M200 50 L200 250" opacity="0.25"/>
-                            
-                            <!-- Side streets -->
-                            <path class="map-line" d="M100 100 L100 200" opacity="0.15"/>
-                            <path class="map-line" d="M300 80 L300 220" opacity="0.15"/>
-                            
-                            <!-- Route to cafe -->
-                            <path class="map-path map-dashed" d="M80 150 L80 120 L150 120 L150 90" style="stroke: var(--copper);"/>
-                            
-                            <!-- Buildings -->
-                            <rect x="120" y="140" width="60" height="40" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            <rect x="240" y="130" width="80" height="50" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            <rect x="60" y="160" width="40" height="30" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.15"/>
-                            
-                            <!-- Trees/park -->
-                            <circle cx="320" cy="180" r="15" fill="var(--olive)" opacity="0.12"/>
-                            <circle cx="340" cy="200" r="12" fill="var(--olive)" opacity="0.08"/>
-                            
-                            <!-- Cafe location -->
-                            <circle cx="150" cy="90" r="22" fill="var(--cream)" stroke="var(--rose)" stroke-width="2"/>
-                            <circle class="map-dot" cx="150" cy="90" r="7"/>
-                            
-                            <!-- Labels -->
-                            <text x="150" y="130" class="map-label-main" text-anchor="middle">Slow Morning</text>
-                            <text x="200" y="170" class="map-label" text-anchor="middle">ул. Центральная</text>
-                            <text x="200" y="230" class="map-label" text-anchor="middle">Тихий переулок</text>
-                            <text x="80" y="180" class="map-label" text-anchor="middle">Метро</text>
-                            
-                            <!-- Walking person icon -->
-                            <g transform="translate(70, 145)" fill="var(--copper)">
-                                <circle cx="0" cy="0" r="4"/>
-                                <path d="M0 6 L0 14 M-5 10 L5 10 M-4 20 L0 14 L4 20" stroke="var(--copper)" stroke-width="2" fill="none"/>
-                            </g>
-                            
-                            <!-- Decorative arrow -->
-                            <path d="M85 110 L95 105 L95 115 Z" fill="var(--copper)"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-sm mt-5 text-center" style="color: var(--muted);">
-                        Две минуты пешком от метро, через арку с муралом
-                    </p>
-                </div>
-            </div>
+  <!-- Equipment Section -->
+  <section id="equipment" class="section equipment-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Оборудование</h2>
+      <p class="section-subtitle">Кулеры, помпы и диспенсеры для воды</p>
+    </div>
+    
+    <div class="equipment-grid">
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="12" y1="6" x2="12" y2="10"/>
+            <circle cx="12" cy="14" r="2"/>
+          </svg>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-14 px-6" style="background: var(--coffee); color: var(--cream);">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-                <div class="text-center md:text-left">
-                    <span class="font-serif text-2xl">Slow Morning</span>
-                    <p class="mt-2 text-sm opacity-50">Культура потребления</p>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <a href="#" class="social-icon opacity-60 hover:opacity-100 transition-opacity" aria-label="Instagram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="2" y="2" width="20" height="20" rx="5"/>
-                            <circle cx="12" cy="12" r="4"/>
-                            <circle cx="18" cy="6" r="1.5" fill="currentColor" stroke="none"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-icon opacity-60 hover:opacity-100 transition-opacity" aria-label="Telegram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
-                            <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
-                        </svg>
-                    </a>
-                </div>
-                
-                <p class="text-sm opacity-50 text-center md:text-right">
-                    Замедлись. Выдохни. Насладись.
-                </p>
-            </div>
+        <div class="equipment-info">
+          <h4>Кулер напольный</h4>
+          <p>Нагрев и охлаждение, защита от детей</p>
+          <span class="equipment-price">от 8 500 руб.</span>
         </div>
-    </footer>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="4" width="14" height="16" rx="2"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <circle cx="12" cy="15" r="1"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Кулер настольный</h4>
+          <p>Компактный, два режима температуры</p>
+          <span class="equipment-price">от 5 900 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Помпа механическая</h4>
+          <p>Простое решение для дома</p>
+          <span class="equipment-price">от 650 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Помпа электрическая</h4>
+          <p>Автоматическая подача воды, USB-зарядка</p>
+          <span class="equipment-price">от 1 200 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Подставка-держатель</h4>
+          <p>Для бутылей 19 литров, устойчивая</p>
+          <span class="equipment-price">от 1 500 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <line x1="12" y1="10" x2="12" y2="14"/>
+            <line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Фильтр-кувшин</h4>
+          <p>Дополнительная очистка, 4 литра</p>
+          <span class="equipment-price">от 990 руб.</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+  <!-- Delivery Section -->
+  <section id="delivery" class="section delivery-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Как заказать</h2>
+      <p class="section-subtitle">Просто и удобно — вода уже через 24 часа</p>
+    </div>
+    
+    <div class="delivery-content">
+      <div class="delivery-steps reveal">
+        <div class="delivery-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Оформите заказ</h4>
+            <p>Позвоните или заполните форму на сайте</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Выберите время</h4>
+            <p>Укажите удобный интервал доставки</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Получите воду</h4>
+            <p>Курьер занесёт воду прямо к двери</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Оплатите</h4>
+            <p>Наличными, картой или онлайн</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="delivery-form reveal">
+        <h3 class="form-title">Заказать доставку</h3>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Ваше имя">
+        </div>
+        <div class="form-group">
+          <input type="tel" class="form-input" placeholder="Телефон">
+        </div>
+        <div class="form-group">
+          <select class="form-input form-select">
+            <option value="">Выберите продукт</option>
+            <option value="standard">Вода Стандарт 19л</option>
+            <option value="premium">Вода Премиум 19л</option>
+            <option value="set">Комплект 6 бутылей</option>
+            <option value="small">Вода 5л</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Адрес доставки">
+        </div>
+        <button type="submit" class="submit-btn">Отправить заявку</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section contact-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Контакты</h2>
+      <p class="section-subtitle">Свяжитесь с нами любым удобным способом</p>
+    </div>
+    
+    <div class="contact-grid">
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <h4>Телефон</h4>
+        <p><a href="tel:+78001234567">8 800 123-45-67</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Бесплатно по России</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h4>Адрес</h4>
+        <p>г. Москва, ул. Водная, 15</p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Пн-Вс: 8:00-22:00</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h4>Email</h4>
+        <p><a href="mailto:info@aquachist.ru">info@aquachist.ru</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Ответим в течение часа</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </div>
+        <h4>Мессенджеры</h4>
+        <p><a href="#">WhatsApp</a> / <a href="#">Telegram</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Быстрые ответы</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">АкваЧист</div>
+    <div class="footer-links">
+      <a href="#products">Продукция</a>
+      <a href="#equipment">Оборудование</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contact">Контакты</a>
+    </div>
+    <p class="footer-copy">2024 АкваЧист. Все права защищены.</p>
+  </footer>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://esm.sh/three@0.160.0"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    // Device detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isLowPower = isMobile || navigator.hardwareConcurrency <= 4;
+
+    // Canvas and renderer setup
+    const canvas = document.getElementById('water-canvas');
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      antialias: !isMobile,
+      alpha: true,
+      powerPreference: isMobile ? 'low-power' : 'high-performance'
+    });
+
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    // Mouse tracking
+    const mouse = { x: 0.5, y: 0.5 };
+    const targetMouse = { x: 0.5, y: 0.5 };
+
+    // Water shader material - optimized
+    const waterMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        uPixelRatio: { value: pixelRatio }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position.xy, 0.0, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision ${isLowPower ? 'mediump' : 'highp'} float;
+        
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec2 uMouse;
+        uniform float uPixelRatio;
+        
+        varying vec2 vUv;
+        
+        #define PI 3.14159265359
+        
+        // Simplified noise function
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        }
+        
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
+          
+          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        }
+        
+        // Smooth metaball SDF
+        float metaballs(vec2 uv, float time) {
+          float result = 0.0;
+          
+          // Main cursor blob
+          vec2 cursorPos = uMouse * 2.0 - 1.0;
+          cursorPos.x *= uResolution.x / uResolution.y;
+          float cursorDist = length(uv - cursorPos);
+          result += 0.25 / (cursorDist * cursorDist + 0.02);
+          
+          // Floating blobs - optimized count
+          int blobCount = isLowPower ? 4 : 6;
+          
+          for (int i = 0; i < 6; i++) {
+            if (i >= blobCount) break;
             
-            // Custom cursor
-            const cursorDot = document.getElementById('cursorDot');
-            const cursorRing = document.getElementById('cursorRing');
-            let mouseX = 0, mouseY = 0;
-            let ringX = 0, ringY = 0;
+            float fi = float(i);
+            float speed = 0.3 + fi * 0.1;
+            float size = 0.08 + mod(fi, 3.0) * 0.03;
             
-            if (window.matchMedia('(pointer: fine)').matches) {
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                    cursorDot.style.left = mouseX - 4 + 'px';
-                    cursorDot.style.top = mouseY - 4 + 'px';
-                });
-                
-                function animateRing() {
-                    ringX += (mouseX - ringX) * 0.15;
-                    ringY += (mouseY - ringY) * 0.15;
-                    cursorRing.style.left = ringX - 20 + 'px';
-                    cursorRing.style.top = ringY - 20 + 'px';
-                    requestAnimationFrame(animateRing);
-                }
-                animateRing();
-                
-                // Hover effect on interactive elements
-                const interactiveElements = document.querySelectorAll('a, button, .menu-item');
-                interactiveElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
-                    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
-                });
-            }
+            vec2 blobPos = vec2(
+              sin(time * speed + fi * 1.5) * 0.8,
+              cos(time * speed * 0.7 + fi * 2.1) * 0.6
+            );
             
-            // Scroll reveal animation
-            const revealElements = document.querySelectorAll('.reveal, .reveal-scale');
+            // Mouse attraction
+            blobPos += (cursorPos - blobPos) * 0.15;
             
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -80px 0px'
-            });
-            
-            revealElements.forEach(el => revealObserver.observe(el));
-            
-            // Temperature curve animation
-            const curveLine = document.querySelector('.curve-line');
-            
-            if (curveLine) {
-                const curveObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            curveLine.classList.add('animate');
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                curveObserver.observe(curveLine.closest('.texture-panel'));
-            }
-            
-            // Map path animation
-            const mapPath = document.querySelector('.map-path');
-            
-            if (mapPath) {
-                const mapObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            mapPath.classList.add('animate');
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                mapObserver.observe(mapPath.closest('.map-illustration'));
-            }
-            
-            // Navbar background on scroll
-            const navbar = document.getElementById('navbar');
-            
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                if (currentScroll > 80) {
-                    navbar.style.background = 'rgba(247, 243, 236, 0.95)';
-                    navbar.style.boxShadow = '0 2px 30px rgba(44, 24, 16, 0.06)';
-                    navbar.style.backdropFilter = 'blur(10px)';
-                } else {
-                    navbar.style.background = 'transparent';
-                    navbar.style.boxShadow = 'none';
-                    navbar.style.backdropFilter = 'none';
-                }
-            });
-            
-            // Mobile menu
-            const menuToggle = document.getElementById('menuToggle');
-            const closeMenu = document.getElementById('closeMenu');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuPanel = document.getElementById('menuPanel');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            
-            function openMenu() {
-                mobileMenu.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                requestAnimationFrame(() => {
-                    menuPanel.style.transform = 'translateX(0)';
-                });
-            }
-            
-            function closeMenuFn() {
-                menuPanel.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 500);
-            }
-            
-            menuToggle.addEventListener('click', openMenu);
-            closeMenu.addEventListener('click', closeMenuFn);
-            menuOverlay.addEventListener('click', closeMenuFn);
-            menuLinks.forEach(link => link.addEventListener('click', closeMenuFn));
-            
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href === '#') return;
-                    
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        const offsetTop = target.offsetTop - 80;
-                        window.scrollTo({
-                            top: offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Reduced motion check
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-            
-            if (prefersReducedMotion.matches) {
-                document.querySelectorAll('.steam, .floating-bean, .origin-dot, .coffee-ripple').forEach(el => {
-                    el.style.animation = 'none';
-                });
-            }
-            
-            // Keyboard navigation for menu items
-            const menuItems = document.querySelectorAll('.menu-item');
-            
-            menuItems.forEach(item => {
-                item.setAttribute('tabindex', '0');
-                item.setAttribute('role', 'button');
-                item.setAttribute('aria-expanded', 'false');
-                
-                const flavorCard = item.querySelector('.flavor-card');
-                
-                item.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const isVisible = flavorCard.style.opacity === '1';
-                        flavorCard.style.opacity = isVisible ? '0' : '1';
-                        flavorCard.style.pointerEvents = isVisible ? 'none' : 'auto';
-                        flavorCard.style.transform = isVisible 
-                            ? 'translateY(-50%) translateX(20px)' 
-                            : 'translateY(-50%) translateX(0)';
-                        item.setAttribute('aria-expanded', !isVisible);
-                    }
-                });
-            });
-            
-            // Parallax effect on hero (subtle)
-            const hero = document.getElementById('hero');
-            const floatingBeans = document.querySelectorAll('.floating-bean');
-            
-            if (!prefersReducedMotion.matches) {
-                window.addEventListener('scroll', () => {
-                    const scrollY = window.pageYOffset;
-                    const heroHeight = hero.offsetHeight;
-                    
-                    if (scrollY < heroHeight) {
-                        floatingBeans.forEach((bean, index) => {
-                            const speed = 0.1 + (index * 0.05);
-                            bean.style.transform = `translateY(${scrollY * speed}px)`;
-                        });
-                    }
-                });
-            }
-        });
-    </script>
+            float dist = length(uv - blobPos);
+            result += size / (dist * dist + 0.01);
+          }
+          
+          return result;
+        }
+        
+        void main() {
+          vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution * uPixelRatio) / (uResolution.y * uPixelRatio);
+          
+          float time = uTime * 0.5;
+          
+          // Calculate metaballs
+          float blobs = metaballs(uv, time);
+          
+          // Threshold for water surface
+          float threshold = 1.0;
+          float edge = smoothstep(threshold - 0.3, threshold + 0.3, blobs);
+          
+          // Water colors
+          vec3 waterDeep = vec3(0.0, 0.33, 0.47);
+          vec3 waterLight = vec3(0.0, 0.67, 0.87);
+          vec3 waterGlow = vec3(0.4, 0.93, 1.0);
+          vec3 waterFoam = vec3(0.67, 0.93, 1.0);
+          
+          // Depth-based coloring
+          float depth = (blobs - threshold) * 2.0;
+          depth = clamp(depth, 0.0, 1.0);
+          
+          vec3 waterColor = mix(waterLight, waterDeep, depth);
+          
+          // Add caustics-like effect
+          float caustics = noise(uv * 8.0 + time * 2.0) * 0.5 + 0.5;
+          caustics *= noise(uv * 12.0 - time * 1.5) * 0.5 + 0.5;
+          waterColor += waterGlow * caustics * 0.15 * (1.0 - depth);
+          
+          // Edge glow/foam
+          float foam = 1.0 - smoothstep(threshold - 0.2, threshold + 0.1, blobs);
+          waterColor = mix(waterColor, waterFoam, foam * 0.6);
+          
+          // Fresnel-like rim effect
+          vec2 gradUv = uv * 0.5;
+          float fresnel = 1.0 - smoothstep(0.0, 2.0, length(uv));
+          waterColor *= 0.7 + fresnel * 0.3;
+          
+          // Cursor highlight
+          vec2 cursorPos = uMouse * 2.0 - 1.0;
+          cursorPos.x *= uResolution.x / uResolution.y;
+          float cursorDist = length(uv - cursorPos);
+          float cursorGlow = exp(-cursorDist * 2.0) * 0.3;
+          waterColor += waterGlow * cursorGlow;
+          
+          // Apply edge masking
+          float alpha = edge * 0.85;
+          
+          // Background gradient
+          vec3 bgColor = mix(
+            vec3(0.008, 0.039, 0.059),
+            vec3(0.02, 0.08, 0.1),
+            vUv.y
+          );
+          
+          // Subtle noise on background
+          bgColor += noise(vUv * 200.0 + time * 0.5) * 0.02;
+          
+          // Final color
+          vec3 finalColor = mix(bgColor, waterColor, alpha);
+          
+          // Vignette
+          float vignette = 1.0 - smoothstep(0.4, 1.4, length(uv * 0.7));
+          finalColor *= 0.8 + vignette * 0.2;
+          
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `,
+      transparent: false
+    });
+
+    // Create mesh
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const mesh = new THREE.Mesh(geometry, waterMaterial);
+    scene.add(mesh);
+
+    // Clock
+    const clock = new THREE.Clock();
+
+    // Event listeners
+    function onMouseMove(e) {
+      targetMouse.x = e.clientX / window.innerWidth;
+      targetMouse.y = 1.0 - e.clientY / window.innerHeight;
+    }
+
+    function onTouchMove(e) {
+      if (e.touches.length > 0) {
+        targetMouse.x = e.touches[0].clientX / window.innerWidth;
+        targetMouse.y = 1.0 - e.touches[0].clientY / window.innerHeight;
+      }
+    }
+
+    function onResize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const pr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+      
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(pr);
+      
+      waterMaterial.uniforms.uResolution.value.set(width, height);
+      waterMaterial.uniforms.uPixelRatio.value = pr;
+    }
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Smooth mouse
+      mouse.x += (targetMouse.x - mouse.x) * 0.08;
+      mouse.y += (targetMouse.y - mouse.y) * 0.08;
+      
+      waterMaterial.uniforms.uTime.value = clock.getElapsedTime();
+      waterMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
+      
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
+        }
+      });
+    }, observerOptions);
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Initial reveal for hero
+    setTimeout(() => {
+      document.querySelector('.hero-section .reveal').classList.add('visible');
+    }, 300);
+  </script>
 </body>
 </html>
