@@ -1,1215 +1,1623 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slow Morning — Культура потребления</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #F5F0E8;
-            --bg-warm: #EDE6DA;
-            --fg: #2C1810;
-            --fg-light: #4A3728;
-            --muted: #8B7355;
-            --accent: #C4A484;
-            --coffee: #3D2314;
-            --latte: #D4C4B0;
-            --cream: #FDF8F3;
-            --rose: #D4A5A5;
-            --olive: #8B9A7D;
-            --copper: #B87333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vellura — Невидимый источник вашей энергии</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --ice-white: #fafffe;
+      --ice-white-dim: #e8f4f2;
+      --transparent-blue: #c8e4ef;
+      --wet-stone: #7a9499;
+      --pale-mint: #d5ebe5;
+      --deep-navy: #162a3d;
+      --deep-navy-light: #2a4a63;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body: 'Cormorant Garamond', serif;
+      --transition-smooth: 0.6s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      --transition-spring: 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--fg);
-            overflow-x: hidden;
-            line-height: 1.7;
-        }
+    @media (min-width: 768px) {
+      html { font-size: 18px; }
+    }
 
-        .font-serif {
-            font-family: 'Playfair Display', Georgia, serif;
-        }
+    body {
+      font-family: var(--font-body);
+      background: var(--ice-white);
+      color: var(--deep-navy);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* Noise texture overlay */
-        .noise-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.03;
-            z-index: 9999;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
+    /* Typography */
+    .heading-xl {
+      font-family: var(--font-display);
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      line-height: 1.1;
+    }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+    .heading-lg {
+      font-family: var(--font-display);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+    }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
+    .body-text {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 1.1em;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--muted);
-            border-radius: 4px;
-        }
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      overflow: hidden;
+    }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    #container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(250, 255, 254, 0.15) 0%,
+        rgba(250, 255, 254, 0.3) 40%,
+        rgba(250, 255, 254, 0.75) 75%,
+        rgba(250, 255, 254, 0.95) 100%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
 
-        @keyframes steamRise {
-            0% {
-                transform: translateY(0) translateX(0) scale(1);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(-30px) translateX(5px) scale(1.2);
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-60px) translateX(-3px) scale(0.8);
-                opacity: 0;
-            }
-        }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
 
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      color: var(--deep-navy);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1.2s var(--transition-smooth) forwards;
+    }
 
-        @keyframes grainShift {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-1%, -1%); }
-            20% { transform: translate(1%, 1%); }
-            30% { transform: translate(-1%, 1%); }
-            40% { transform: translate(1%, -1%); }
-            50% { transform: translate(-1%, 0); }
-            60% { transform: translate(1%, 0); }
-            70% { transform: translate(0, 1%); }
-            80% { transform: translate(0, -1%); }
-            90% { transform: translate(1%, 1%); }
-        }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--wet-stone);
+      max-width: 550px;
+      opacity: 0;
+      animation: fadeInUp 1.2s var(--transition-smooth) 0.3s forwards;
+    }
 
-        @keyframes lightBeam {
-            0% { opacity: 0.3; transform: translateX(-20%); }
-            50% { opacity: 0.6; }
-            100% { opacity: 0.3; transform: translateX(20%); }
-        }
+    .hero-tagline {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--wet-stone);
+      opacity: 0;
+      animation: fadeInUp 1.2s var(--transition-smooth) 0.6s forwards;
+    }
 
-        .animate-fadeInUp {
-            animation: fadeInUp 1s ease-out forwards;
-        }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeInUp 1.2s var(--transition-smooth) 0.9s forwards, bounce 2s ease-in-out 2s infinite;
+      cursor: pointer;
+    }
 
-        .animate-fadeIn {
-            animation: fadeIn 1.5s ease-out forwards;
-        }
+    .scroll-indicator span {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--wet-stone), transparent);
+    }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0) translateX(-50%);
+      }
+    }
+    
+    .hero-title, .hero-subtitle {
+      animation-name: fadeInUpSimple;
+    }
+    
+    @keyframes fadeInUpSimple {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            .reveal {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-            .animate-fadeInUp,
-            .animate-fadeIn {
-                animation: none;
-                opacity: 1;
-            }
-        }
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      transition: all var(--transition-smooth);
+    }
 
-        /* Hero section */
-        .hero {
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
+    .nav.scrolled {
+      background: rgba(250, 255, 254, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 1rem 3rem;
+      box-shadow: 0 1px 0 rgba(122, 148, 153, 0.1);
+    }
 
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(255, 248, 240, 0.8) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(196, 164, 132, 0.3) 0%, transparent 40%),
-                linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
-        }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 200;
+      font-size: 1.4rem;
+      letter-spacing: 0.25em;
+      color: var(--deep-navy);
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
 
-        .light-beam {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(180deg, 
-                rgba(255, 250, 240, 0.4) 0%, 
-                rgba(255, 245, 230, 0.1) 50%,
-                transparent 100%);
-            transform: translateX(-50%) skewX(-15deg);
-            animation: lightBeam 8s ease-in-out infinite;
-            pointer-events: none;
-        }
+    .logo:hover {
+      opacity: 0.7;
+    }
 
-        .coffee-cup-container {
-            position: relative;
-            width: 280px;
-            height: 340px;
-        }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
 
-        .coffee-cup {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
+    .nav-links a {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--wet-stone);
+      text-decoration: none;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
+    }
 
-        .cup-body {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 180px;
-            background: linear-gradient(135deg, var(--cream) 0%, #F8F4EF 50%, #E8E0D5 100%);
-            border-radius: 10px 10px 50% 50%;
-            box-shadow: 
-                inset 5px 5px 15px rgba(255, 255, 255, 0.8),
-                inset -5px -5px 15px rgba(0, 0, 0, 0.05),
-                0 20px 60px rgba(44, 24, 16, 0.15);
-        }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--deep-navy);
+      transition: width 0.4s var(--transition-smooth);
+    }
 
-        .cup-coffee {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 170px;
-            height: 140px;
-            background: radial-gradient(ellipse at 30% 30%, #5C3D2E 0%, var(--coffee) 60%, #1A0F0A 100%);
-            border-radius: 10px 10px 50% 50%;
-            overflow: hidden;
-        }
+    .nav-links a:hover {
+      color: var(--deep-navy);
+    }
 
-        .coffee-surface {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: linear-gradient(180deg, 
-                rgba(92, 61, 46, 0.8) 0%, 
-                transparent 100%);
-            border-radius: 10px 10px 0 0;
-        }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
 
-        .latte-art {
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 80px;
-            background: radial-gradient(ellipse at center, var(--latte) 0%, transparent 70%);
-            opacity: 0.7;
-            border-radius: 50%;
-        }
+    /* Interactive Glass Section */
+    .glass-section {
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--ice-white) 0%, var(--pale-mint) 50%, var(--ice-white-dim) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem;
+      position: relative;
+    }
 
-        .steam-container {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-        }
+    .glass-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(200, 228, 239, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(213, 235, 229, 0.4) 0%, transparent 50%);
+      pointer-events: none;
+    }
 
-        .steam {
-            position: absolute;
-            bottom: 0;
-            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.4));
-            border-radius: 50%;
-            animation: steamRise 3s ease-out infinite;
-        }
+    .glass-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+      max-width: 800px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
 
-        .steam:nth-child(1) {
-            left: 20%;
-            width: 20px;
-            height: 40px;
-            animation-delay: 0s;
-        }
+    .glass-section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
 
-        .steam:nth-child(2) {
-            left: 50%;
-            width: 25px;
-            height: 50px;
-            animation-delay: 0.5s;
-        }
+    .glass-section-text {
+      text-align: center;
+      color: var(--wet-stone);
+      max-width: 480px;
+    }
 
-        .steam:nth-child(3) {
-            left: 70%;
-            width: 18px;
-            height: 35px;
-            animation-delay: 1s;
-        }
+    .glass-demo {
+      position: relative;
+      width: 180px;
+      height: 280px;
+      filter: drop-shadow(0 20px 40px rgba(22, 42, 61, 0.1));
+    }
 
-        .cup-handle {
-            position: absolute;
-            right: -35px;
-            top: 30px;
-            width: 40px;
-            height: 80px;
-            border: 12px solid var(--cream);
-            border-left: none;
-            border-radius: 0 50px 50px 0;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-        }
+    .glass-svg {
+      width: 100%;
+      height: 100%;
+    }
 
-        .saucer {
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 260px;
-            height: 30px;
-            background: linear-gradient(135deg, var(--cream) 0%, #E8E0D5 100%);
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.1);
-        }
+    /* Water types */
+    .water-types {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-        /* Coffee pour animation */
-        .pour-stream {
-            position: absolute;
-            top: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 100px;
-            background: linear-gradient(180deg, 
-                var(--coffee) 0%, 
-                #5C3D2E 100%);
-            border-radius: 4px;
-            animation: gentleFloat 4s ease-in-out infinite;
-        }
+    .water-type-btn {
+      padding: 0.875rem 1.75rem;
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid rgba(122, 148, 153, 0.4);
+      color: var(--wet-stone);
+      cursor: pointer;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
 
-        .pour-stream::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 15px;
-            background: var(--coffee);
-            border-radius: 50%;
-        }
+    .water-type-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--deep-navy);
+      transform: translateY(100%);
+      transition: transform 0.4s var(--transition-smooth);
+      z-index: -1;
+    }
 
-        /* Menu cards */
-        .menu-item {
-            position: relative;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid rgba(139, 115, 85, 0.2);
-            cursor: pointer;
-            transition: all 0.4s ease;
-        }
+    .water-type-btn:hover::before,
+    .water-type-btn.active::before {
+      transform: translateY(0);
+    }
 
-        .menu-item:hover {
-            padding-left: 1rem;
-        }
+    .water-type-btn:hover,
+    .water-type-btn.active {
+      border-color: var(--deep-navy);
+      color: var(--ice-white);
+    }
 
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0;
-            background: linear-gradient(90deg, var(--rose), transparent);
-            opacity: 0.1;
-            transition: width 0.4s ease;
-        }
+    .additives {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-        .menu-item:hover::before {
-            width: 100%;
-        }
+    .additive-btn {
+      padding: 0.6rem 1.2rem;
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid transparent;
+      color: var(--wet-stone);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
 
-        .flavor-card {
-            position: absolute;
-            left: calc(100% + 2rem);
-            top: 50%;
-            transform: translateY(-50%) translateX(10px);
-            width: 280px;
-            padding: 1.5rem;
-            background: var(--cream);
-            border-radius: 12px;
-            box-shadow: 0 15px 50px rgba(44, 24, 16, 0.15);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s ease;
-            z-index: 10;
-        }
+    .additive-btn:hover,
+    .additive-btn.active {
+      background: rgba(213, 235, 229, 0.8);
+      color: var(--deep-navy);
+      border-color: rgba(122, 148, 153, 0.3);
+    }
 
-        .menu-item:hover .flavor-card {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-            pointer-events: auto;
-        }
+    /* Split Section */
+    .split-section {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
 
-        @media (max-width: 768px) {
-            .flavor-card {
-                position: fixed;
-                left: 50%;
-                top: auto;
-                bottom: 2rem;
-                transform: translateX(-50%) translateY(20px);
-                width: calc(100% - 2rem);
-                max-width: 320px;
-            }
-            
-            .menu-item:hover .flavor-card {
-                transform: translateX(-50%) translateY(0);
-            }
-        }
+    @media (max-width: 768px) {
+      .split-section {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        /* Split section */
-        .split-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 80vh;
-        }
+    .split-image {
+      position: relative;
+      overflow: hidden;
+      min-height: 50vh;
+      background: linear-gradient(135deg, var(--ice-white) 0%, var(--pale-mint) 100%);
+    }
 
-        @media (max-width: 768px) {
-            .split-section {
-                grid-template-columns: 1fr;
-            }
-        }
+    .split-image-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 1s var(--transition-smooth);
+    }
 
-        .texture-panel {
-            position: relative;
-            background: var(--bg-warm);
-            overflow: hidden;
-        }
+    .split-image:hover .split-image-inner {
+      transform: scale(1.02);
+    }
 
-        .hand-illustration {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .split-image-graphic {
+      opacity: 0.5;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 
-        /* Temperature curve */
-        .temp-curve {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
+    .split-image:hover .split-image-graphic {
+      opacity: 0.7;
+      transform: rotate(5deg);
+    }
 
-        .curve-line {
-            fill: none;
-            stroke: var(--copper);
-            stroke-width: 2;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            transition: stroke-dashoffset 2s ease;
-        }
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3.5rem;
+      background: var(--ice-white);
+      position: relative;
+    }
 
-        .curve-line.animate {
-            stroke-dashoffset: 0;
-        }
+    .water-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--transparent-blue),
+        var(--pale-mint),
+        var(--transparent-blue),
+        transparent
+      );
+    }
 
-        /* Map illustration */
-        .map-illustration {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            aspect-ratio: 4/3;
-        }
+    .scene-label {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--wet-stone);
+      margin-bottom: 1rem;
+    }
 
-        .map-svg {
-            width: 100%;
-            height: 100%;
-        }
+    .scene-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      margin-bottom: 1.5rem;
+    }
 
-        /* Button styles */
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            background: var(--coffee);
-            color: var(--cream);
-            border: none;
-            border-radius: 4px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+    .scene-text {
+      color: var(--wet-stone);
+    }
 
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
+    /* Specs Section */
+    .specs-section {
+      padding: 8rem 2rem;
+      background: linear-gradient(180deg, var(--ice-white) 0%, #f0f7f5 100%);
+      position: relative;
+    }
 
-        .btn-primary:hover::before {
-            transform: translateX(100%);
-        }
+    .specs-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200, 228, 239, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(44, 24, 16, 0.3);
-        }
+    .specs-container {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
 
-        .btn-primary:focus-visible {
-            outline: 2px solid var(--copper);
-            outline-offset: 3px;
-        }
+    .specs-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      text-align: center;
+      margin-bottom: 3rem;
+    }
 
-        /* Plant decorations */
-        .plant-decoration {
-            position: absolute;
-            opacity: 0.15;
-            pointer-events: none;
-        }
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
 
-        /* Focus states */
-        a:focus-visible,
-        button:focus-visible {
-            outline: 2px solid var(--copper);
-            outline-offset: 3px;
-        }
+    .accordion-item {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(122, 148, 153, 0.15);
+      overflow: hidden;
+      transition: all 0.4s var(--transition-smooth);
+    }
 
-        /* Selection */
-        ::selection {
-            background: var(--rose);
-            color: var(--fg);
-        }
-    </style>
+    .accordion-item:hover {
+      border-color: rgba(122, 148, 153, 0.35);
+      background: rgba(255,255,255,0.95);
+    }
+
+    .accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.35rem 1.75rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accordion-label {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      color: var(--deep-navy);
+    }
+
+    .accordion-sensory {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--wet-stone);
+    }
+
+    .accordion-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s var(--transition-smooth);
+    }
+
+    .accordion-icon svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--wet-stone);
+    }
+
+    .accordion-item.open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s var(--transition-smooth);
+    }
+
+    .accordion-item.open .accordion-content {
+      max-height: 400px;
+    }
+
+    .accordion-inner {
+      padding: 0 1.75rem 1.75rem;
+      border-top: 1px solid rgba(122, 148, 153, 0.1);
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .spec-item {
+      text-align: center;
+      padding: 1rem 0.5rem;
+    }
+
+    .spec-value {
+      font-family: var(--font-display);
+      font-weight: 200;
+      font-size: 1.6rem;
+      color: var(--deep-navy);
+      margin-bottom: 0.35rem;
+    }
+
+    .spec-name {
+      font-size: 0.7rem;
+      color: var(--wet-stone);
+      letter-spacing: 0.03em;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 10rem 2rem;
+      text-align: center;
+      background: var(--deep-navy);
+      color: var(--ice-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(200, 228, 239, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 70% 80%, rgba(213, 235, 229, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+      color: var(--ice-white);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-text {
+      color: rgba(255,255,255,0.55);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 1.1rem 3.5rem;
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--ice-white);
+      text-decoration: none;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--ice-white);
+      transform: translateY(100%);
+      transition: transform 0.4s var(--transition-smooth);
+      z-index: -1;
+    }
+
+    .cta-btn:hover::before {
+      transform: translateY(0);
+    }
+
+    .cta-btn:hover {
+      color: var(--deep-navy);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 3.5rem 2rem;
+      background: var(--deep-navy);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 200;
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      color: var(--ice-white);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--ice-white);
+    }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.25);
+      width: 100%;
+      text-align: center;
+      margin-top: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s var(--transition-smooth);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Focus states */
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--deep-navy);
+      outline-offset: 4px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .nav {
+        padding: 1rem 1.5rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .split-content {
+        padding: 3rem 1.75rem;
+      }
+      
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .glass-demo {
+        width: 150px;
+        height: 240px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="noise-overlay" aria-hidden="true"></div>
+  <!-- Navigation -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="#" class="logo">Vellura</a>
+    <ul class="nav-links">
+      <li><a href="#glass">Продукт</a></li>
+      <li><a href="#scenes">Ритуалы</a></li>
+      <li><a href="#specs">Состав</a></li>
+      <li><a href="#cta">Доставка</a></li>
+    </ul>
+  </nav>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:py-6 transition-all duration-500" id="navbar">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="font-serif text-2xl md:text-3xl tracking-wide" style="color: var(--coffee);">
-                Slow Morning
-            </a>
-            <div class="hidden md:flex items-center gap-10">
-                <a href="#philosophy" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Философия</a>
-                <a href="#menu" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Меню</a>
-                <a href="#process" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Процесс</a>
-                <a href="#contact" class="text-sm tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity" style="color: var(--fg-light);">Найти нас</a>
-            </div>
-            <button class="md:hidden p-2" id="menuToggle" aria-label="Открыть меню">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <line x1="4" y1="8" x2="20" y2="8"></line>
-                    <line x1="4" y1="16" x2="20" y2="16"></line>
-                </svg>
-            </button>
-        </div>
-    </nav>
+  <!-- Hero Section -->
+  <section class="hero-section" aria-label="Hero">
+    <div id="container" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1 class="heading-xl hero-title">Невидимый источник<br>вашей энергии</h1>
+      <p class="body-text hero-subtitle">Лучшая вода — это не просто напиток. Это ежедневный ритуал заботы о себе и кристальная чистота в каждом глотке.</p>
+    </div>
+    <a href="#glass" class="scroll-indicator" aria-label="Scroll down">
+      <span aria-hidden="true"></span>
+    </a>
+    <p class="hero-tagline">Проведите вниз, чтобы узнать больше</p>
+  </section>
 
-    <!-- Mobile Menu -->
-    <div class="fixed inset-0 z-40 hidden" id="mobileMenu">
-        <div class="absolute inset-0 bg-black/50" id="menuOverlay"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-80 max-w-full p-8 transform translate-x-full transition-transform duration-500" style="background: var(--cream);" id="menuPanel">
-            <div class="flex flex-col gap-8 mt-16">
-                <a href="#philosophy" class="font-serif text-2xl" style="color: var(--fg);">Философия</a>
-                <a href="#menu" class="font-serif text-2xl" style="color: var(--fg);">Меню</a>
-                <a href="#process" class="font-serif text-2xl" style="color: var(--fg);">Процесс</a>
-                <a href="#contact" class="font-serif text-2xl" style="color: var(--fg);">Найти нас</a>
-            </div>
+  <!-- Interactive Glass Section -->
+  <section class="glass-section" id="glass" aria-labelledby="glass-title">
+    <div class="glass-container">
+      <h2 class="heading-lg glass-section-title reveal" id="glass-title">Создайте свой ритуал</h2>
+      <p class="body-text glass-section-text reveal reveal-delay-1">Выберите тип воды и добавки — наблюдайте, как кристальная чистота наполняет ваш стакан</p>
+      
+      <div class="glass-demo reveal reveal-delay-2" aria-label="Interactive water glass demonstration">
+        <svg class="glass-svg" viewBox="0 0 180 280" fill="none" role="img" aria-label="Glass with water">
+          <!-- Glass shadow -->
+          <ellipse cx="90" cy="272" rx="50" ry="6" fill="rgba(22, 42, 61, 0.08)"/>
+          
+          <!-- Glass body with gradient -->
+          <defs>
+            <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:rgba(255,255,255,0.1)"/>
+              <stop offset="20%" style="stop-color:rgba(255,255,255,0.05)"/>
+              <stop offset="80%" style="stop-color:rgba(255,255,255,0.05)"/>
+              <stop offset="100%" style="stop-color:rgba(255,255,255,0.15)"/>
+            </linearGradient>
+            <linearGradient id="waterGradientNew" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#d4e8f2;stop-opacity:0.5"/>
+              <stop offset="40%" style="stop-color:#b8d8e8;stop-opacity:0.7"/>
+              <stop offset="100%" style="stop-color:#a8d0e0;stop-opacity:0.85"/>
+            </linearGradient>
+            <linearGradient id="causticNew" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:rgba(255,255,255,0.6)"/>
+              <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+            </linearGradient>
+            <clipPath id="glassClipNew">
+              <path d="M38 22 L34 258 Q34 270 48 270 L132 270 Q146 270 146 258 L142 22 Z"/>
+            </clipPath>
+          </defs>
+          
+          <!-- Glass outline -->
+          <path d="M38 22 L34 258 Q34 270 48 270 L132 270 Q146 270 146 258 L142 22" 
+                fill="url(#glassGradient)" stroke="rgba(122, 148, 153, 0.25)" stroke-width="1.5"/>
+          
+          <!-- Glass rim highlight -->
+          <path d="M40 22 Q90 18 140 22" stroke="rgba(255,255,255,0.6)" stroke-width="2" fill="none"/>
+          
+          <!-- Left glass highlight -->
+          <path d="M42 30 L38 255" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/>
+          
+          <!-- Water -->
+          <g clip-path="url(#glassClipNew)">
+            <!-- Water body -->
+            <rect id="waterRectNew" class="water-fill" x="30" y="280" width="120" height="280" 
+                  fill="url(#waterGradientNew)"/>
+            
+            <!-- Water surface with wave effect -->
+            <g id="waterSurfaceGroup" opacity="0">
+              <ellipse id="waterSurfaceNew" cx="90" cy="100" rx="52" ry="4" fill="rgba(255,255,255,0.5)"/>
+              <ellipse cx="90" cy="100" rx="40" ry="2" fill="rgba(255,255,255,0.3)"/>
+            </g>
+            
+            <!-- Caustic light effect -->
+            <g id="causticGroup" opacity="0">
+              <ellipse cx="90" cy="250" rx="35" ry="8" fill="url(#causticNew)" opacity="0.4"/>
+              <ellipse cx="70" cy="240" rx="15" ry="4" fill="rgba(255,255,255,0.15)"/>
+              <ellipse cx="110" cy="245" rx="12" ry="3" fill="rgba(255,255,255,0.12)"/>
+            </g>
+            
+            <!-- Additive slice -->
+            <g id="additiveGroupNew" opacity="0">
+              <ellipse id="additiveSliceNew" cx="90" cy="130" rx="22" ry="7" fill="#f4e8c1" opacity="0.7"/>
+            </g>
+          </g>
+          
+          <!-- Bubbles -->
+          <g id="bubblesGroupNew" opacity="0">
+            <circle class="bubble" cx="60" cy="200" r="2.5" fill="rgba(255,255,255,0.6)"/>
+            <circle class="bubble" cx="80" cy="180" r="1.8" fill="rgba(255,255,255,0.5)"/>
+            <circle class="bubble" cx="100" cy="210" r="2" fill="rgba(255,255,255,0.55)"/>
+            <circle class="bubble" cx="115" cy="190" r="1.5" fill="rgba(255,255,255,0.5)"/>
+            <circle class="bubble" cx="70" cy="160" r="1.8" fill="rgba(255,255,255,0.45)"/>
+            <circle class="bubble" cx="95" cy="170" r="2.2" fill="rgba(255,255,255,0.5)"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="water-types reveal reveal-delay-3" role="group" aria-label="Water type selection">
+        <button class="water-type-btn active" data-type="still" aria-pressed="true">Негазированная</button>
+        <button class="water-type-btn" data-type="sparkling" aria-pressed="false">Газированная</button>
+        <button class="water-type-btn" data-type="alkaline" aria-pressed="false">Щелочная</button>
+      </div>
+
+      <div class="additives reveal reveal-delay-3" role="group" aria-label="Additive selection">
+        <button class="additive-btn" data-additive="none">Чистая</button>
+        <button class="additive-btn active" data-additive="lemon">Лимон</button>
+        <button class="additive-btn" data-additive="ginger">Имбирь</button>
+        <button class="additive-btn" data-additive="mint">Мята</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Split Sections -->
+  <section id="scenes" aria-label="Rituals">
+    <!-- Scene 1: Morning -->
+    <div class="split-section">
+      <div class="split-image" aria-hidden="true">
+        <div class="split-image-inner">
+          <svg class="split-image-graphic" width="220" height="220" viewBox="0 0 220 220" fill="none">
+            <circle cx="110" cy="110" r="85" stroke="#7a9499" stroke-width="0.75" fill="none"/>
+            <circle cx="110" cy="110" r="65" stroke="#7a9499" stroke-width="0.5" fill="none" stroke-dasharray="4 4"/>
+            <circle cx="110" cy="110" r="45" stroke="#7a9499" stroke-width="0.5" fill="none"/>
+            <path d="M110 70 L110 110 L140 110" stroke="#7a9499" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="110" cy="110" r="4" fill="#7a9499"/>
+            <line x1="110" y1="25" x2="110" y2="35" stroke="#7a9499" stroke-width="0.75"/>
+            <line x1="110" y1="185" x2="110" y2="195" stroke="#7a9499" stroke-width="0.75"/>
+            <line x1="25" y1="110" x2="35" y2="110" stroke="#7a9499" stroke-width="0.75"/>
+            <line x1="185" y1="110" x2="195" y2="110" stroke="#7a9499" stroke-width="0.75"/>
+          </svg>
         </div>
+      </div>
+      <div class="split-content">
+        <div class="water-line" aria-hidden="true"></div>
+        <span class="scene-label">Утренний ритуал</span>
+        <h3 class="heading-lg scene-title">Пробуждение с чистым разумом</h3>
+        <p class="body-text scene-text">Стакан воды за 30 минут до йоги настраивает тело на гармонию. Кристальная чистота смывает остатки сна, подготавливая вас к осознанному дню.</p>
+      </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="light-beam" aria-hidden="true"></div>
-        
-        <!-- Decorative plants -->
-        <svg class="plant-decoration" style="top: 10%; left: 5%; width: 200px;" viewBox="0 0 100 150" aria-hidden="true">
-            <path d="M50 150 Q30 100 50 50 Q70 100 50 150" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="30" cy="60" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-20 30 60)"/>
-            <ellipse cx="70" cy="70" rx="25" ry="40" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(20 70 70)"/>
-        </svg>
-        
-        <div class="relative z-10 h-full flex flex-col">
-            <div class="flex-1 flex items-center justify-center px-6 pt-20">
-                <div class="text-center max-w-4xl">
-                    <p class="text-sm md:text-base tracking-[0.3em] uppercase mb-6 animate-fadeIn" style="color: var(--muted); animation-delay: 0.2s; opacity: 0;">
-                        Авторская кофейня
-                    </p>
-                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fadeInUp" style="color: var(--coffee); animation-delay: 0.4s; opacity: 0;">
-                        Slow Morning
-                    </h1>
-                    <p class="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fadeInUp" style="color: var(--fg-light); animation-delay: 0.6s; opacity: 0;">
-                        Кофе — это не просто напиток для бодрости.<br>
-                        Это повод остановиться и насладиться моментом.
-                    </p>
-                    <a href="#menu" class="btn-primary animate-fadeInUp" style="animation-delay: 0.8s; opacity: 0;">
-                        <span>Исследовать вкусы</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 5v14M19 12l-7 7-7-7"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Coffee cup illustration -->
-            <div class="flex justify-center pb-12 md:pb-20">
-                <div class="coffee-cup-container animate-fadeIn" style="animation-delay: 1s; opacity: 0;">
-                    <div class="pour-stream"></div>
-                    <div class="coffee-cup">
-                        <div class="steam-container">
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                            <div class="steam"></div>
-                        </div>
-                        <div class="cup-body">
-                            <div class="cup-coffee">
-                                <div class="coffee-surface"></div>
-                                <div class="latte-art"></div>
-                            </div>
-                        </div>
-                        <div class="cup-handle"></div>
-                    </div>
-                    <div class="saucer"></div>
-                </div>
-            </div>
+    <!-- Scene 2: Work -->
+    <div class="split-section">
+      <div class="split-content">
+        <div class="water-line" aria-hidden="true"></div>
+        <span class="scene-label">Рабочий процесс</span>
+        <h3 class="heading-lg scene-title">Ясность мысли в каждом решении</h3>
+        <p class="body-text scene-text">Минимальный дизайн вашей рабочей среды требует идеальных деталей. Прозрачная бутылка Vellura на столе — напоминание о балансе между продуктивностью и заботой о себе.</p>
+      </div>
+      <div class="split-image" aria-hidden="true">
+        <div class="split-image-inner">
+          <svg class="split-image-graphic" width="200" height="200" viewBox="0 0 200 200" fill="none">
+            <rect x="35" y="35" width="130" height="130" rx="3" stroke="#7a9499" stroke-width="0.75" fill="none"/>
+            <line x1="55" y1="70" x2="145" y2="70" stroke="#7a9499" stroke-width="0.75"/>
+            <line x1="55" y1="95" x2="125" y2="95" stroke="#7a9499" stroke-width="0.75"/>
+            <line x1="55" y1="120" x2="105" y2="120" stroke="#7a9499" stroke-width="0.75"/>
+            <circle cx="155" cy="155" r="25" stroke="#7a9499" stroke-width="0.75" fill="none" stroke-dasharray="3 3"/>
+            <circle cx="155" cy="155" r="8" fill="rgba(122, 148, 153, 0.3)"/>
+          </svg>
         </div>
-        
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
-            <span class="text-xs tracking-widest uppercase" style="color: var(--muted);">Листайте</span>
-            <div class="w-px h-12 bg-gradient-to-b from-transparent to-current" style="color: var(--muted);"></div>
-        </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Philosophy Section -->
-    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="philosophy" style="background: var(--bg-warm);">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Философия</span>
-                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-8" style="color: var(--coffee);">
-                        Лучший кофе — тот,<br>
-                        <em>который пьется в тишине</em>
-                    </h2>
-                    <div class="space-y-6 text-lg" style="color: var(--fg-light);">
-                        <p>
-                            Мы не торопим вас. В «Slow Morning» время течет иначе — 
-                            мягко и размеренно, как солнечный луч, скользящий по столешнице.
-                        </p>
-                        <p>
-                            Каждый напиток здесь — маленький ритуал. От момента, когда бариста 
-                            насыпает зерна, до последнего глотка, оставляющего тепло где-то внутри.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="reveal" style="transition-delay: 0.2s;">
-                    <div class="relative">
-                        <!-- Stylized coffee bean illustration -->
-                        <svg viewBox="0 0 400 400" class="w-full max-w-md mx-auto" aria-hidden="true">
-                            <!-- Background glow -->
-                            <defs>
-                                <radialGradient id="glow" cx="50%" cy="50%">
-                                    <stop offset="0%" stop-color="var(--latte)" stop-opacity="0.5"/>
-                                    <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                                </radialGradient>
-                            </defs>
-                            <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
-                            
-                            <!-- Coffee beans -->
-                            <g fill="var(--coffee)" opacity="0.9">
-                                <ellipse cx="150" cy="180" rx="45" ry="65" transform="rotate(-30 150 180)"/>
-                                <path d="M150 130 Q165 180 150 230" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
-                                
-                                <ellipse cx="250" cy="200" rx="50" ry="70" transform="rotate(20 250 200)"/>
-                                <path d="M250 140 Q265 200 250 260" stroke="var(--bg-warm)" stroke-width="3" fill="none"/>
-                                
-                                <ellipse cx="180" cy="280" rx="40" ry="55" transform="rotate(10 180 280)"/>
-                                <path d="M180 235 Q195 280 180 325" stroke="var(--bg-warm)" stroke-width="2" fill="none"/>
-                            </g>
-                            
-                            <!-- Texture lines -->
-                            <g stroke="var(--accent)" stroke-width="0.5" opacity="0.3">
-                                <line x1="100" y1="100" x2="300" y2="100"/>
-                                <line x1="80" y1="150" x2="320" y2="150"/>
-                                <line x1="90" y1="320" x2="310" y2="320"/>
-                            </g>
-                        </svg>
-                        
-                        <!-- Floating text -->
-                        <div class="absolute top-4 right-4 font-serif italic text-lg" style="color: var(--muted);">
-                            Обжарено с душой
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Scene 3: Evening -->
+    <div class="split-section">
+      <div class="split-image" aria-hidden="true">
+        <div class="split-image-inner">
+          <svg class="split-image-graphic" width="180" height="180" viewBox="0 0 180 180" fill="none">
+            <circle cx="90" cy="90" r="70" stroke="#7a9499" stroke-width="0.75" fill="none"/>
+            <ellipse cx="90" cy="90" rx="50" ry="50" stroke="#7a9499" stroke-width="0.5" fill="none"/>
+            <ellipse cx="90" cy="90" rx="30" ry="30" stroke="#7a9499" stroke-width="0.5" fill="none"/>
+            <circle cx="90" cy="90" r="6" fill="#7a9499"/>
+            <path d="M90 20 Q105 55 90 90 Q75 125 90 160" stroke="#7a9499" stroke-width="0.5" fill="none" stroke-dasharray="4 4"/>
+            <path d="M20 90 Q55 75 90 90 Q125 105 160 90" stroke="#7a9499" stroke-width="0.5" fill="none" stroke-dasharray="4 4"/>
+          </svg>
         </div>
-    </section>
+      </div>
+      <div class="split-content">
+        <div class="water-line" aria-hidden="true"></div>
+        <span class="scene-label">Вечерний покой</span>
+        <h3 class="heading-lg scene-title">Завершение дня в гармонии</h3>
+        <p class="body-text scene-text">Семейный ужин или тихий вечер с книгой — вода Vellura дополняет моменты единения. Щелочной баланс поддерживает естественный ритм восстановления организма.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Menu Section -->
-    <section class="py-24 md:py-32 px-6 relative" id="menu" style="background: var(--cream);">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Не просто напитки</span>
-                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mt-4" style="color: var(--coffee);">
-                    Наши вкусы
-                </h2>
-                <p class="mt-6 text-lg max-w-xl mx-auto" style="color: var(--muted);">
-                    Наведите на название, чтобы узнать вкусовой профиль — 
-                    как если бы вы спросили бариста
-                </p>
+  <!-- Specs Section -->
+  <section class="specs-section" id="specs" aria-labelledby="specs-title">
+    <div class="specs-container">
+      <h2 class="heading-lg specs-title reveal" id="specs-title">Кристальная чистота в деталях</h2>
+      
+      <div class="accordion reveal">
+        <div class="accordion-item">
+          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-source">
+            <div>
+              <span class="accordion-label">Источник</span>
+              <span class="accordion-sensory"> — Вкус горного воздуха</span>
             </div>
-            
-            <div class="space-y-0 reveal" style="transition-delay: 0.2s;">
-                <!-- Menu items -->
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Эфиопия Иргачеффе</h3>
-                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, V60</p>
-                        </div>
-                        <span class="font-serif text-lg" style="color: var(--copper);">280 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--olive), var(--rose));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg" style="color: var(--fg);">
-                            Ноты жасмина, спелого персика и легкая цитрусовая кислинка. 
-                            Чашка весеннего сада.
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Цветочный</span>
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Фруктовый</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Колумбия Уила</h3>
-                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, doppio</p>
-                        </div>
-                        <span class="font-serif text-lg" style="color: var(--copper);">220 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--copper), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg" style="color: var(--fg);">
-                            Карамельная сладость, ноты горького шоколада и ореховое послевкусие. 
-                            Утро в горах.
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Нутовый</span>
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Шоколадный</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Кения Абердар</h3>
-                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Kalita</p>
-                        </div>
-                        <span class="font-serif text-lg" style="color: var(--copper);">320 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--rose), var(--accent));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg" style="color: var(--fg);">
-                            Яркая смородиновая кислинка, томное послевкусие сушеных ягод. 
-                            Африка в каждой чашке.
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--rose);">Ягодный</span>
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--olive);">Сбалансированный</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Бразилия Серрадо</h3>
-                            <p class="text-sm mt-1" style="color: var(--muted);">Эспрессо, лунго</p>
-                        </div>
-                        <span class="font-serif text-lg" style="color: var(--copper);">200 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--accent), var(--coffee));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg" style="color: var(--fg);">
-                            Мягкий, с нотами молочного шоколада и жареного фундука. 
-                            Идеальный компаньон для неторопливой беседы.
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--accent);">Мягкий</span>
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--copper);">Ореховый</span>
-                        </div>
-                    </div>
-                </article>
-                
-                <article class="menu-item">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-serif text-xl md:text-2xl" style="color: var(--fg);">Гватемала Антигуа</h3>
-                            <p class="text-sm mt-1" style="color: var(--muted);">Фильтр, Chemex</p>
-                        </div>
-                        <span class="font-serif text-lg" style="color: var(--copper);">350 ₽</span>
-                    </div>
-                    <div class="flavor-card">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full" style="background: linear-gradient(135deg, var(--fg), var(--copper));"></div>
-                            <span class="text-sm font-medium tracking-wide" style="color: var(--muted);">Вкусовой профиль</span>
-                        </div>
-                        <p class="font-serif text-lg" style="color: var(--fg);">
-                            Дымные ноты, пряности и темный шоколад. 
-                            Вкус вулканических почв и древних городов.
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--fg-light);">Пряный</span>
-                            <span class="px-3 py-1 text-xs rounded-full" style="background: var(--bg); color: var(--coffee);">Насыщенный</span>
-                        </div>
-                    </div>
-                </article>
+            <span class="accordion-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="accordion-content" id="accordion-source">
+            <div class="accordion-inner">
+              <div class="spec-grid">
+                <div class="spec-item">
+                  <div class="spec-value">1847 м</div>
+                  <div class="spec-name">Высота источника</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">-4°C</div>
+                  <div class="spec-name">Температура родника</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">450 лет</div>
+                  <div class="spec-name">Возраст водоносного слоя</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">0</div>
+                  <div class="spec-name">Следов антропогенного воздействия</div>
+                </div>
+              </div>
             </div>
-            
-            <div class="text-center mt-12 reveal">
-                <p class="text-sm" style="color: var(--muted);">
-                    Также спросите бариста о сезонных альтернативах и дрип-пакетах домой
-                </p>
-            </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Process Section -->
-    <section class="split-section" id="process">
-        <div class="texture-panel relative">
-            <!-- Stylized hand/tamper illustration -->
-            <div class="hand-illustration p-8 md:p-12">
-                <svg viewBox="0 0 400 500" class="w-full h-full max-w-md" aria-hidden="true">
-                    <!-- Background warmth -->
-                    <defs>
-                        <radialGradient id="warmth" cx="50%" cy="50%">
-                            <stop offset="0%" stop-color="var(--copper)" stop-opacity="0.15"/>
-                            <stop offset="100%" stop-color="var(--bg-warm)" stop-opacity="0"/>
-                        </radialGradient>
-                    </defs>
-                    <circle cx="200" cy="250" r="200" fill="url(#warmth)"/>
-                    
-                    <!-- Tamper -->
-                    <g transform="translate(120, 100)">
-                        <!-- Handle -->
-                        <rect x="60" y="0" width="40" height="180" rx="20" fill="var(--coffee)"/>
-                        <ellipse cx="80" cy="180" rx="50" ry="15" fill="var(--coffee)"/>
-                        
-                        <!-- Base -->
-                        <rect x="30" y="180" width="100" height="30" rx="2" fill="var(--fg)"/>
-                        
-                        <!-- Coffee grounds texture -->
-                        <g fill="var(--coffee)" opacity="0.6">
-                            <circle cx="55" cy="215" r="3"/>
-                            <circle cx="75" cy="218" r="2"/>
-                            <circle cx="95" cy="214" r="2.5"/>
-                            <circle cx="115" cy="217" r="2"/>
-                            <circle cx="45" cy="220" r="1.5"/>
-                            <circle cx="105" cy="222" r="2"/>
-                        </g>
-                        
-                        <!-- Portafilter basket -->
-                        <ellipse cx="80" cy="230" rx="55" ry="12" fill="none" stroke="var(--muted)" stroke-width="2"/>
-                    </g>
-                    
-                    <!-- Decorative elements -->
-                    <g stroke="var(--accent)" stroke-width="0.5" opacity="0.4">
-                        <line x1="50" y1="350" x2="350" y2="350"/>
-                        <line x1="70" y1="380" x2="330" y2="380"/>
-                        <line x1="100" y1="410" x2="300" y2="410"/>
-                    </g>
-                    
-                    <!-- Steam/aroma lines -->
-                    <g stroke="var(--muted)" stroke-width="1" fill="none" opacity="0.3">
-                        <path d="M180 80 Q175 60 185 40 Q195 20 180 0"/>
-                        <path d="M200 70 Q195 50 205 30 Q215 10 200 -10"/>
-                        <path d="M220 80 Q215 60 225 40 Q235 20 220 0"/>
-                    </g>
-                </svg>
+        <div class="accordion-item">
+          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-minerals">
+            <div>
+              <span class="accordion-label">Минеральный состав</span>
+              <span class="accordion-sensory"> — Абсолютная мягкость</span>
             </div>
-            
-            <!-- Temperature curve overlay -->
-            <svg class="temp-curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <path class="curve-line" d="M0 90 Q25 85 40 60 Q55 35 70 40 Q85 45 100 20"/>
-            </svg>
-        </div>
-        
-        <div class="flex items-center p-8 md:p-12 lg:p-20" style="background: var(--cream);">
-            <div class="reveal">
-                <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Процесс</span>
-                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mt-4 mb-8" style="color: var(--coffee);">
-                    Обжарка маленькими партиями
-                </h2>
-                <div class="space-y-6 text-lg" style="color: var(--fg-light);">
-                    <p>
-                        Мы обжариваем зерно маленькими партиями, чтобы сохранить 
-                        аромат и раскрыть характер каждого региона.
-                    </p>
-                    <p>
-                        Каждый день наши бариста калибруют оборудование, 
-                        пробуют эспрессо и настраивают рецепты — 
-                        чтобы ваша чашка была идеальной.
-                    </p>
-                    <p class="font-serif italic text-xl" style="color: var(--muted);">
-                        «Кофе — это не продукт. Это отношение.»
-                    </p>
+            <span class="accordion-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="accordion-content" id="accordion-minerals">
+            <div class="accordion-inner">
+              <div class="spec-grid">
+                <div class="spec-item">
+                  <div class="spec-value">7.4</div>
+                  <div class="spec-name">pH баланс</div>
                 </div>
-                
-                <div class="mt-10 flex flex-wrap gap-4">
-                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
-                        <span class="block text-2xl font-serif" style="color: var(--coffee);">12</span>
-                        <span class="text-sm" style="color: var(--muted);">регионов мира</span>
-                    </div>
-                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
-                        <span class="block text-2xl font-serif" style="color: var(--coffee);">4</span>
-                        <span class="text-sm" style="color: var(--muted);">года обжарки</span>
-                    </div>
-                    <div class="px-4 py-3 rounded-lg" style="background: var(--bg);">
-                        <span class="block text-2xl font-serif" style="color: var(--coffee);">∞</span>
-                        <span class="text-sm" style="color: var(--muted);">внимания</span>
-                    </div>
+                <div class="spec-item">
+                  <div class="spec-value">42 мг/л</div>
+                  <div class="spec-name">Общая минерализация</div>
                 </div>
+                <div class="spec-item">
+                  <div class="spec-value">12 мг/л</div>
+                  <div class="spec-name">Кальций Ca²⁺</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">4 мг/л</div>
+                  <div class="spec-name">Магний Mg²⁺</div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section class="py-24 md:py-32 px-6 relative overflow-hidden" id="contact" style="background: var(--bg-warm);">
-        <!-- Decorative plant -->
-        <svg class="plant-decoration" style="bottom: 5%; right: 5%; width: 250px; opacity: 0.1;" viewBox="0 0 150 200" aria-hidden="true">
-            <path d="M75 200 Q60 150 75 100 Q90 150 75 200" fill="none" stroke="var(--olive)" stroke-width="1"/>
-            <ellipse cx="40" cy="80" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(-15 40 80)"/>
-            <ellipse cx="110" cy="90" rx="35" ry="55" fill="none" stroke="var(--olive)" stroke-width="0.5" transform="rotate(15 110 90)"/>
-            <ellipse cx="75" cy="50" rx="30" ry="45" fill="none" stroke="var(--olive)" stroke-width="0.5"/>
-        </svg>
-        
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 md:gap-20">
-                <div class="reveal">
-                    <span class="text-sm tracking-[0.3em] uppercase" style="color: var(--rose);">Найти нас</span>
-                    <h2 class="font-serif text-4xl md:text-5xl mt-4 mb-8" style="color: var(--coffee);">
-                        Приходите за тишиной
-                    </h2>
-                    
-                    <div class="space-y-8">
-                        <div>
-                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Адрес</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                ул. Тихая, 14<br>
-                                двор «Архитектор», второй этаж
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Время жить</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                Будни: 8:00 — 22:00<br>
-                                Выходные: 9:00 — 21:00
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-serif text-xl mb-2" style="color: var(--fg);">Связь</h3>
-                            <p class="text-lg" style="color: var(--muted);">
-                                <a href="tel:+78001234567" class="hover:underline">+7 800 123-45-67</a><br>
-                                <a href="mailto:hello@slowmorning.ru" class="hover:underline">hello@slowmorning.ru</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="reveal" style="transition-delay: 0.2s;">
-                    <!-- Sketch-style map -->
-                    <div class="map-illustration">
-                        <svg viewBox="0 0 400 300" class="map-svg" aria-label="Схема проезда к кофейне">
-                            <style>
-                                .map-line { fill: none; stroke: var(--fg-light); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-                                .map-dashed { stroke-dasharray: 8 4; }
-                                .map-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: var(--muted); }
-                                .map-label-main { font-family: 'Playfair Display', serif; font-size: 14px; fill: var(--coffee); }
-                                .map-dot { fill: var(--rose); }
-                            </style>
-                            
-                            <!-- Main streets -->
-                            <path class="map-line" d="M50 150 L350 150" opacity="0.3"/>
-                            <path class="map-line" d="M200 50 L200 250" opacity="0.3"/>
-                            
-                            <!-- Side streets -->
-                            <path class="map-line" d="M100 100 L100 200" opacity="0.2"/>
-                            <path class="map-line" d="M300 80 L300 220" opacity="0.2"/>
-                            
-                            <!-- Route to cafe -->
-                            <path class="map-line map-dashed" d="M80 150 L80 120 L150 120 L150 90" style="stroke: var(--copper);"/>
-                            
-                            <!-- Buildings -->
-                            <rect x="120" y="140" width="60" height="40" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
-                            <rect x="240" y="130" width="80" height="50" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
-                            <rect x="60" y="160" width="40" height="30" rx="4" fill="none" stroke="var(--fg-light)" stroke-width="1" opacity="0.2"/>
-                            
-                            <!-- Trees/park -->
-                            <circle cx="320" cy="180" r="15" fill="var(--olive)" opacity="0.15"/>
-                            <circle cx="340" cy="200" r="12" fill="var(--olive)" opacity="0.1"/>
-                            
-                            <!-- Cafe location -->
-                            <circle cx="150" cy="90" r="20" fill="var(--cream)" stroke="var(--rose)" stroke-width="2"/>
-                            <circle class="map-dot" cx="150" cy="90" r="6"/>
-                            
-                            <!-- Labels -->
-                            <text x="150" y="130" class="map-label-main" text-anchor="middle">Slow Morning</text>
-                            <text x="200" y="170" class="map-label" text-anchor="middle">ул. Центральная</text>
-                            <text x="200" y="230" class="map-label" text-anchor="middle">Тихий переулок</text>
-                            <text x="80" y="180" class="map-label" text-anchor="middle">Метро</text>
-                            
-                            <!-- Walking person icon -->
-                            <g transform="translate(70, 145)" fill="var(--copper)">
-                                <circle cx="0" cy="0" r="4"/>
-                                <path d="M0 6 L0 14 M-5 10 L5 10 M-4 20 L0 14 L4 20" stroke="var(--copper)" stroke-width="2" fill="none"/>
-                            </g>
-                            
-                            <!-- Decorative arrow -->
-                            <path d="M85 110 L95 105 L95 115 Z" fill="var(--copper)"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-sm mt-4 text-center" style="color: var(--muted);">
-                        Две минуты пешком от метро, через арку с муралом
-                    </p>
-                </div>
+        <div class="accordion-item">
+          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-purification">
+            <div>
+              <span class="accordion-label">Очистка</span>
+              <span class="accordion-sensory"> — Невесомая прозрачность</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-12 px-6" style="background: var(--coffee); color: var(--cream);">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="text-center md:text-left">
-                    <span class="font-serif text-2xl">Slow Morning</span>
-                    <p class="mt-2 text-sm opacity-60">Культура потребления</p>
+            <span class="accordion-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="accordion-content" id="accordion-purification">
+            <div class="accordion-inner">
+              <div class="spec-grid">
+                <div class="spec-item">
+                  <div class="spec-value">0.1 мкм</div>
+                  <div class="spec-name">Микрофильтрация</div>
                 </div>
-                
-                <div class="flex items-center gap-6">
-                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Instagram">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="2" y="2" width="20" height="20" rx="5"/>
-                            <circle cx="12" cy="12" r="4"/>
-                            <circle cx="18" cy="6" r="1" fill="currentColor"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="opacity-60 hover:opacity-100 transition-opacity" aria-label="Telegram">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
-                            <path d="M5 12l4 2 1 4 2-3 4 2L17 6l-12 6z"/>
-                        </svg>
-                    </a>
+                <div class="spec-item">
+                  <div class="spec-value">UV-C</div>
+                  <div class="spec-name">Ультрафиолетовая стерилизация</div>
                 </div>
-                
-                <p class="text-sm opacity-60">
-                    Замедлись. Выдохни. Насладись.
-                </p>
+                <div class="spec-item">
+                  <div class="spec-value">99.99%</div>
+                  <div class="spec-name">Удаление микропластика</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">0</div>
+                  <div class="spec-name">Химических добавок</div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </footer>
 
-    <script>
-        // Initialize all functionality after DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        <div class="accordion-item">
+          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-packaging">
+            <div>
+              <span class="accordion-label">Упаковка</span>
+              <span class="accordion-sensory"> — Этика в каждой детали</span>
+            </div>
+            <span class="accordion-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="accordion-content" id="accordion-packaging">
+            <div class="accordion-inner">
+              <div class="spec-grid">
+                <div class="spec-item">
+                  <div class="spec-value">100%</div>
+                  <div class="spec-name">Перерабатываемые материалы</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">Стекло</div>
+                  <div class="spec-name">Основной материал</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">-80%</div>
+                  <div class="spec-name">Углеродный след vs пластик</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-value">Дуб</div>
+                  <div class="spec-name">Крышка из FSC-дерева</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section" id="cta" aria-labelledby="cta-title">
+    <h2 class="heading-xl cta-title reveal" id="cta-title">Начните свой ритуал</h2>
+    <p class="body-text cta-text reveal reveal-delay-1">Первая доставка — бесплатно. Отменить можно в любой момент.</p>
+    <a href="#" class="cta-btn reveal reveal-delay-2">Подключить доставку</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <span class="footer-logo">Vellura</span>
+      <div class="footer-links">
+        <a href="#">О воде</a>
+        <a href="#">Доставка</a>
+        <a href="#">Тарифы</a>
+        <a href="#">Контакты</a>
+        <a href="#">Политика конфиденциальности</a>
+      </div>
+      <span class="footer-copy">2024 Vellura. Невидимый источник вашей энергии.</span>
+    </div>
+  </footer>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://esm.sh/three@0.178.0"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+
+    // Configuration
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+
+    let scene, camera, renderer, material, clock;
+    let mousePosition = { x: 0.5, y: 0.5 };
+    let targetMousePosition = { x: 0.5, y: 0.5 };
+
+    function init() {
+      const container = document.getElementById('container');
+      if (!container) return;
+
+      scene = new THREE.Scene();
+      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      camera.position.z = 1;
+      clock = new THREE.Clock();
+
+      renderer = new THREE.WebGLRenderer({
+        antialias: !isMobile,
+        alpha: true,
+        powerPreference: isMobile ? 'default' : 'high-performance'
+      });
+
+      renderer.setPixelRatio(pixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x000000, 0);
+
+      const canvas = renderer.domElement;
+      canvas.style.cssText = `
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+      `;
+      container.appendChild(canvas);
+
+      material = new THREE.ShaderMaterial({
+        uniforms: {
+          uTime: { value: 0 },
+          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+          uDrops: { value: isMobile ? 4 : 6 },
+          uSpeed: { value: prefersReducedMotion ? 0.15 : 0.4 }
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          precision highp float;
+          
+          uniform float uTime;
+          uniform vec2 uResolution;
+          uniform vec2 uMouse;
+          uniform float uDrops;
+          uniform float uSpeed;
+          
+          varying vec2 vUv;
+          
+          #define PI 3.14159265359
+          
+          float hash(vec2 p) {
+            return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+          }
+          
+          float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            f = f * f * (3.0 - 2.0 * f);
+            return mix(
+              mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+              mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x),
+              f.y
+            );
+          }
+          
+          float sdSphere(vec3 p, float r) {
+            return length(p) - r;
+          }
+          
+          float smin(float a, float b, float k) {
+            float h = max(k - abs(a - b), 0.0) / k;
+            return min(a, b) - h * h * k * 0.25;
+          }
+          
+          vec3 calcNormal(vec3 p, float t) {
+            float eps = 0.002;
+            return normalize(vec3(
+              sdSphere(p + vec3(eps, 0, 0), 0.5 + noise(p.xy + t) * 0.1) - sdSphere(p - vec3(eps, 0, 0), 0.5 + noise(p.xy + t) * 0.1),
+              sdSphere(p + vec3(0, eps, 0), 0.5 + noise(p.xy + t) * 0.1) - sdSphere(p - vec3(0, eps, 0), 0.5 + noise(p.xy + t) * 0.1),
+              sdSphere(p + vec3(0, 0, eps), 0.5 + noise(p.xy + t) * 0.1) - sdSphere(p - vec3(0, 0, eps), 0.5 + noise(p.xy + t) * 0.1)
+            ));
+          }
+          
+          void main() {
+            vec2 uv = vUv;
+            float aspect = uResolution.x / uResolution.y;
+            uv.x *= aspect;
             
-            // Scroll reveal animation
-            const revealElements = document.querySelectorAll('.reveal');
+            float t = uTime * uSpeed;
             
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
+            // Mouse influence
+            vec2 mouseUV = uMouse;
+            mouseUV.x *= aspect;
             
-            revealElements.forEach(el => revealObserver.observe(el));
+            // Water drops
+            vec3 color = vec3(0.0);
+            float alpha = 0.0;
             
-            // Temperature curve animation
-            const curveLine = document.querySelector('.curve-line');
+            // Cursor-following drop
+            vec2 cursorPos = mouseUV * 2.0 - 1.0;
+            cursorPos.y = -cursorPos.y;
+            float cursorDist = length(uv * 2.0 - 1.0 - cursorPos);
+            float cursorDrop = smoothstep(0.18, 0.0, cursorDist);
             
-            if (curveLine) {
-                const curveObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            curveLine.classList.add('animate');
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                curveObserver.observe(curveLine.closest('.texture-panel'));
+            // Animated drops
+            for(float i = 0.0; i < 8.0; i++) {
+              if(i >= uDrops) break;
+              
+              float fi = i + 1.0;
+              float speed = 0.25 + fi * 0.08;
+              float orbit = 0.35 + noise(vec2(fi, 0.0)) * 0.25;
+              float size = 0.06 + noise(vec2(0.0, fi)) * 0.06;
+              
+              float angle = t * speed + fi * PI * 0.5;
+              float yOffset = sin(t * speed * 0.7 + fi) * 0.4;
+              
+              vec2 dropPos = vec2(
+                cos(angle) * orbit,
+                sin(angle * 0.8) * orbit * 0.5 + yOffset
+              );
+              
+              float dist = length(uv * 2.0 - 1.0 - dropPos);
+              float drop = smoothstep(size, size * 0.3, dist);
+              
+              // Drop color with refraction effect
+              vec2 refraction = normalize(uv * 2.0 - 1.0 - dropPos) * drop * 0.3;
+              float inner = smoothstep(size * 0.7, size * 0.1, dist);
+              
+              vec3 dropColor = vec3(0.85, 0.93, 0.96);
+              dropColor += inner * 0.3;
+              dropColor += vec3(refraction.x * 0.1, refraction.y * 0.1, 0.0);
+              
+              // Highlight
+              float highlight = smoothstep(size * 0.5, size * 0.2, dist);
+              highlight *= smoothstep(size * 0.1, size * 0.3, dist);
+              dropColor += highlight * 0.4;
+              
+              color = mix(color, dropColor, drop * 0.7);
+              alpha = max(alpha, drop * 0.65);
             }
             
-            // Navbar background on scroll
-            const navbar = document.getElementById('navbar');
-            let lastScroll = 0;
+            // Cursor drop
+            vec2 cursorRefraction = normalize(uv * 2.0 - 1.0 - cursorPos) * cursorDrop * 0.4;
+            vec3 cursorColor = vec3(0.82, 0.91, 0.94);
+            cursorColor += cursorDrop * 0.25;
+            cursorColor += vec3(cursorRefraction * 0.1, 0.0);
             
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                if (currentScroll > 100) {
-                    navbar.style.background = 'rgba(245, 240, 232, 0.95)';
-                    navbar.style.boxShadow = '0 2px 20px rgba(44, 24, 16, 0.05)';
-                } else {
-                    navbar.style.background = 'transparent';
-                    navbar.style.boxShadow = 'none';
-                }
-                
-                lastScroll = currentScroll;
-            });
+            float cursorHighlight = cursorDrop * smoothstep(0.1, 0.05, cursorDist);
+            cursorHighlight *= smoothstep(0.02, 0.08, cursorDist);
+            cursorColor += cursorHighlight * 0.35;
             
-            // Mobile menu
-            const menuToggle = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuPanel = document.getElementById('menuPanel');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const menuLinks = mobileMenu.querySelectorAll('a');
+            color = mix(color, cursorColor, cursorDrop * 0.75);
+            alpha = max(alpha, cursorDrop * 0.7);
             
-            function openMenu() {
-                mobileMenu.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    menuPanel.style.transform = 'translateX(0)';
-                });
-                document.body.style.overflow = 'hidden';
-            }
+            // Subtle background glow following cursor
+            float bgGlow = exp(-cursorDist * 1.5) * 0.15;
+            color += vec3(0.78, 0.89, 0.94) * bgGlow;
+            alpha = max(alpha, bgGlow);
             
-            function closeMenu() {
-                menuPanel.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 500);
-            }
-            
-            menuToggle.addEventListener('click', openMenu);
-            menuOverlay.addEventListener('click', closeMenu);
-            menuLinks.forEach(link => link.addEventListener('click', closeMenu));
-            
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-            
-            // Reduced motion check
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-            
-            if (prefersReducedMotion.matches) {
-                document.querySelectorAll('.steam').forEach(steam => {
-                    steam.style.animation = 'none';
-                });
-            }
-            
-            // Keyboard navigation for menu items
-            const menuItems = document.querySelectorAll('.menu-item');
-            
-            menuItems.forEach(item => {
-                item.setAttribute('tabindex', '0');
-                item.setAttribute('role', 'button');
-                
-                item.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const flavorCard = item.querySelector('.flavor-card');
-                        if (flavorCard) {
-                            if (flavorCard.style.opacity === '1') {
-                                flavorCard.style.opacity = '0';
-                                flavorCard.style.pointerEvents = 'none';
-                            } else {
-                                flavorCard.style.opacity = '1';
-                                flavorCard.style.pointerEvents = 'auto';
-                            }
-                        }
-                    }
-                });
-            });
+            gl_FragColor = vec4(color, alpha);
+          }
+        `,
+        transparent: true,
+        depthWrite: false
+      });
+
+      const geometry = new THREE.PlaneGeometry(2, 2);
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+      window.addEventListener('mousemove', onMouseMove, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('resize', onResize, { passive: true });
+
+      animate();
+    }
+
+    function onMouseMove(e) {
+      targetMousePosition.x = e.clientX / window.innerWidth;
+      targetMousePosition.y = 1.0 - e.clientY / window.innerHeight;
+    }
+
+    function onTouchMove(e) {
+      if (e.touches.length > 0) {
+        targetMousePosition.x = e.touches[0].clientX / window.innerWidth;
+        targetMousePosition.y = 1.0 - e.touches[0].clientY / window.innerHeight;
+      }
+    }
+
+    function onResize() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      mousePosition.x += (targetMousePosition.x - mousePosition.x) * 0.06;
+      mousePosition.y += (targetMousePosition.y - mousePosition.y) * 0.06;
+
+      material.uniforms.uTime.value = clock.getElapsedTime();
+      material.uniforms.uMouse.value.set(mousePosition.x, mousePosition.y);
+
+      renderer.render(scene, camera);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    // Navigation scroll effect
+    const nav = document.getElementById('nav');
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      
+      if (currentScroll > 80) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    }, { passive: true });
+
+    // Reveal animations
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Interactive glass demo
+    const waterRect = document.getElementById('waterRectNew');
+    const waterSurfaceGroup = document.getElementById('waterSurfaceGroup');
+    const causticGroup = document.getElementById('causticGroup');
+    const bubblesGroupNew = document.getElementById('bubblesGroupNew');
+    const additiveGroupNew = document.getElementById('additiveGroupNew');
+    const additiveSliceNew = document.getElementById('additiveSliceNew');
+    const waterTypeBtns = document.querySelectorAll('.water-type-btn');
+    const additiveBtns = document.querySelectorAll('.additive-btn');
+
+    let currentFillLevel = 0;
+    let targetFillLevel = 65;
+    let currentType = 'still';
+    let currentAdditive = 'lemon';
+
+    const additiveColors = {
+      none: '#f4e8c1',
+      lemon: '#f7f0c8',
+      ginger: '#e8d5a3',
+      mint: '#c8e5d8'
+    };
+
+    // Initial additive
+    additiveGroupNew.setAttribute('opacity', '1');
+    additiveSliceNew.setAttribute('fill', additiveColors.lemon);
+
+    function animateWater() {
+      if (Math.abs(currentFillLevel - targetFillLevel) > 0.3) {
+        currentFillLevel += (targetFillLevel - currentFillLevel) * 0.04;
+      }
+      
+      const yPos = 270 - (currentFillLevel * 2.3);
+      waterRect.setAttribute('y', Math.max(yPos, 25));
+      
+      // Surface position
+      const surfaceY = Math.max(yPos, 25);
+      const surfaceEllipse = waterSurfaceGroup.querySelector('#waterSurfaceNew');
+      surfaceEllipse.setAttribute('cy', surfaceY);
+      
+      // Caustic position (bottom reflection)
+      const causticY = Math.min(surfaceY + 140, 260);
+      causticGroup.querySelector('ellipse').setAttribute('cy', causticY);
+      
+      // Show/hide effects based on fill level
+      waterSurfaceGroup.setAttribute('opacity', currentFillLevel > 15 ? '1' : '0');
+      causticGroup.setAttribute('opacity', currentFillLevel > 20 ? '1' : '0');
+      
+      // Additive position follows water level
+      const additiveY = surfaceY + 30;
+      additiveSliceNew.setAttribute('cy', Math.min(additiveY, 240));
+      additiveGroupNew.setAttribute('opacity', currentFillLevel > 25 && currentAdditive !== 'none' ? '1' : '0');
+      
+      requestAnimationFrame(animateWater);
+    }
+    animateWater();
+
+    // Water type selection
+    waterTypeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        waterTypeBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
         });
-    </script>
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+        
+        currentType = btn.dataset.type;
+        
+        if (currentType === 'sparkling') {
+          bubblesGroupNew.setAttribute('opacity', '1');
+          targetFillLevel = 70;
+        } else if (currentType === 'alkaline') {
+          bubblesGroupNew.setAttribute('opacity', '0');
+          targetFillLevel = 75;
+        } else {
+          bubblesGroupNew.setAttribute('opacity', '0');
+          targetFillLevel = 65;
+        }
+      });
+    });
+
+    // Additive selection
+    additiveBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        additiveBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        currentAdditive = btn.dataset.additive;
+        
+        if (currentAdditive !== 'none') {
+          additiveGroupNew.setAttribute('opacity', '1');
+          additiveSliceNew.setAttribute('fill', additiveColors[currentAdditive]);
+        } else {
+          additiveGroupNew.setAttribute('opacity', '0');
+        }
+      });
+    });
+
+    // Accordion functionality
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    
+    accordionItems.forEach(item => {
+      const header = item.querySelector('.accordion-header');
+      
+      const toggle = () => {
+        const isOpen = item.classList.contains('open');
+        
+        accordionItems.forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+        });
+        
+        if (!isOpen) {
+          item.classList.add('open');
+          header.setAttribute('aria-expanded', 'true');
+        }
+      };
+      
+      header.addEventListener('click', toggle);
+      header.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
+
+    // Bubble animation
+    const bubbles = bubblesGroupNew.querySelectorAll('.bubble');
+    const bubblePositions = Array.from(bubbles).map(() => ({
+      x: 50 + Math.random() * 80,
+      y: 200 + Math.random() * 60,
+      speed: 0.3 + Math.random() * 0.4,
+      wobblePhase: Math.random() * Math.PI * 2
+    }));
+
+    function animateBubbles() {
+      if (currentType === 'sparkling' && !prefersReducedMotion) {
+        const time = Date.now() * 0.001;
+        
+        bubbles.forEach((bubble, i) => {
+          const pos = bubblePositions[i];
+          
+          pos.y -= pos.speed;
+          
+          if (pos.y < 80) {
+            pos.y = 240 + Math.random() * 20;
+            pos.x = 50 + Math.random() * 80;
+          }
+          
+          const wobble = Math.sin(time * 2 + pos.wobblePhase) * 2;
+          bubble.setAttribute('cx', pos.x + wobble);
+          bubble.setAttribute('cy', pos.y);
+        });
+      }
+      
+      requestAnimationFrame(animateBubbles);
+    }
+    animateBubbles();
+
+    // Scroll indicator click
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener('click', () => {
+        document.getElementById('glass').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  </script>
 </body>
 </html>
