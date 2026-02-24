@@ -11,17 +11,17 @@
   
   <style>
     :root {
-      --water-deep: #005577;
-      --water-light: #00aadd;
+      --water-deep: #0066aa;
+      --water-light: #00bbee;
       --water-glow: #66eeff;
-      --water-foam: #aaeeff;
-      --bg-dark: #020a0f;
-      --bg-medium: #041218;
+      --water-foam: #ccf4ff;
+      --bg-dark: #010810;
+      --bg-medium: #021520;
       --text-primary: #e8f8ff;
       --text-secondary: #88ccee;
-      --text-muted: #447788;
+      --text-muted: #5588aa;
       --accent: #00ddff;
-      --accent-warm: #00ffaa;
+      --accent-warm: #00ffcc;
     }
 
     * {
@@ -56,6 +56,11 @@
       pointer-events: none;
     }
 
+    .content-wrapper {
+      position: relative;
+      z-index: 10;
+    }
+
     .section {
       position: relative;
       z-index: 10;
@@ -76,10 +81,12 @@
       font-weight: 700;
       line-height: 1.1;
       margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-warm) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text-primary);
+      text-shadow: 0 4px 30px rgba(0, 187, 238, 0.3);
+    }
+
+    .hero-title span {
+      color: var(--accent);
     }
 
     .hero-subtitle {
@@ -112,6 +119,10 @@
       box-shadow: 0 10px 40px rgba(0, 221, 255, 0.4);
     }
 
+    .cta-button:active {
+      transform: translateY(-1px);
+    }
+
     .stats-bar {
       display: flex;
       gap: 3rem;
@@ -141,7 +152,6 @@
     /* Products Section */
     .products-section {
       padding: 6rem 2rem;
-      background: linear-gradient(180deg, transparent 0%, rgba(0, 85, 119, 0.1) 50%, transparent 100%);
     }
 
     .section-header {
@@ -172,13 +182,14 @@
     }
 
     .product-card {
-      background: rgba(0, 170, 221, 0.05);
-      border: 1px solid rgba(0, 221, 255, 0.15);
+      background: rgba(0, 102, 170, 0.08);
+      border: 1px solid rgba(0, 187, 238, 0.15);
       border-radius: 24px;
       padding: 2rem;
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(10px);
     }
 
     .product-card::before {
@@ -196,7 +207,7 @@
     .product-card:hover {
       transform: translateY(-8px);
       border-color: rgba(0, 221, 255, 0.4);
-      box-shadow: 0 20px 60px rgba(0, 170, 221, 0.15);
+      box-shadow: 0 20px 60px rgba(0, 170, 238, 0.2);
     }
 
     .product-card:hover::before {
@@ -204,7 +215,7 @@
     }
 
     .product-image {
-      height: 180px;
+      height: 140px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -212,10 +223,10 @@
     }
 
     .product-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, rgba(0, 221, 255, 0.2) 0%, rgba(0, 255, 170, 0.1) 100%);
-      border-radius: 20px;
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, rgba(0, 187, 238, 0.2) 0%, rgba(0, 255, 204, 0.1) 100%);
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -227,8 +238,8 @@
     }
 
     .product-icon svg {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       stroke: var(--accent);
     }
 
@@ -273,26 +284,27 @@
     }
 
     .equipment-card {
-      background: linear-gradient(145deg, rgba(0, 85, 119, 0.15) 0%, rgba(0, 170, 221, 0.05) 100%);
-      border: 1px solid rgba(0, 221, 255, 0.1);
+      background: linear-gradient(145deg, rgba(0, 102, 170, 0.12) 0%, rgba(0, 187, 238, 0.05) 100%);
+      border: 1px solid rgba(0, 187, 238, 0.1);
       border-radius: 20px;
       padding: 2rem;
       display: flex;
       gap: 1.5rem;
       align-items: center;
       transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
 
     .equipment-card:hover {
       border-color: rgba(0, 221, 255, 0.3);
-      background: linear-gradient(145deg, rgba(0, 85, 119, 0.25) 0%, rgba(0, 170, 221, 0.1) 100%);
+      background: linear-gradient(145deg, rgba(0, 102, 170, 0.2) 0%, rgba(0, 187, 238, 0.1) 100%);
     }
 
     .equipment-icon {
       width: 70px;
       height: 70px;
       min-width: 70px;
-      background: rgba(0, 221, 255, 0.1);
+      background: rgba(0, 187, 238, 0.1);
       border-radius: 16px;
       display: flex;
       align-items: center;
@@ -326,7 +338,6 @@
     /* Delivery Section */
     .delivery-section {
       padding: 6rem 2rem;
-      background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 170, 0.03) 50%, transparent 100%);
     }
 
     .delivery-content {
@@ -358,9 +369,9 @@
     }
 
     .step-number {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
       background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
       border-radius: 12px;
       display: flex;
@@ -383,10 +394,11 @@
     }
 
     .delivery-form {
-      background: rgba(0, 85, 119, 0.1);
-      border: 1px solid rgba(0, 221, 255, 0.15);
+      background: rgba(0, 102, 170, 0.1);
+      border: 1px solid rgba(0, 187, 238, 0.15);
       border-radius: 24px;
       padding: 2.5rem;
+      backdrop-filter: blur(15px);
     }
 
     .form-title {
@@ -404,8 +416,8 @@
     .form-input {
       width: 100%;
       padding: 1rem 1.25rem;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(0, 221, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 187, 238, 0.2);
       border-radius: 12px;
       color: var(--text-primary);
       font-family: 'Onest', sans-serif;
@@ -473,7 +485,7 @@
       width: 60px;
       height: 60px;
       margin: 0 auto 1rem;
-      background: rgba(0, 221, 255, 0.1);
+      background: rgba(0, 187, 238, 0.1);
       border-radius: 16px;
       display: flex;
       align-items: center;
@@ -513,7 +525,7 @@
     /* Footer */
     footer {
       padding: 3rem 2rem;
-      border-top: 1px solid rgba(0, 221, 255, 0.1);
+      border-top: 1px solid rgba(0, 187, 238, 0.1);
       text-align: center;
     }
 
@@ -560,7 +572,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(180deg, rgba(2, 10, 15, 0.9) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(1, 8, 16, 0.95) 0%, transparent 100%);
       backdrop-filter: blur(10px);
     }
 
@@ -572,21 +584,22 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      text-decoration: none;
     }
 
     .logo-icon {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .logo-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke: var(--bg-dark);
     }
 
@@ -652,359 +665,354 @@
   <!-- Water Animation Canvas -->
   <canvas id="water-canvas"></canvas>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-        </svg>
-      </div>
-      АкваЧист
-    </div>
-    <nav class="nav-links">
-      <a href="#products">Продукция</a>
-      <a href="#equipment">Оборудование</a>
-      <a href="#delivery">Доставка</a>
-      <a href="#contact">Контакты</a>
-    </nav>
-    <a href="tel:+78001234567" class="phone-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-      </svg>
-      8 800 123-45-67
-    </a>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="section hero-section">
-    <div class="reveal">
-      <h1 class="hero-title">Чистая вода<br>с доставкой</h1>
-      <p class="hero-subtitle">Кристально чистая артезианская вода для вашего дома и офиса. Добываем из глубин 250 метров, очищаем и доставляем в удобное для вас время.</p>
-      <a href="#delivery" class="cta-button">
-        Заказать воду
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+  <div class="content-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        АкваЧист
       </a>
-    </div>
-    
-    <div class="stats-bar reveal">
-      <div class="stat-item">
-        <div class="stat-value">15+</div>
-        <div class="stat-label">Лет на рынке</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">50K+</div>
-        <div class="stat-label">Клиентов</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">250м</div>
-        <div class="stat-label">Глубина скважины</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">24ч</div>
-        <div class="stat-label">Доставка</div>
-      </div>
-    </div>
-  </section>
+      <nav class="nav-links">
+        <a href="#products">Продукция</a>
+        <a href="#equipment">Оборудование</a>
+        <a href="#delivery">Доставка</a>
+        <a href="#contact">Контакты</a>
+      </nav>
+      <a href="tel:+78001234567" class="phone-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        8 800 123-45-67
+      </a>
+    </header>
 
-  <!-- Products Section -->
-  <section id="products" class="section products-section">
-    <div class="section-header reveal">
-      <h2 class="section-title">Наша вода</h2>
-      <p class="section-subtitle">Артезианская вода высшей категории для всей семьи</p>
-    </div>
-    
-    <div class="products-grid">
-      <div class="product-card reveal">
-        <div class="product-image">
-          <div class="product-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 2h8l4 10H4L8 2z"/>
-              <path d="M12 12v10"/>
-              <path d="M8 22h8"/>
-            </svg>
-          </div>
-        </div>
-        <h3 class="product-title">Стандарт</h3>
-        <p class="product-volume">Бутыль 19 литров</p>
-        <div class="product-price">350 <span>руб.</span></div>
+    <!-- Hero Section -->
+    <section class="section hero-section">
+      <div class="reveal">
+        <h1 class="hero-title">Чистая вода<br><span>с доставкой</span></h1>
+        <p class="hero-subtitle">Кристально чистая артезианская вода для вашего дома и офиса. Добываем из глубин 250 метров, очищаем и доставляем в удобное для вас время.</p>
+        <a href="#delivery" class="cta-button">
+          Заказать воду
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
       </div>
       
-      <div class="product-card reveal">
-        <div class="product-image">
-          <div class="product-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 2h8l4 10H4L8 2z"/>
-              <path d="M12 12v10"/>
-              <path d="M8 22h8"/>
-              <circle cx="12" cy="6" r="2"/>
-            </svg>
-          </div>
+      <div class="stats-bar reveal">
+        <div class="stat-item">
+          <div class="stat-value">15+</div>
+          <div class="stat-label">Лет на рынке</div>
         </div>
-        <h3 class="product-title">Премиум</h3>
-        <p class="product-volume">Бутыль 19 литров</p>
-        <div class="product-price">450 <span>руб.</span></div>
+        <div class="stat-item">
+          <div class="stat-value">50K+</div>
+          <div class="stat-label">Клиентов</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">250м</div>
+          <div class="stat-label">Глубина скважины</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">24ч</div>
+          <div class="stat-label">Доставка</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="section products-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Наша вода</h2>
+        <p class="section-subtitle">Артезианская вода высшей категории для всей семьи</p>
       </div>
       
-      <div class="product-card reveal">
-        <div class="product-image">
-          <div class="product-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <line x1="9" y1="3" x2="9" y2="21"/>
-              <line x1="15" y1="3" x2="15" y2="21"/>
-            </svg>
+      <div class="products-grid">
+        <div class="product-card reveal">
+          <div class="product-image">
+            <div class="product-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 2h8l4 10H4L8 2z"/>
+                <path d="M12 12v10"/>
+                <path d="M8 22h8"/>
+              </svg>
+            </div>
           </div>
+          <h3 class="product-title">Стандарт</h3>
+          <p class="product-volume">Бутыль 19 литров</p>
+          <div class="product-price">350 <span>руб.</span></div>
         </div>
-        <h3 class="product-title">Комплект 6 шт</h3>
-        <p class="product-volume">6 бутылей по 19 литров</p>
-        <div class="product-price">1 900 <span>руб.</span></div>
+        
+        <div class="product-card reveal">
+          <div class="product-image">
+            <div class="product-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="product-title">Премиум</h3>
+          <p class="product-volume">Бутыль 19 литров</p>
+          <div class="product-price">450 <span>руб.</span></div>
+        </div>
+        
+        <div class="product-card reveal">
+          <div class="product-image">
+            <div class="product-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <line x1="9" y1="3" x2="9" y2="21"/>
+                <line x1="15" y1="3" x2="15" y2="21"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="product-title">Комплект 6 шт</h3>
+          <p class="product-volume">6 бутылей по 19 литров</p>
+          <div class="product-price">1 900 <span>руб.</span></div>
+        </div>
+        
+        <div class="product-card reveal">
+          <div class="product-image">
+            <div class="product-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 12h8"/>
+                <path d="M12 8v8"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="product-title">Маленькая</h3>
+          <p class="product-volume">Бутылка 5 литров</p>
+          <div class="product-price">120 <span>руб.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Equipment Section -->
+    <section id="equipment" class="section equipment-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Оборудование</h2>
+        <p class="section-subtitle">Кулеры, помпы и диспенсеры для воды</p>
       </div>
       
-      <div class="product-card reveal">
-        <div class="product-image">
-          <div class="product-icon">
+      <div class="equipment-grid">
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2"/>
+              <line x1="12" y1="6" x2="12" y2="10"/>
+              <circle cx="12" cy="14" r="2"/>
+            </svg>
+          </div>
+          <div class="equipment-info">
+            <h4>Кулер напольный</h4>
+            <p>Нагрев и охлаждение, защита от детей</p>
+            <span class="equipment-price">от 8 500 руб.</span>
+          </div>
+        </div>
+        
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="4" width="14" height="16" rx="2"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <circle cx="12" cy="15" r="1"/>
+            </svg>
+          </div>
+          <div class="equipment-info">
+            <h4>Кулер настольный</h4>
+            <p>Компактный, два режима температуры</p>
+            <span class="equipment-price">от 5 900 руб.</span>
+          </div>
+        </div>
+        
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="equipment-info">
+            <h4>Помпа механическая</h4>
+            <p>Простое решение для дома</p>
+            <span class="equipment-price">от 650 руб.</span>
+          </div>
+        </div>
+        
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div class="equipment-info">
+            <h4>Помпа электрическая</h4>
+            <p>Автоматическая подача воды, USB-зарядка</p>
+            <span class="equipment-price">от 1 200 руб.</span>
+          </div>
+        </div>
+        
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
             </svg>
           </div>
-        </div>
-        <h3 class="product-title">Маленькая</h3>
-        <p class="product-volume">Бутылка 5 литров</p>
-        <div class="product-price">120 <span>руб.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Equipment Section -->
-  <section id="equipment" class="section equipment-section">
-    <div class="section-header reveal">
-      <h2 class="section-title">Оборудование</h2>
-      <p class="section-subtitle">Кулеры, помпы и диспенсеры для воды</p>
-    </div>
-    
-    <div class="equipment-grid">
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="2" width="16" height="20" rx="2"/>
-            <line x1="12" y1="6" x2="12" y2="10"/>
-            <circle cx="12" cy="14" r="2"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Кулер напольный</h4>
-          <p>Нагрев и охлаждение, защита от детей</p>
-          <span class="equipment-price">от 8 500 руб.</span>
-        </div>
-      </div>
-      
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="4" width="14" height="16" rx="2"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <circle cx="12" cy="15" r="1"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Кулер настольный</h4>
-          <p>Компактный, два режима температуры</p>
-          <span class="equipment-price">от 5 900 руб.</span>
-        </div>
-      </div>
-      
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 6v6l4 2"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Помпа механическая</h4>
-          <p>Простое решение для дома</p>
-          <span class="equipment-price">от 650 руб.</span>
-        </div>
-      </div>
-      
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Помпа электрическая</h4>
-          <p>Автоматическая подача воды, USB-зарядка</p>
-          <span class="equipment-price">от 1 200 руб.</span>
-        </div>
-      </div>
-      
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Подставка-держатель</h4>
-          <p>Для бутылей 19 литров, устойчивая</p>
-          <span class="equipment-price">от 1 500 руб.</span>
-        </div>
-      </div>
-      
-      <div class="equipment-card reveal">
-        <div class="equipment-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="6" width="20" height="12" rx="2"/>
-            <line x1="12" y1="10" x2="12" y2="14"/>
-            <line x1="10" y1="12" x2="14" y2="12"/>
-          </svg>
-        </div>
-        <div class="equipment-info">
-          <h4>Фильтр-кувшин</h4>
-          <p>Дополнительная очистка, 4 литра</p>
-          <span class="equipment-price">от 990 руб.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Delivery Section -->
-  <section id="delivery" class="section delivery-section">
-    <div class="section-header reveal">
-      <h2 class="section-title">Как заказать</h2>
-      <p class="section-subtitle">Просто и удобно — вода уже через 24 часа</p>
-    </div>
-    
-    <div class="delivery-content">
-      <div class="delivery-steps reveal">
-        <div class="delivery-step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h4>Оформите заказ</h4>
-            <p>Позвоните или заполните форму на сайте</p>
+          <div class="equipment-info">
+            <h4>Подставка-держатель</h4>
+            <p>Для бутылей 19 литров, устойчивая</p>
+            <span class="equipment-price">от 1 500 руб.</span>
           </div>
         </div>
-        <div class="delivery-step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h4>Выберите время</h4>
-            <p>Укажите удобный интервал доставки</p>
+        
+        <div class="equipment-card reveal">
+          <div class="equipment-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3h18v18H3zM12 8v8M8 12h8"/>
+            </svg>
           </div>
-        </div>
-        <div class="delivery-step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h4>Получите воду</h4>
-            <p>Курьер занесёт воду прямо к двери</p>
-          </div>
-        </div>
-        <div class="delivery-step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h4>Оплатите</h4>
-            <p>Наличными, картой или онлайн</p>
+          <div class="equipment-info">
+            <h4>Фильтр-кувшин</h4>
+            <p>Дополнительная очистка, 4 литра</p>
+            <span class="equipment-price">от 990 руб.</span>
           </div>
         </div>
       </div>
-      
-      <div class="delivery-form reveal">
-        <h3 class="form-title">Заказать доставку</h3>
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Ваше имя">
-        </div>
-        <div class="form-group">
-          <input type="tel" class="form-input" placeholder="Телефон">
-        </div>
-        <div class="form-group">
-          <select class="form-input form-select">
-            <option value="">Выберите продукт</option>
-            <option value="standard">Вода Стандарт 19л</option>
-            <option value="premium">Вода Премиум 19л</option>
-            <option value="set">Комплект 6 бутылей</option>
-            <option value="small">Вода 5л</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Адрес доставки">
-        </div>
-        <button type="submit" class="submit-btn">Отправить заявку</button>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="section contact-section">
-    <div class="section-header reveal">
-      <h2 class="section-title">Контакты</h2>
-      <p class="section-subtitle">Свяжитесь с нами любым удобным способом</p>
-    </div>
-    
-    <div class="contact-grid">
-      <div class="contact-card reveal">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-        </div>
-        <h4>Телефон</h4>
-        <p><a href="tel:+78001234567">8 800 123-45-67</a></p>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Бесплатно по России</p>
+    <!-- Delivery Section -->
+    <section id="delivery" class="section delivery-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Как заказать</h2>
+        <p class="section-subtitle">Просто и удобно — вода уже через 24 часа</p>
       </div>
       
-      <div class="contact-card reveal">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
+      <div class="delivery-content">
+        <div class="delivery-steps reveal">
+          <div class="delivery-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Оформите заказ</h4>
+              <p>Позвоните или заполните форму на сайте</p>
+            </div>
+          </div>
+          <div class="delivery-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Выберите время</h4>
+              <p>Укажите удобный интервал доставки</p>
+            </div>
+          </div>
+          <div class="delivery-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Получите воду</h4>
+              <p>Курьер занесёт воду прямо к двери</p>
+            </div>
+          </div>
+          <div class="delivery-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Оплатите</h4>
+              <p>Наличными, картой или онлайн</p>
+            </div>
+          </div>
         </div>
-        <h4>Адрес</h4>
-        <p>г. Москва, ул. Водная, 15</p>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Пн-Вс: 8:00-22:00</p>
-      </div>
-      
-      <div class="contact-card reveal">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
+        
+        <div class="delivery-form reveal">
+          <h3 class="form-title">Заказать доставку</h3>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Ваше имя">
+          </div>
+          <div class="form-group">
+            <input type="tel" class="form-input" placeholder="Телефон">
+          </div>
+          <div class="form-group">
+            <select class="form-input form-select">
+              <option value="">Выберите продукт</option>
+              <option value="standard">Вода Стандарт 19л</option>
+              <option value="premium">Вода Премиум 19л</option>
+              <option value="set">Комплект 6 бутылей</option>
+              <option value="small">Вода 5л</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Адрес доставки">
+          </div>
+          <button type="submit" class="submit-btn">Отправить заявку</button>
         </div>
-        <h4>Email</h4>
-        <p><a href="mailto:info@aquachist.ru">info@aquachist.ru</a></p>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Ответим в течение часа</p>
       </div>
-      
-      <div class="contact-card reveal">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-          </svg>
-        </div>
-        <h4>Мессенджеры</h4>
-        <p><a href="#">WhatsApp</a> / <a href="#">Telegram</a></p>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Быстрые ответы</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-logo">АкваЧист</div>
-    <div class="footer-links">
-      <a href="#products">Продукция</a>
-      <a href="#equipment">Оборудование</a>
-      <a href="#delivery">Доставка</a>
-      <a href="#contact">Контакты</a>
-    </div>
-    <p class="footer-copy">2024 АкваЧист. Все права защищены.</p>
-  </footer>
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="section-header reveal">
+        <h2 class="section-title">Контакты</h2>
+        <p class="section-subtitle">Свяжитесь с нами любым удобным способом</p>
+      </div>
+      
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </div>
+          <h4>Телефон</h4>
+          <p><a href="tel:+78001234567">8 800 123-45-67</a></p>
+        </div>
+        
+        <div class="contact-card reveal">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <h4>Адрес</h4>
+          <p>г. Москва, ул. Водная, 15</p>
+        </div>
+        
+        <div class="contact-card reveal">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <h4>Email</h4>
+          <p><a href="mailto:info@aquachist.ru">info@aquachist.ru</a></p>
+        </div>
+        
+        <div class="contact-card reveal">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </div>
+          <h4>Мессенджеры</h4>
+          <p><a href="#">WhatsApp</a> / <a href="#">Telegram</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-logo">АкваЧист</div>
+      <div class="footer-links">
+        <a href="#products">Продукция</a>
+        <a href="#equipment">Оборудование</a>
+        <a href="#delivery">Доставка</a>
+        <a href="#contact">Контакты</a>
+      </div>
+      <p class="footer-copy">2024 АкваЧист. Все права защищены.</p>
+    </footer>
+  </div>
 
   <script type="importmap">
   {
@@ -1017,44 +1025,50 @@
   <script type="module">
     import * as THREE from 'three';
 
+    // ===== WATER FLUID ANIMATION =====
+    
     // Device detection
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isLowPower = isMobile || navigator.hardwareConcurrency <= 4;
+    const isLowPower = isMobile || (navigator.hardwareConcurrency || 4) <= 4;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
 
-    // Canvas and renderer setup
+    // Canvas setup
     const canvas = document.getElementById('water-canvas');
     const renderer = new THREE.WebGLRenderer({ 
       canvas, 
-      antialias: !isMobile,
+      antialias: !isMobile && !isLowPower,
       alpha: true,
-      powerPreference: isMobile ? 'low-power' : 'high-performance'
+      powerPreference: isMobile ? 'default' : 'high-performance',
+      preserveDrawingBuffer: false
     });
-
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
 
-    // Scene setup
+    // Scene & Camera
     const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
 
     // Mouse tracking
     const mouse = { x: 0.5, y: 0.5 };
     const targetMouse = { x: 0.5, y: 0.5 };
 
-    // Water shader material - optimized
+    // Water shader - optimized ray marching
     const waterMaterial = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-        uPixelRatio: { value: pixelRatio }
+        uActualResolution: { value: new THREE.Vector2(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio) },
+        uPixelRatio: { value: pixelRatio },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) }
       },
       vertexShader: `
         varying vec2 vUv;
         void main() {
           vUv = uv;
-          gl_Position = vec4(position.xy, 0.0, 1.0);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
       fragmentShader: `
@@ -1062,135 +1076,216 @@
         
         uniform float uTime;
         uniform vec2 uResolution;
-        uniform vec2 uMouse;
+        uniform vec2 uActualResolution;
         uniform float uPixelRatio;
+        uniform vec2 uMouse;
         
         varying vec2 vUv;
         
-        #define PI 3.14159265359
+        const float PI = 3.14159265359;
+        const float EPSILON = 0.001;
+        const float MAX_DIST = 100.0;
         
-        // Simplified noise function
-        float hash(vec2 p) {
-          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        // Smooth minimum for metaball blending
+        float smin(float a, float b, float k) {
+          float h = max(k - abs(a - b), 0.0) / k;
+          return min(a, b) - h * h * k * 0.25;
         }
         
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        // Sphere SDF
+        float sdSphere(vec3 p, float r) {
+          return length(p) - r;
         }
         
-        // Smooth metaball SDF
-        float metaballs(vec2 uv, float time) {
-          float result = 0.0;
+        // Convert screen coords to world
+        vec3 screenToWorld(vec2 normalizedPos) {
+          vec2 uv = normalizedPos * 2.0 - 1.0;
+          uv.x *= uResolution.x / uResolution.y;
+          return vec3(uv * 2.0, 0.0);
+        }
+        
+        // Water drops scene
+        float sceneSDF(vec3 pos, float time) {
+          float result = MAX_DIST;
           
-          // Main cursor blob
-          vec2 cursorPos = uMouse * 2.0 - 1.0;
-          cursorPos.x *= uResolution.x / uResolution.y;
-          float cursorDist = length(uv - cursorPos);
-          result += 0.25 / (cursorDist * cursorDist + 0.02);
+          // Cursor-controlled blob
+          vec3 cursorPos = screenToWorld(uMouse);
+          float cursorBlob = sdSphere(pos - cursorPos, 0.25);
+          result = smin(result, cursorBlob, 0.15);
           
-          // Floating blobs - optimized count
-          int blobCount = isLowPower ? 4 : 6;
+          // Animated water drops
+          int dropCount = isLowPower ? 4 : 6;
           
           for (int i = 0; i < 6; i++) {
-            if (i >= blobCount) break;
+            if (i >= dropCount) break;
             
             float fi = float(i);
-            float speed = 0.3 + fi * 0.1;
-            float size = 0.08 + mod(fi, 3.0) * 0.03;
+            float speed = 0.3 + fi * 0.12;
+            float radius = 0.12 + mod(fi, 3.0) * 0.05;
+            float orbitRadius = 0.5 + mod(fi, 3.0) * 0.2;
+            float phaseOffset = fi * PI * 0.4;
             
-            vec2 blobPos = vec2(
-              sin(time * speed + fi * 1.5) * 0.8,
-              cos(time * speed * 0.7 + fi * 2.1) * 0.6
+            // Organic movement
+            vec3 offset = vec3(
+              sin(time * speed + phaseOffset) * orbitRadius,
+              cos(time * speed * 0.8 + phaseOffset * 1.3) * orbitRadius * 0.6,
+              sin(time * speed * 0.5 + phaseOffset) * 0.3
             );
             
-            // Mouse attraction
-            blobPos += (cursorPos - blobPos) * 0.15;
+            // Attraction to cursor
+            vec3 toCursor = cursorPos - offset;
+            float cursorDist = length(toCursor);
+            if (cursorDist < 1.5 && cursorDist > 0.0) {
+              float attraction = (1.0 - cursorDist / 1.5) * 0.2;
+              offset += normalize(toCursor) * attraction;
+            }
             
-            float dist = length(uv - blobPos);
-            result += size / (dist * dist + 0.01);
+            float drop = sdSphere(pos - offset, radius);
+            result = smin(result, drop, 0.1);
           }
+          
+          // Corner drops (fixed)
+          vec3 topLeft = screenToWorld(vec2(0.08, 0.92));
+          float topLeftDrop = sdSphere(pos - topLeft, 0.4);
+          result = smin(result, topLeftDrop, 0.2);
+          
+          vec3 bottomRight = screenToWorld(vec2(0.92, 0.08));
+          float bottomRightDrop = sdSphere(pos - bottomRight, 0.35);
+          result = smin(result, bottomRightDrop, 0.2);
           
           return result;
         }
         
+        // Calculate normal
+        vec3 calcNormal(vec3 p, float time) {
+          float eps = isLowPower ? 0.002 : 0.001;
+          return normalize(vec3(
+            sceneSDF(p + vec3(eps, 0, 0), time) - sceneSDF(p - vec3(eps, 0, 0), time),
+            sceneSDF(p + vec3(0, eps, 0), time) - sceneSDF(p - vec3(0, eps, 0), time),
+            sceneSDF(p + vec3(0, 0, eps), time) - sceneSDF(p - vec3(0, 0, eps), time)
+          ));
+        }
+        
+        // Ray marching
+        float rayMarch(vec3 ro, vec3 rd, float time) {
+          float t = 0.0;
+          int maxSteps = isLowPower ? 20 : 32;
+          
+          for (int i = 0; i < 32; i++) {
+            if (i >= maxSteps) break;
+            
+            vec3 p = ro + rd * t;
+            float d = sceneSDF(p, time);
+            
+            if (d < EPSILON) return t;
+            if (t > 5.0) break;
+            
+            t += d * 0.9;
+          }
+          
+          return -1.0;
+        }
+        
+        // Water lighting
+        vec3 waterLighting(vec3 p, vec3 rd, float t, float time) {
+          if (t < 0.0) return vec3(0.0);
+          
+          vec3 normal = calcNormal(p, time);
+          vec3 viewDir = -rd;
+          
+          // Water colors
+          vec3 waterDeep = vec3(0.0, 0.25, 0.4);
+          vec3 waterLight = vec3(0.0, 0.6, 0.8);
+          vec3 waterGlow = vec3(0.3, 0.85, 1.0);
+          vec3 waterFoam = vec3(0.7, 0.95, 1.0);
+          
+          // Light direction
+          vec3 lightDir = normalize(vec3(0.8, 0.6, 1.0));
+          
+          // Diffuse
+          float diff = max(dot(normal, lightDir), 0.0);
+          
+          // Specular
+          vec3 reflectDir = reflect(-lightDir, normal);
+          float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+          
+          // Fresnel
+          float fresnel = pow(1.0 - max(dot(viewDir, normal), 0.0), 3.0);
+          
+          // Base color with depth
+          vec3 baseColor = mix(waterLight, waterDeep, smoothstep(0.0, 3.0, t));
+          
+          // Combine lighting
+          vec3 color = baseColor * 0.3; // ambient
+          color += baseColor * diff * 0.5;
+          color += waterGlow * spec * 0.8;
+          color += waterFoam * fresnel * 0.4;
+          
+          // Cursor glow
+          vec3 cursorPos = screenToWorld(uMouse);
+          float distToCursor = length(p - cursorPos);
+          float cursorGlow = exp(-distToCursor * 2.5) * 0.4;
+          color += waterGlow * cursorGlow;
+          
+          // Contrast and tone mapping
+          color = color / (color + vec3(0.5));
+          color = pow(color, vec3(0.9));
+          
+          return color;
+        }
+        
         void main() {
-          vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution * uPixelRatio) / (uResolution.y * uPixelRatio);
+          // Screen coordinates
+          vec2 uv = (gl_FragCoord.xy * 2.0 - uActualResolution.xy) / uActualResolution.xy;
+          uv.x *= uResolution.x / uResolution.y;
           
           float time = uTime * 0.5;
           
-          // Calculate metaballs
-          float blobs = metaballs(uv, time);
+          // Ray setup
+          vec3 ro = vec3(uv * 2.0, -1.0);
+          vec3 rd = vec3(0.0, 0.0, 1.0);
           
-          // Threshold for water surface
-          float threshold = 1.0;
-          float edge = smoothstep(threshold - 0.3, threshold + 0.3, blobs);
-          
-          // Water colors
-          vec3 waterDeep = vec3(0.0, 0.33, 0.47);
-          vec3 waterLight = vec3(0.0, 0.67, 0.87);
-          vec3 waterGlow = vec3(0.4, 0.93, 1.0);
-          vec3 waterFoam = vec3(0.67, 0.93, 1.0);
-          
-          // Depth-based coloring
-          float depth = (blobs - threshold) * 2.0;
-          depth = clamp(depth, 0.0, 1.0);
-          
-          vec3 waterColor = mix(waterLight, waterDeep, depth);
-          
-          // Add caustics-like effect
-          float caustics = noise(uv * 8.0 + time * 2.0) * 0.5 + 0.5;
-          caustics *= noise(uv * 12.0 - time * 1.5) * 0.5 + 0.5;
-          waterColor += waterGlow * caustics * 0.15 * (1.0 - depth);
-          
-          // Edge glow/foam
-          float foam = 1.0 - smoothstep(threshold - 0.2, threshold + 0.1, blobs);
-          waterColor = mix(waterColor, waterFoam, foam * 0.6);
-          
-          // Fresnel-like rim effect
-          vec2 gradUv = uv * 0.5;
-          float fresnel = 1.0 - smoothstep(0.0, 2.0, length(uv));
-          waterColor *= 0.7 + fresnel * 0.3;
-          
-          // Cursor highlight
-          vec2 cursorPos = uMouse * 2.0 - 1.0;
-          cursorPos.x *= uResolution.x / uResolution.y;
-          float cursorDist = length(uv - cursorPos);
-          float cursorGlow = exp(-cursorDist * 2.0) * 0.3;
-          waterColor += waterGlow * cursorGlow;
-          
-          // Apply edge masking
-          float alpha = edge * 0.85;
+          // Ray march
+          float t = rayMarch(ro, rd, time);
           
           // Background gradient
-          vec3 bgColor = mix(
-            vec3(0.008, 0.039, 0.059),
-            vec3(0.02, 0.08, 0.1),
-            vUv.y
-          );
+          vec3 bgColorTop = vec3(0.01, 0.04, 0.08);
+          vec3 bgColorBottom = vec3(0.005, 0.02, 0.04);
+          vec3 bgColor = mix(bgColorBottom, bgColorTop, vUv.y);
           
-          // Subtle noise on background
-          bgColor += noise(vUv * 200.0 + time * 0.5) * 0.02;
+          // Subtle animated noise on background
+          float bgNoise = sin(vUv.x * 100.0 + time) * sin(vUv.y * 100.0 + time * 0.7) * 0.01;
+          bgColor += bgNoise;
           
-          // Final color
-          vec3 finalColor = mix(bgColor, waterColor, alpha);
+          vec3 finalColor;
+          float alpha = 0.0;
           
-          // Vignette
-          float vignette = 1.0 - smoothstep(0.4, 1.4, length(uv * 0.7));
-          finalColor *= 0.8 + vignette * 0.2;
+          if (t > 0.0) {
+            vec3 p = ro + rd * t;
+            finalColor = waterLighting(p, rd, t, time);
+            
+            // Fog based on distance
+            float fog = 1.0 - exp(-t * 0.15);
+            finalColor = mix(finalColor, bgColor, fog * 0.4);
+            
+            alpha = smoothstep(3.0, 0.5, t);
+          } else {
+            finalColor = bgColor;
+            
+            // Cursor glow on background
+            vec3 cursorPos = screenToWorld(uMouse);
+            vec2 cursor2D = vec2(cursorPos.x, cursorPos.y);
+            vec2 frag2D = vec2(uv.x * 2.0, uv.y * 2.0);
+            float cursorDist = length(frag2D - cursor2D);
+            float glow = exp(-cursorDist * 2.0) * 0.15;
+            finalColor += vec3(0.2, 0.7, 0.9) * glow;
+            alpha = glow;
+          }
           
-          gl_FragColor = vec4(finalColor, 1.0);
+          gl_FragColor = vec4(finalColor, max(alpha, 0.95));
         }
       `,
-      transparent: false
+      transparent: true
     });
 
     // Create mesh
@@ -1201,7 +1296,7 @@
     // Clock
     const clock = new THREE.Clock();
 
-    // Event listeners
+    // Event handlers
     function onMouseMove(e) {
       targetMouse.x = e.clientX / window.innerWidth;
       targetMouse.y = 1.0 - e.clientY / window.innerHeight;
@@ -1223,21 +1318,24 @@
       renderer.setPixelRatio(pr);
       
       waterMaterial.uniforms.uResolution.value.set(width, height);
+      waterMaterial.uniforms.uActualResolution.value.set(width * pr, height * pr);
       waterMaterial.uniforms.uPixelRatio.value = pr;
     }
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchstart', onTouchMove, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
 
     // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       
-      // Smooth mouse
+      // Smooth mouse interpolation
       mouse.x += (targetMouse.x - mouse.x) * 0.08;
       mouse.y += (targetMouse.y - mouse.y) * 0.08;
       
+      // Update uniforms
       waterMaterial.uniforms.uTime.value = clock.getElapsedTime();
       waterMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
       
@@ -1246,7 +1344,7 @@
 
     animate();
 
-    // Scroll reveal
+    // ===== SCROLL REVEAL =====
     const revealElements = document.querySelectorAll('.reveal');
     
     const observerOptions = {
@@ -1259,16 +1357,22 @@
         if (entry.isIntersecting) {
           setTimeout(() => {
             entry.target.classList.add('visible');
-          }, index * 100);
+          }, index * 80);
         }
       });
     }, observerOptions);
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // Initial reveal for hero
+    // Initial reveal
     setTimeout(() => {
-      document.querySelector('.hero-section .reveal').classList.add('visible');
+      const heroReveal = document.querySelector('.hero-section .reveal');
+      if (heroReveal) heroReveal.classList.add('visible');
+      
+      const statsReveal = document.querySelector('.stats-bar.reveal');
+      if (statsReveal) {
+        setTimeout(() => statsReveal.classList.add('visible'), 200);
+      }
     }, 300);
   </script>
 </body>
