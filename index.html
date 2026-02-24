@@ -3,122 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroSpace Dynamics — Величие инженерной мысли </title>
+    <title>AeroSpace Dynamics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
-            --bg-deep: #020208;
-            --bg-night: #06060f;
-            --bg-card: #0a0a14;
-            --fg: #f0f0f8;
-            --fg-muted: #8888a0;
-            --accent-copper: #e87a3f;
-            --accent-orange: #ff7847;
-            --accent-violet: #a894d9;
-            --accent-gold: #e8b84a;
-            --accent-teal: #4ab8b8;
-            --accent-cyan: #38d9d9;
+            --bg: #050506;
+            --bg-elevated: #0a0a0c;
+            --fg: #f0f0f2;
+            --fg-muted: #6e6e78;
+            --accent: #a8b4c0;
+            --accent-warm: #c4a882;
+            --border: rgba(255,255,255,0.06);
         }
+        
         html { scroll-behavior: smooth; }
+        
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-deep);
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg);
             color: var(--fg);
             overflow-x: hidden;
-            line-height: 1.7;
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.01em;
         }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: var(--bg-deep); }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, var(--accent-copper), var(--accent-orange)); 
-            border-radius: 3px; 
-        }
+        
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+        
         :focus-visible { 
-            outline: 2px solid var(--accent-cyan); 
-            outline-offset: 3px; 
+            outline: 1px solid var(--accent); 
+            outline-offset: 4px; 
         }
 
         #canvas-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 0;
         }
-        
-        /* Cursor glow */
-        .cursor-glow {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(232,122,63,0.08) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 5;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-        }
-        
+
+        /* Navigation */
         nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            padding: 1.2rem 5%;
+            right: 0;
+            padding: 1.5rem 4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            background: linear-gradient(to bottom, rgba(2,2,8,0.95) 0%, transparent 100%);
-            transition: all 0.4s ease;
+            background: linear-gradient(to bottom, var(--bg), transparent);
+            transition: background 0.4s ease;
         }
+        
         nav.scrolled {
-            background: rgba(2,2,8,0.98);
-            backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(232,122,63,0.1);
+            background: rgba(5,5,6,0.95);
+            backdrop-filter: blur(20px);
         }
+        
         .logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: 0.35em;
-            color: var(--fg);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
+            color: var(--fg);
             text-decoration: none;
-            transition: all 0.3s ease;
         }
-        .logo:hover { transform: scale(1.02); }
-        .logo span { color: var(--accent-copper); }
-        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        
+        .logo span { color: var(--fg-muted); }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        
         .nav-links a {
             color: var(--fg-muted);
             text-decoration: none;
-            font-size: 0.75rem;
-            letter-spacing: 0.18em;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            transition: all 0.4s ease;
+            transition: color 0.3s ease;
             position: relative;
-            padding: 0.5rem 0;
-            font-weight: 500;
         }
+        
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -2px;
-            left: 50%;
+            bottom: -4px;
+            left: 0;
             width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-copper), var(--accent-cyan));
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(-50%);
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
         }
-        .nav-links a:hover, .nav-links a:focus { color: var(--fg); }
-        .nav-links a:hover::after, .nav-links a:focus::after { width: 100%; }
+        
+        .nav-links a:hover { color: var(--fg); }
+        .nav-links a:hover::after { width: 100%; }
 
+        /* Sections */
         section {
             position: relative;
             min-height: 100vh;
@@ -127,818 +117,476 @@
             z-index: 10;
             pointer-events: none;
         }
-        section > * { pointer-events: auto; }
         
+        section > * { pointer-events: auto; }
+
+        /* Hero */
         #hero {
             height: 100vh;
             justify-content: flex-start;
             padding: 0 8%;
         }
-        .hero-content {
-            max-width: 680px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: heroReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
-        }
-        @keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
         
-        .hero-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 0.6em;
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
-            color: var(--accent-cyan);
-            margin-bottom: 1.8rem;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.8s forwards;
+            color: var(--accent);
+            margin-bottom: 2rem;
             display: flex;
             align-items: center;
-            gap: 1.2rem;
+            gap: 1rem;
         }
-        .hero-subtitle::before {
+        
+        .hero-eyebrow::before {
             content: '';
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-copper));
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
         }
         
         .hero-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
             font-weight: 300;
-            line-height: 1.08;
-            letter-spacing: 0.02em;
-            margin-bottom: 2rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
         }
+        
         .hero-title strong {
-            font-weight: 700;
-            display: block;
-            background: linear-gradient(135deg, var(--fg) 0%, var(--accent-copper) 40%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 500;
+            color: var(--fg);
         }
         
         .hero-desc {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             color: var(--fg-muted);
             margin-bottom: 3rem;
-            letter-spacing: 0.02em;
-            max-width: 500px;
-            line-height: 1.9;
+            max-width: 440px;
+            line-height: 1.8;
         }
         
-        .hero-buttons {
+        .hero-actions {
             display: flex;
-            gap: 1.2rem;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
         
-        .hero-btn {
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1rem 2.2rem;
+            gap: 0.6rem;
+            padding: 0.9rem 1.8rem;
             background: transparent;
-            border: 1px solid var(--accent-copper);
+            border: 1px solid var(--border);
             color: var(--fg);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.82rem;
-            letter-spacing: 0.22em;
+            font-family: inherit;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .hero-btn::before {
-            content: '';
+        
+        .btn:hover {
+            border-color: var(--accent);
+            background: rgba(168,180,192,0.05);
+        }
+        
+        .btn-primary {
+            background: var(--fg);
+            border-color: var(--fg);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover svg { transform: translateX(3px); }
+
+        .scroll-hint {
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(232,122,63,0.4), transparent);
-            transition: left 0.5s ease;
-        }
-        .hero-btn:hover::before, .hero-btn:focus::before { left: 100%; }
-        .hero-btn:hover, .hero-btn:focus {
-            background: linear-gradient(135deg, var(--accent-copper), var(--accent-orange));
-            box-shadow: 0 0 50px rgba(232,122,63,0.5), 0 0 100px rgba(232,122,63,0.2);
-            transform: translateY(-3px);
-            border-color: transparent;
-        }
-        
-        .hero-btn-secondary {
-            background: rgba(232,122,63,0.08);
-            border-color: rgba(232,122,63,0.3);
-        }
-        .hero-btn-secondary:hover {
-            background: rgba(232,122,63,0.15);
-            border-color: var(--accent-copper);
-            box-shadow: 0 0 30px rgba(232,122,63,0.2);
-        }
-        
-        .hero-btn svg { transition: transform 0.3s ease; }
-        .hero-btn:hover svg { transform: translateX(5px); }
-        
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 3rem;
+            left: 8%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 1rem;
-            opacity: 0;
-            animation: fadeIn 1s ease 1.5s forwards;
-        }
-        .scroll-indicator span {
-            font-size: 0.6rem;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
             color: var(--fg-muted);
-        }
-        .scroll-line {
-            width: 2px;
-            height: 70px;
-            background: linear-gradient(to bottom, var(--accent-copper), transparent);
-            animation: scrollPulse 2.5s ease infinite;
-            position: relative;
-        }
-        .scroll-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -3px;
-            width: 8px;
-            height: 8px;
-            background: var(--accent-copper);
-            border-radius: 50%;
-            animation: scrollDot 2.5s ease infinite;
-        }
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.4; transform: scaleY(0.7); }
-            50% { opacity: 1; transform: scaleY(1); }
-        }
-        @keyframes scrollDot {
-            0%, 100% { top: 0; opacity: 0.5; }
-            50% { top: 60px; opacity: 1; }
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            html { scroll-behavior: auto; }
-            .hero-content, .hero-subtitle, .scroll-indicator { opacity: 1; transform: none; }
-        }
-
-        #gallery {
-            min-height: 100vh;
-            padding: 8rem 5%;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-        .section-label {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.7em;
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--accent-cyan);
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
         }
-        .section-label::before, .section-label::after {
+        
+        .scroll-hint::after {
             content: '';
             width: 40px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan));
+            background: linear-gradient(90deg, var(--fg-muted), transparent);
         }
-        .section-label::before {
-            background: linear-gradient(90deg, var(--accent-cyan), transparent);
+
+        /* Gallery */
+        #gallery {
+            padding: 10rem 8%;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(to bottom, transparent, var(--bg-elevated) 20%, var(--bg-elevated) 80%, transparent);
         }
-        .section-label::after {
-            background: linear-gradient(90deg, transparent, var(--accent-cyan));
+        
+        .section-header {
+            margin-bottom: 4rem;
         }
+        
+        .section-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
         .section-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
             font-weight: 300;
-            letter-spacing: 0.06em;
+            letter-spacing: -0.01em;
         }
         
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 1px;
+            background: var(--border);
+            max-width: 1200px;
             width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
         }
+        
         .gallery-item {
             position: relative;
             aspect-ratio: 4/3;
-            background: linear-gradient(145deg, rgba(10,10,20,0.9) 0%, rgba(6,6,15,0.95) 100%);
-            border: 1px solid rgba(232,122,63,0.1);
+            background: var(--bg);
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.4s ease;
         }
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(232,122,63,0.12) 0%, rgba(56,217,217,0.08) 100%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
+        
+        .gallery-item:hover {
+            background: var(--bg-elevated);
         }
-        .gallery-item::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(232,122,63,0.15) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            transform: rotate(0deg);
-        }
-        .gallery-item:hover::before, .gallery-item:focus-within::before { opacity: 1; }
-        .gallery-item:hover::after, .gallery-item:focus-within::after { 
-            opacity: 1; 
-            animation: rotateGlow 8s linear infinite;
-        }
-        @keyframes rotateGlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .gallery-item:hover, .gallery-item:focus-within {
-            border-color: rgba(232,122,63,0.6);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 60px rgba(232,122,63,0.2);
-        }
-        .gallery-visual {
+        
+        .gallery-bg {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 6rem;
+            font-size: 8rem;
             font-weight: 200;
-            color: rgba(232,122,63,0.06);
+            color: rgba(168,180,192,0.03);
             transition: all 0.5s ease;
         }
-        .gallery-item:hover .gallery-visual, .gallery-item:focus-within .gallery-visual {
-            color: rgba(232,122,63,0.2);
-            transform: scale(1.1) rotate(-5deg);
+        
+        .gallery-item:hover .gallery-bg {
+            color: rgba(168,180,192,0.08);
+            transform: scale(1.05);
         }
+        
         .gallery-info {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem;
-            background: linear-gradient(to top, rgba(2,2,8,0.98) 0%, rgba(2,2,8,0.7) 60%, transparent 100%);
-            transform: translateY(100%);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .gallery-item:hover .gallery-info, .gallery-item:focus-within .gallery-info {
-            transform: translateY(0);
-        }
-        .gallery-info h3 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
-            color: var(--fg);
-        }
-        .gallery-info p {
-            font-size: 0.85rem;
-            color: var(--fg-muted);
-            letter-spacing: 0.02em;
-        }
-        .gallery-icon {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(232,122,63,0.3);
-            border-radius: 50%;
+            inset: 0;
+            padding: 1.5rem;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.4s ease;
-        }
-        .gallery-item:hover .gallery-icon, .gallery-item:focus-within .gallery-icon {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        #journey {
-            min-height: 300vh;
-            padding: 10rem 5%;
             flex-direction: column;
-            justify-content: flex-start;
-        }
-        .journey-container {
-            display: flex;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            position: sticky;
-            top: 10rem;
-        }
-        .journey-text { flex: 1; max-width: 500px; }
-        .journey-visual {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 450px;
-            position: relative;
-        }
-        .journey-stage {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 60%);
             opacity: 0;
-            transform: scale(0.9) rotateY(15deg);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.4s ease;
         }
-        .journey-stage.active {
+        
+        .gallery-item:hover .gallery-info {
             opacity: 1;
-            transform: scale(1) rotateY(0deg);
-        }
-        .stage-visual {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .stage-sketch {
-            width: 80%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-copper), var(--accent-cyan), transparent);
-            position: relative;
-        }
-        .stage-sketch::before, .stage-sketch::after {
-            content: '';
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            border: 2px solid rgba(232,122,63,0.3);
-            border-radius: 50%;
-            animation: pulse 3s ease infinite;
-        }
-        .stage-sketch::before { top: -70px; left: 10%; opacity: 0.4; animation-delay: 0s; }
-        .stage-sketch::after { top: -70px; right: 10%; opacity: 0.6; animation-delay: 1.5s; border-color: rgba(56,217,217,0.3); }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.15); opacity: 0.7; }
         }
         
-        .stage-draft {
-            width: 70%;
-            aspect-ratio: 16/9;
-            border: 2px solid rgba(232,122,63,0.5);
-            position: relative;
-            background: linear-gradient(135deg, rgba(232,122,63,0.1) 0%, transparent 50%);
-            box-shadow: 0 0 80px rgba(232,122,63,0.15);
-        }
-        .stage-draft::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-copper), var(--accent-cyan), transparent);
-        }
-        .stage-draft::after {
-            content: '';
-            position: absolute;
-            top: 30%;
-            left: 20%;
-            width: 60%;
-            height: 40%;
-            border: 1px solid rgba(56,217,217,0.4);
-            border-radius: 50%;
+        .gallery-info h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
         }
         
-        .stage-complete {
-            width: 75%;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, rgba(232,122,63,0.2) 0%, rgba(56,217,217,0.1) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 4rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            color: var(--accent-copper);
-            border: 2px solid rgba(232,122,63,0.5);
-            box-shadow: 0 0 100px rgba(232,122,63,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        .stage-complete::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 40%, rgba(232,122,63,0.15) 50%, transparent 60%);
-            animation: shimmer 3s ease infinite;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-        
-        .journey-text-item {
-            margin-bottom: 3rem;
-            opacity: 0.2;
-            transform: translateX(-30px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-left: 2rem;
-            border-left: 3px solid transparent;
-        }
-        .journey-text-item.active {
-            opacity: 1;
-            transform: translateX(0);
-            border-left-color: var(--accent-copper);
-        }
-        .journey-text-item h3 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.7rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.8rem;
-            color: var(--accent-copper);
-        }
-        .journey-text-item p {
+        .gallery-info p {
+            font-size: 0.75rem;
             color: var(--fg-muted);
-            font-size: 0.95rem;
-            line-height: 1.85;
-        }
-        .journey-number {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.25em;
-            color: var(--accent-cyan);
-            margin-bottom: 0.6rem;
-            opacity: 0.8;
         }
 
-        #specs {
-            min-height: 100vh;
-            padding: 8rem 5%;
+        /* Process */
+        #process {
+            padding: 10rem 8%;
+            flex-direction: column;
             justify-content: center;
         }
-        .specs-container {
-            max-width: 1400px;
+        
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
             width: 100%;
-            display: flex;
-            gap: 5rem;
+        }
+        
+        .process-item {
+            position: relative;
+            padding-top: 2rem;
+        }
+        
+        .process-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+        
+        .process-number {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--fg-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .process-item h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.8rem;
+        }
+        
+        .process-item p {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            line-height: 1.7;
+        }
+
+        /* Specs */
+        #specs {
+            padding: 10rem 8%;
+            justify-content: center;
+        }
+        
+        .specs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            max-width: 1200px;
+            width: 100%;
             align-items: center;
         }
-        .specs-hud {
-            flex: 1;
-            position: relative;
-            min-height: 550px;
+        
+        .specs-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
         }
-        .hud-element {
-            position: absolute;
-            padding: 1.8rem 2.2rem;
-            border: 1px solid rgba(232,122,63,0.4);
-            background: rgba(2,2,8,0.95);
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            transform: scale(0.85);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        .spec-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
         }
-        .hud-element.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .hud-element::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 30px;
-            right: 30px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-copper), var(--accent-cyan), transparent);
-        }
-        .hud-element::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 30px;
-            right: 30px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(232,122,63,0.3), transparent);
-        }
-        .hud-element .value {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-copper), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-        }
-        .hud-element .unit {
-            font-size: 1rem;
+        
+        .spec-value {
+            font-size: 2.5rem;
             font-weight: 300;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            margin-bottom: 0.3rem;
+        }
+        
+        .spec-value span {
+            font-size: 1rem;
             color: var(--fg-muted);
             margin-left: 0.3rem;
         }
-        .hud-element .label {
+        
+        .spec-label {
             font-size: 0.65rem;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--fg-muted);
-            margin-top: 0.8rem;
-        }
-        .hud-1 { top: 0; left: 0; transition-delay: 0.1s; }
-        .hud-2 { top: 0; right: 0; transition-delay: 0.2s; }
-        .hud-3 { bottom: 120px; left: 30px; transition-delay: 0.3s; }
-        .hud-4 { bottom: 120px; right: 30px; transition-delay: 0.4s; }
-        .hud-5 {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.85);
-            transition-delay: 0.5s;
-        }
-        .hud-5.visible { transform: translate(-50%, -50%) scale(1); }
-        .hud-center {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border: 2px solid var(--accent-copper);
-            background: radial-gradient(circle, rgba(232,122,63,0.15) 0%, transparent 70%);
-            position: relative;
-        }
-        .hud-center::before {
-            content: '';
-            position: absolute;
-            inset: 15px;
-            border: 1px solid rgba(56,217,217,0.3);
-            border-radius: 50%;
-            animation: hudSpin 25s linear infinite;
-        }
-        .hud-center::after {
-            content: '';
-            position: absolute;
-            inset: 8px;
-            border: 1px dashed rgba(232,122,63,0.2);
-            border-radius: 50%;
-            animation: hudSpin 15s linear infinite reverse;
-        }
-        @keyframes hudSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .hud-center .value { font-size: 4.5rem; }
-        .specs-info { flex: 1; }
-        .specs-info .section-label { text-align: left; justify-content: flex-start; }
-        .specs-info .section-label::after { display: none; }
-        .specs-info .section-title { text-align: left; margin-bottom: 2rem; }
-        .specs-info p {
-            color: var(--fg-muted);
-            margin-bottom: 2.5rem;
-            max-width: 520px;
-            line-height: 1.9;
-        }
-        .specs-list { list-style: none; }
-        .specs-list li {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            padding: 1.3rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            transition: all 0.3s ease;
-        }
-        .specs-list li:hover {
-            padding-left: 0.8rem;
-            border-bottom-color: rgba(232,122,63,0.4);
-        }
-        .specs-list li::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: linear-gradient(135deg, var(--accent-copper), var(--accent-cyan));
-            transform: rotate(45deg);
-            flex-shrink: 0;
         }
 
+        /* Contact */
         #contact {
-            min-height: 60vh;
-            padding: 8rem 5%;
+            padding: 10rem 8%;
             justify-content: center;
-            background: linear-gradient(to top, rgba(2,2,8,1) 0%, transparent 100%);
+            background: linear-gradient(to top, var(--bg-elevated), transparent);
         }
+        
         .contact-container {
-            max-width: 800px;
-            width: 100%;
+            max-width: 500px;
             text-align: center;
         }
+        
         .contact-container .section-title {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
+        
         .contact-desc {
+            font-size: 0.9rem;
             color: var(--fg-muted);
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            line-height: 1.8;
+            margin-bottom: 2.5rem;
         }
+        
         .contact-form {
             display: flex;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
+            gap: 0;
+            border: 1px solid var(--border);
         }
+        
         .contact-input {
             flex: 1;
-            padding: 1.1rem 1.8rem;
-            background: rgba(10,10,20,0.9);
-            border: 1px solid rgba(232,122,63,0.25);
+            padding: 1rem 1.2rem;
+            background: transparent;
+            border: none;
             color: var(--fg);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.4s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
         }
+        
         .contact-input:focus {
             outline: none;
-            border-color: var(--accent-copper);
-            box-shadow: 0 0 30px rgba(232,122,63,0.2);
-            background: rgba(10,10,20,1);
         }
+        
         .contact-input::placeholder {
             color: var(--fg-muted);
         }
 
+        /* Footer */
         footer {
             position: relative;
-            padding: 5rem 5%;
-            background: var(--bg-deep);
+            padding: 3rem 8%;
             z-index: 20;
-            border-top: 1px solid rgba(232,122,63,0.1);
+            border-top: 1px solid var(--border);
         }
+        
         .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            flex-wrap: wrap;
-            gap: 2rem;
         }
-        .footer-logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
+        
+        .footer-copy {
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.1em;
         }
-        .footer-logo span { color: var(--accent-copper); }
+        
         .footer-links {
             display: flex;
-            gap: 2.5rem;
-            flex-wrap: wrap;
+            gap: 2rem;
         }
+        
         .footer-links a {
             color: var(--fg-muted);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             letter-spacing: 0.1em;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
-        .footer-links a:hover, .footer-links a:focus {
-            color: var(--accent-copper);
-        }
-        .footer-copy {
-            width: 100%;
-            text-align: center;
-            margin-top: 2.5rem;
-            padding-top: 2.5rem;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            color: var(--fg-muted);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
+        
+        .footer-links a:hover {
+            color: var(--fg);
         }
 
+        /* Progress */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-copper), var(--accent-cyan), var(--accent-violet));
+            height: 1px;
+            background: var(--accent);
             z-index: 1000;
-            transition: width 0.1s linear;
         }
-        
+
+        /* Loading */
         .loading-screen {
             position: fixed;
             inset: 0;
-            background: var(--bg-deep);
+            background: var(--bg);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
+        
         .loading-screen.hidden {
             opacity: 0;
             visibility: hidden;
-            pointer-events: none;
         }
+        
         .loading-logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: 0.35em;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.2s forwards;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            margin-bottom: 2rem;
         }
-        .loading-logo span { color: var(--accent-copper); }
+        
+        .loading-logo span { color: var(--fg-muted); }
+        
         .loading-bar {
-            width: 250px;
-            height: 3px;
-            background: rgba(232,122,63,0.12);
-            overflow: hidden;
+            width: 120px;
+            height: 1px;
+            background: var(--border);
             position: relative;
-            border-radius: 2px;
+            overflow: hidden;
         }
+        
         .loading-progress {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-copper), var(--accent-cyan));
+            background: var(--accent);
             width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 2px;
-        }
-        .loading-text {
-            margin-top: 1.8rem;
-            font-size: 0.65rem;
-            letter-spacing: 0.4em;
-            color: var(--fg-muted);
-            text-transform: uppercase;
+            transition: width 0.2s ease;
         }
 
+        /* Responsive */
         @media (max-width: 1024px) {
-            nav { padding: 1rem 3%; }
+            nav { padding: 1.2rem 2rem; }
             .nav-links { display: none; }
-            #hero, #gallery, #journey, #specs, #contact { padding: 4rem 4%; }
+            #hero, #gallery, #process, #specs, #contact { padding: 6rem 5%; }
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-            .journey-container { flex-direction: column; gap: 2.5rem; }
-            .specs-container { flex-direction: column; }
-            .specs-hud { width: 100%; min-height: 450px; }
-            .contact-form { flex-direction: column; }
+            .process-grid { grid-template-columns: repeat(2, 1fr); }
+            .specs-container { grid-direction: column; gap: 4rem; }
         }
+        
         @media (max-width: 640px) {
             .gallery-grid { grid-template-columns: 1fr; }
-            .hero-title { font-size: 2.4rem; }
-            .hero-buttons { flex-direction: column; }
-            .hud-element { padding: 1.2rem 1.5rem; }
-            .hud-element .value { font-size: 2.2rem; }
-            .hud-center { width: 130px; height: 130px; }
-            .hud-center .value { font-size: 2.8rem; }
-            .footer-content { flex-direction: column; text-align: center; }
-            .journey-container { top: 6rem; }
+            .process-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .specs-container { grid-template-columns: 1fr; }
+            .specs-data { grid-template-columns: 1fr; }
+            .hero-actions { flex-direction: column; }
+            .footer-content { flex-direction: column; gap: 1.5rem; text-align: center; }
+            .scroll-hint { display: none; }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
         
         .visually-hidden {
@@ -949,7 +597,6 @@
             margin: -1px;
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
             border: 0;
         }
     </style>
@@ -958,19 +605,18 @@
     <div class="loading-screen" id="loadingScreen" role="status" aria-label="Загрузка">
         <div class="loading-logo">Aero<span>Space</span></div>
         <div class="loading-bar"><div class="loading-progress" id="loadingProgress"></div></div>
-        <div class="loading-text">Инициализация системы</div>
     </div>
+    
     <div class="progress-bar" id="progressBar"></div>
-    <div class="cursor-glow" id="cursorGlow"></div>
 
     <nav role="navigation" id="mainNav">
         <a href="#hero" class="logo">Aero<span>Space</span></a>
         <ul class="nav-links">
-            <li><a href="#hero">Главная</a></li>
-            <li><a href="#gallery">Производство</a></li>
-            <li><a href="#journey">Разработка</a></li>
-            <li><a href="#specs">Характеристики</a></li>
-            <li><a href="#contact">Контакты</a></li>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#gallery">Production</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#specs">Specifications</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
@@ -979,165 +625,118 @@
     <main>
         <section id="hero">
             <div class="hero-content">
-                <p class="hero-subtitle">Инженерное искусство</p>
-                <h1 class="hero-title">Величие мысли,<strong>эстетика высоты</strong></h1>
-                <p class="hero-desc">Мы создаём не просто самолёты — мы проектируем будущее. Каждая линия, каждый изгиб — это симфония технологий и красоты, воплощённая в металле и композитах.</p>
-                <div class="hero-buttons">
-                    <button class="hero-btn" type="button">
-                        <span>Открыть горизонты</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <p class="hero-eyebrow">Engineering Excellence</p>
+                <h1 class="hero-title">Precision in<strong>every dimension</strong></h1>
+                <p class="hero-desc">We engineer the future of aviation. Every curve, every component — a synthesis of advanced technology and refined aesthetics.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" type="button">
+                        <span>Explore</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
-                    <button class="hero-btn hero-btn-secondary" type="button">
-                        <span>Узнать больше</span>
-                    </button>
+                    <button class="btn" type="button"><span>Learn more</span></button>
                 </div>
             </div>
-            <div class="scroll-indicator">
-                <span>Прокрутите вниз</span>
-                <div class="scroll-line"></div>
-            </div>
+            <div class="scroll-hint">Scroll</div>
         </section>
 
         <section id="gallery">
             <div class="section-header">
-                <p class="section-label">Производственные мощности</p>
-                <h2 class="section-title">Там, где рождается полёт</h2>
+                <p class="section-label">Production</p>
+                <h2 class="section-title">Where flight begins</h2>
             </div>
             <div class="gallery-grid">
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">T</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Турбинный цех</h3><p>Точность до микрона в каждом компоненте.</p></div>
+                    <div class="gallery-bg">01</div>
+                    <div class="gallery-info"><h3>Turbine Shop</h3><p>Micron-level precision in every component.</p></div>
                 </article>
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">C</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Композиты</h3><p>Сотканы из прочности и лёгкости.</p></div>
+                    <div class="gallery-bg">02</div>
+                    <div class="gallery-info"><h3>Composites</h3><p>Woven from strength and lightness.</p></div>
                 </article>
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">W</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Сборка крыла</h3><p>Аэродинамическое совершенство формы.</p></div>
+                    <div class="gallery-bg">03</div>
+                    <div class="gallery-info"><h3>Wing Assembly</h3><p>Aerodynamic perfection of form.</p></div>
                 </article>
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">A</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Авионика</h3><p>Мозг современного самолёта.</p></div>
+                    <div class="gallery-bg">04</div>
+                    <div class="gallery-info"><h3>Avionics</h3><p>The brain of a modern aircraft.</p></div>
                 </article>
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">F</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Фюзеляж</h3><p>Гармония формы и функции.</p></div>
+                    <div class="gallery-bg">05</div>
+                    <div class="gallery-info"><h3>Fuselage</h3><p>Harmony of form and function.</p></div>
                 </article>
                 <article class="gallery-item" tabindex="0">
-                    <div class="gallery-visual">P</div>
-                    <div class="gallery-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-copper)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </div>
-                    <div class="gallery-info"><h3>Испытания</h3><p>Тысячи часов краш-тестов.</p></div>
+                    <div class="gallery-bg">06</div>
+                    <div class="gallery-info"><h3>Testing</h3><p>Thousands of hours of validation.</p></div>
                 </article>
             </div>
         </section>
 
-        <section id="journey">
-            <h2 class="visually-hidden">Путь к небу</h2>
-            <div class="journey-container">
-                <div class="journey-text">
-                    <div class="journey-text-item" data-stage="0">
-                        <div class="journey-number">01 / 04</div>
-                        <h3>Замысел</h3>
-                        <p>Начало с чистого листа. Инженеры и дизайнеры работают вместе, создавая первоначальные эскизы и концепции будущего воздушного судна.</p>
-                    </div>
-                    <div class="journey-text-item" data-stage="1">
-                        <div class="journey-number">02 / 04</div>
-                        <h3>Проектирование</h3>
-                        <p>Цифровая модель рождается в суперкомпьютерах. Каждая деталь просчитывается с точностью до нанометров.</p>
-                    </div>
-                    <div class="journey-text-item" data-stage="2">
-                        <div class="journey-number">03 / 04</div>
-                        <h3>Создание</h3>
-                        <p>Рождение компонентов. Роботизированные линии и мастера своего дела воплощают чертежи в реальность.</p>
-                    </div>
-                    <div class="journey-text-item" data-stage="3">
-                        <div class="journey-number">04 / 04</div>
-                        <h3>Первый полёт</h3>
-                        <p>Отрыв от земли. Момент истины, когда годы работы получают своё подтверждение в небе.</p>
-                    </div>
+        <section id="process">
+            <div class="section-header">
+                <p class="section-label">Process</p>
+                <h2 class="section-title">From concept to sky</h2>
+            </div>
+            <div class="process-grid">
+                <div class="process-item">
+                    <div class="process-number">01</div>
+                    <h3>Concept</h3>
+                    <p>Starting from a blank canvas. Engineers and designers collaborate to create initial concepts of the future aircraft.</p>
                 </div>
-                <div class="journey-visual">
-                    <div class="journey-stage active" data-stage="0">
-                        <div class="stage-visual"><div class="stage-sketch"></div></div>
-                    </div>
-                    <div class="journey-stage" data-stage="1">
-                        <div class="stage-visual"><div class="stage-draft"></div></div>
-                    </div>
-                    <div class="journey-stage" data-stage="2">
-                        <div class="stage-visual"><div class="stage-complete">AS-1</div></div>
-                    </div>
-                    <div class="journey-stage" data-stage="3">
-                        <div class="stage-visual"><div class="stage-complete" style="background: linear-gradient(135deg, rgba(56,217,217,0.25) 0%, rgba(232,122,63,0.15) 100%);">FLIGHT</div></div>
-                    </div>
+                <div class="process-item">
+                    <div class="process-number">02</div>
+                    <h3>Design</h3>
+                    <p>Digital models are born in supercomputers. Every detail is calculated with nanometer precision.</p>
+                </div>
+                <div class="process-item">
+                    <div class="process-number">03</div>
+                    <h3>Manufacturing</h3>
+                    <p>Components come to life. Robotic lines and master craftsmen transform blueprints into reality.</p>
+                </div>
+                <div class="process-item">
+                    <div class="process-number">04</div>
+                    <h3>First Flight</h3>
+                    <p>Liftoff. The moment of truth when years of work find their confirmation in the sky.</p>
                 </div>
             </div>
         </section>
 
         <section id="specs">
             <div class="specs-container">
-                <div class="specs-hud">
-                    <div class="hud-element hud-1">
-                        <div class="value">0<span class="unit">км/ч</span></div>
-                        <div class="label">Крейсерская скорость</div>
-                    </div>
-                    <div class="hud-element hud-2">
-                        <div class="value">0<span class="unit">км</span></div>
-                        <div class="label">Дальность полёта</div>
-                    </div>
-                    <div class="hud-element hud-3">
-                        <div class="value">0<span class="unit">м</span></div>
-                        <div class="label">Потолок</div>
-                    </div>
-                    <div class="hud-element hud-4">
-                        <div class="value">0<span class="unit">л/ч</span></div>
-                        <div class="label">Расход топлива</div>
-                    </div>
-                    <div class="hud-element hud-5 hud-center">
-                        <div class="value">0</div>
-                        <div class="label">Пассажиров</div>
-                    </div>
-                </div>
-                <div class="specs-info">
-                    <p class="section-label">Технические данные</p>
+                <div>
+                    <p class="section-label">Specifications</p>
                     <h2 class="section-title">AS-350 Horizon</h2>
-                    <p>Флагман нашей линейки. Воплощение инноваций и инженерного мастерства. Каждый элемент спроектирован для максимальной эффективности и комфорта.</p>
-                    <ul class="specs-list">
-                        <li>Композитный фюзеляж нового поколения</li>
-                        <li>Турбовентиляторные двигатели с низкой эмиссией</li>
-                        <li>Активная система гашения турбулентности</li>
-                        <li>Голосовое управление бортовыми системами</li>
-                        <li>Панорамные окна с электрохромным затемнением</li>
-                    </ul>
+                    <p class="hero-desc" style="margin-top: 1.5rem;">The flagship of our lineup. A synthesis of innovation and engineering mastery. Every element designed for maximum efficiency and comfort.</p>
+                </div>
+                <div class="specs-data">
+                    <div class="spec-item">
+                        <div class="spec-value">1020<span>km/h</span></div>
+                        <div class="spec-label">Cruise Speed</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-value">14,800<span>km</span></div>
+                        <div class="spec-label">Range</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-value">14,500<span>m</span></div>
+                        <div class="spec-label">Ceiling</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-value">380</div>
+                        <div class="spec-label">Passengers</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="contact">
             <div class="contact-container">
-                <p class="section-label">Свяжитесь с нами</p>
-                <h2 class="section-title">Готовы к сотрудничеству?</h2>
-                <p class="contact-desc">Оставьте заявку, и наши специалисты свяжутся с вами для обсуждения деталей вашего проекта.</p>
+                <p class="section-label">Contact</p>
+                <h2 class="section-title">Start a conversation</h2>
+                <p class="contact-desc">Leave your email and our specialists will contact you to discuss your project.</p>
                 <form class="contact-form" onsubmit="return false;">
-                    <input type="email" class="contact-input" placeholder="Ваш email" aria-label="Email адрес">
-                    <button type="submit" class="hero-btn"><span>Отправить</span></button>
+                    <input type="email" class="contact-input" placeholder="Email address" aria-label="Email">
+                    <button type="submit" class="btn btn-primary"><span>Send</span></button>
                 </form>
             </div>
         </section>
@@ -1145,14 +744,13 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">Aero<span>Space</span> Dynamics</div>
+            <div class="footer-copy">2024 AeroSpace Dynamics</div>
             <div class="footer-links">
-                <a href="#">О компании</a>
-                <a href="#">Карьера</a>
-                <a href="#">Пресс-центр</a>
-                <a href="#">Политика конфиденциальности</a>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Privacy</a>
             </div>
-            <div class="footer-copy">2024 AeroSpace Dynamics. Все права защищены.</div>
         </div>
     </footer>
 
@@ -1168,60 +766,34 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // ===== CONSTANTS =====
+        // Constants
         const EPS = 0.0001;
-        const PARTICLES_COUNT = 2500;
-        const LIGHT_COUNT = 8;
-
-        // ===== STATE =====
-        let scrollProgress = 0;
-        let targetScrollProgress = 0;
-        let time = 0;
-        let hudAnimated = false;
-        let modelReady = false;
+        const PARTICLE_COUNT = 800;
         const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // ===== DOM ELEMENTS =====
+        // State
+        let time = 0;
+        let scrollProgress = 0;
+        let targetScrollProgress = 0;
+
+        // DOM
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingProgress = document.getElementById('loadingProgress');
         const progressBar = document.getElementById('progressBar');
         const container = document.getElementById('canvas-container');
-        const journeySection = document.getElementById('journey');
-        const specsSection = document.getElementById('specs');
         const mainNav = document.getElementById('mainNav');
-        const cursorGlow = document.getElementById('cursorGlow');
 
-        // ===== CURSOR GLOW =====
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function updateCursor() {
-            cursorX += (mouseX - cursorX) * 0.1;
-            cursorY += (mouseY - cursorY) * 0.1;
-            if (cursorGlow) {
-                cursorGlow.style.left = cursorX + 'px';
-                cursorGlow.style.top = cursorY + 'px';
-            }
-            requestAnimationFrame(updateCursor);
-        }
-        updateCursor();
-
-        // ===== THREE.JS SETUP =====
+        // Three.js Setup
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x020208, 0.006);
+        scene.fog = new THREE.FogExp2(0x050506, 0.004);
 
         const camera = new THREE.PerspectiveCamera(
-            50,
+            45,
             window.innerWidth / window.innerHeight,
             0.1,
             1000
         );
-        camera.position.set(22, 4, 28);
+        camera.position.set(25, 3, 30);
 
         const renderer = new THREE.WebGLRenderer({
             antialias: true,
@@ -1231,417 +803,194 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMappingExposure = 1.0;
         container.appendChild(renderer.domElement);
 
-        // ===== COLORS =====
-        const colors = {
-            copper: new THREE.Color(0xe87a3f),
-            orange: new THREE.Color(0xff7847),
-            violet: new THREE.Color(0xa894d9),
-            gold: new THREE.Color(0xe8b84a),
-            teal: new THREE.Color(0x4ab8b8),
-            cyan: new THREE.Color(0x38d9d9),
-            white: new THREE.Color(0xffffff),
-            ambient: new THREE.Color(0x0a0a15)
-        };
+        // Colors
+        const accentColor = new THREE.Color(0xa8b4c0);
+        const warmColor = new THREE.Color(0xc4a882);
 
-        // ===== MATERIALS =====
-        const bodyMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x101018,
-            metalness: 0.9,
-            roughness: 0.12,
-            clearcoat: 0.5,
-            clearcoatRoughness: 0.08,
-            envMapIntensity: 2
-        });
-
-        const glassMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x040410,
-            metalness: 0.0,
-            roughness: 0.0,
-            transmission: 0.9,
-            transparent: true,
-            thickness: 0.4,
-            ior: 1.5
-        });
-
-        const engineMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x08080f,
-            metalness: 0.95,
-            roughness: 0.08,
-            clearcoat: 0.4
-        });
-
-        const accentMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xe87a3f,
-            metalness: 0.85,
-            roughness: 0.2,
-            emissive: 0xe87a3f,
-            emissiveIntensity: 0.25
-        });
-
-        const wingMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x12121a,
-            metalness: 0.85,
-            roughness: 0.15,
-            clearcoat: 0.4
-        });
-
-        // ===== AIRPLANE GROUP =====
+        // Airplane Group
         const airplane = new THREE.Group();
         scene.add(airplane);
 
-        // ===== DETAILED AIRPLANE CONSTRUCTION =====
-        function createDetailedAirplane() {
-            const fuselageLength = 18;
-            const fuselageRadius = 1.2;
-            
-            const fuselagePoints = [];
-            const segments = 50;
-            
-            for (let i = 0; i <= segments; i++) {
-                const t = i / segments;
-                const x = t * fuselageLength - fuselageLength / 2;
-                let radius;
-                
-                if (t < 0.1) {
-                    const nt = t / 0.1;
-                    radius = Math.sin(nt * Math.PI * 0.5) * fuselageRadius;
-                }
-                else if (t > 0.85) {
-                    const nt = (t - 0.85) / 0.15;
-                    radius = Math.cos(nt * Math.PI * 0.5) * fuselageRadius * 0.7;
-                }
-                else {
-                    const bt = (t - 0.1) / 0.75;
-                    radius = fuselageRadius * (1 + Math.sin(bt * Math.PI) * 0.06);
-                }
-                
-                fuselagePoints.push(new THREE.Vector2(Math.max(EPS, radius), x));
-            }
-            
-            const fuselageGeometry = new THREE.LatheGeometry(fuselagePoints, 64);
-            fuselageGeometry.rotateZ(-Math.PI / 2);
+        // Materials
+        const bodyMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x0a0a0c,
+            metalness: 0.95,
+            roughness: 0.1,
+            clearcoat: 0.3
+        });
+
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x050508,
+            metalness: 0.0,
+            roughness: 0.0,
+            transmission: 0.85,
+            transparent: true,
+            thickness: 0.3
+        });
+
+        const accentMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xa8b4c0,
+            metalness: 0.9,
+            roughness: 0.2,
+            emissive: 0xa8b4c0,
+            emissiveIntensity: 0.1
+        });
+
+        // Simplified Airplane
+        function createAirplane() {
+            // Fuselage
+            const fuselageGeometry = new THREE.CapsuleGeometry(1.1, 14, 32, 64);
+            fuselageGeometry.rotateZ(Math.PI / 2);
             const fuselage = new THREE.Mesh(fuselageGeometry, bodyMaterial);
             fuselage.castShadow = true;
-            fuselage.receiveShadow = true;
             airplane.add(fuselage);
 
+            // Nose
+            const noseGeometry = new THREE.ConeGeometry(1.1, 3, 32);
+            noseGeometry.rotateZ(-Math.PI / 2);
+            const nose = new THREE.Mesh(noseGeometry, bodyMaterial);
+            nose.position.x = 8.5;
+            airplane.add(nose);
+
             // Cockpit
-            const cockpitGeometry = new THREE.SphereGeometry(1.5, 48, 32, 0, Math.PI * 2, 0, Math.PI / 2.5);
+            const cockpitGeometry = new THREE.SphereGeometry(1.2, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2.5);
             const cockpit = new THREE.Mesh(cockpitGeometry, glassMaterial);
-            cockpit.scale.set(1.0, 0.4, 0.72);
-            cockpit.position.set(5.8, 1.05, 0);
-            cockpit.rotation.z = -0.12;
+            cockpit.scale.set(0.8, 0.35, 0.6);
+            cockpit.position.set(5.5, 1.0, 0);
+            cockpit.rotation.z = -0.15;
             airplane.add(cockpit);
 
-            // Cockpit frames
-            const frameGeometry = new THREE.TorusGeometry(1.5, 0.05, 8, 48, Math.PI);
-            const frameMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x151520,
-                metalness: 0.9,
-                roughness: 0.15
-            });
-            
-            [-0.35, 0.35].forEach(z => {
-                const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-                frame.scale.set(1.0, 0.4, 0.72);
-                frame.position.set(5.8, 1.05, z);
-                frame.rotation.set(Math.PI / 2, 0, -0.12);
-                airplane.add(frame);
-            });
-
             // Wings
-            const wingSpan = 15;
-            const wingChord = 3.8;
-            const wingThickness = 0.38;
-            
             const wingShape = new THREE.Shape();
             wingShape.moveTo(0, 0);
-            wingShape.lineTo(wingChord * 0.12, wingThickness * 0.55);
-            wingShape.lineTo(wingChord * 0.72, wingThickness * 0.32);
-            wingShape.lineTo(wingChord, 0);
-            wingShape.lineTo(wingChord * 0.72, -wingThickness * 0.18);
-            wingShape.lineTo(wingChord * 0.12, -wingThickness * 0.22);
+            wingShape.lineTo(3.2, 0.3);
+            wingShape.lineTo(3.2, -0.1);
+            wingShape.lineTo(0, -0.15);
             wingShape.closePath();
 
-            const wingExtrudeSettings = {
-                depth: wingSpan / 2,
-                bevelEnabled: true,
-                bevelThickness: 0.03,
-                bevelSize: 0.03,
-                bevelSegments: 3
-            };
-
+            const wingExtrudeSettings = { depth: 7, bevelEnabled: false };
             const wingGeometry = new THREE.ExtrudeGeometry(wingShape, wingExtrudeSettings);
-            
+
             [1, -1].forEach(side => {
-                const wing = new THREE.Mesh(wingGeometry, wingMaterial);
+                const wing = new THREE.Mesh(wingGeometry, bodyMaterial);
                 wing.rotation.x = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-                wing.rotation.y = -0.025;
-                wing.position.set(-0.6, -0.35, 0);
+                wing.position.set(-0.5, -0.3, 0);
                 if (side < 0) wing.scale.z = -1;
                 wing.castShadow = true;
-                wing.receiveShadow = true;
                 airplane.add(wing);
             });
 
-            // Winglets
-            const wingletGeometry = new THREE.BoxGeometry(0.1, 1.4, 0.65);
-            const wingletMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x101018,
-                metalness: 0.85,
-                roughness: 0.15
-            });
-            
-            [{ z: wingSpan / 2 + 0.35, rotY: -0.12 }, { z: -wingSpan / 2 - 0.35, rotY: 0.12 }].forEach(({ z, rotY }) => {
-                const winglet = new THREE.Mesh(wingletGeometry, wingletMaterial);
-                winglet.position.set(0.6, 0.55, z);
-                winglet.rotation.set(0.15, rotY, 0);
-                airplane.add(winglet);
-            });
-
             // Engines
-            function createEngine() {
-                const engineGroup = new THREE.Group();
-                
-                const nacelleGeometry = new THREE.CylinderGeometry(0.58, 0.68, 3.8, 48);
-                nacelleGeometry.rotateZ(Math.PI / 2);
-                const nacelle = new THREE.Mesh(nacelleGeometry, engineMaterial);
-                nacelle.castShadow = true;
-                engineGroup.add(nacelle);
+            const engineGeometry = new THREE.CylinderGeometry(0.5, 0.6, 3, 32);
+            engineGeometry.rotateZ(Math.PI / 2);
 
-                const intakeGeometry = new THREE.TorusGeometry(0.6, 0.07, 12, 48);
-                const intakeMaterial = new THREE.MeshPhysicalMaterial({
-                    color: 0x2a2a38,
-                    metalness: 0.95,
-                    roughness: 0.08
-                });
-                const intake = new THREE.Mesh(intakeGeometry, intakeMaterial);
-                intake.position.x = 1.9;
-                intake.rotation.y = Math.PI / 2;
-                engineGroup.add(intake);
-
-                const fanGeometry = new THREE.CircleGeometry(0.52, 48);
-                const fanMaterial = new THREE.MeshPhysicalMaterial({
-                    color: 0x202030,
-                    metalness: 0.95,
-                    roughness: 0.03
-                });
-                const fan = new THREE.Mesh(fanGeometry, fanMaterial);
-                fan.position.x = 1.92;
-                fan.rotation.y = Math.PI / 2;
-                engineGroup.add(fan);
-
-                const spinnerGeometry = new THREE.ConeGeometry(0.18, 0.45, 24);
-                spinnerGeometry.rotateZ(-Math.PI / 2);
-                const spinner = new THREE.Mesh(spinnerGeometry, engineMaterial);
-                spinner.position.x = 2.05;
-                engineGroup.add(spinner);
-
-                const pylonGeometry = new THREE.BoxGeometry(0.18, 0.85, 0.65);
-                const pylon = new THREE.Mesh(pylonGeometry, wingMaterial);
-                pylon.position.set(0, 0.75, 0);
-                engineGroup.add(pylon);
-
-                return engineGroup;
-            }
-
-            [4.8, -4.8].forEach(z => {
-                const engine = createEngine();
-                engine.position.set(0.6, -1.1, z);
+            [4.2, -4.2].forEach(z => {
+                const engine = new THREE.Mesh(engineGeometry, bodyMaterial);
+                engine.position.set(0.5, -0.9, z);
                 airplane.add(engine);
             });
 
-            // Horizontal stabilizer
-            const hStabGeometry = new THREE.BoxGeometry(2.0, 0.1, 5.5);
-            const hStab = new THREE.Mesh(hStabGeometry, wingMaterial);
-            hStab.position.set(-7.8, 0.35, 0);
-            hStab.castShadow = true;
-            airplane.add(hStab);
+            // Tail
+            const vTailGeometry = new THREE.BoxGeometry(3, 3.5, 0.12);
+            const vTail = new THREE.Mesh(vTailGeometry, bodyMaterial);
+            vTail.position.set(-6.5, 2, 0);
+            vTail.rotation.z = 0.15;
+            airplane.add(vTail);
 
-            // Vertical stabilizer
-            const vStabShape = new THREE.Shape();
-            vStabShape.moveTo(0, 0);
-            vStabShape.lineTo(-2.8, 0);
-            vStabShape.lineTo(-3.5, 3.5);
-            vStabShape.lineTo(-1.0, 4.2);
-            vStabShape.closePath();
+            const hTailGeometry = new THREE.BoxGeometry(2, 0.1, 5);
+            const hTail = new THREE.Mesh(hTailGeometry, bodyMaterial);
+            hTail.position.set(-6.5, 0.3, 0);
+            airplane.add(hTail);
 
-            const vStabGeometry = new THREE.ExtrudeGeometry(vStabShape, {
-                depth: 0.15,
-                bevelEnabled: false
-            });
-            const vStab = new THREE.Mesh(vStabGeometry, wingMaterial);
-            vStab.position.set(-6.2, 0.85, -0.075);
-            vStab.castShadow = true;
-            airplane.add(vStab);
-
-            // Accent stripes
-            const stripeGeometry = new THREE.BoxGeometry(15, 0.025, 0.18);
-            const stripe = new THREE.Mesh(stripeGeometry, accentMaterial);
-            stripe.position.set(1.5, 1.24, 0);
-            airplane.add(stripe);
-
-            const stripe2 = new THREE.Mesh(
-                new THREE.BoxGeometry(9, 0.02, 0.12),
-                accentMaterial
-            );
-            stripe2.position.set(-4, 1.17, 0);
-            airplane.add(stripe2);
-
-            // Navigation lights
-            const lightGeometry = new THREE.SphereGeometry(0.07, 12, 12);
-            
-            [
-                { color: 0xff2222, pos: [-0.6, -0.25, wingSpan / 2 + 0.15] },
-                { color: 0x22ff22, pos: [-0.6, -0.25, -wingSpan / 2 - 0.15] },
-                { color: 0xffffff, pos: [-8.8, 1.2, 0] }
-            ].forEach(({ color, pos }) => {
-                const light = new THREE.Mesh(
-                    lightGeometry,
-                    new THREE.MeshBasicMaterial({ color })
-                );
-                light.position.set(...pos);
-                airplane.add(light);
-            });
-
-            // Antenna
-            const antennaGeometry = new THREE.CylinderGeometry(0.025, 0.025, 0.5, 8);
-            const antenna = new THREE.Mesh(antennaGeometry, engineMaterial);
-            antenna.position.set(3.2, 1.4, 0);
-            airplane.add(antenna);
+            // Accent line
+            const lineGeometry = new THREE.BoxGeometry(12, 0.02, 0.08);
+            const line = new THREE.Mesh(lineGeometry, accentMaterial);
+            line.position.set(1, 1.15, 0);
+            airplane.add(line);
 
             airplane.position.set(0, 0, 0);
-            airplane.rotation.y = -0.35;
-            
-            modelReady = true;
+            airplane.rotation.y = -0.3;
         }
 
-        createDetailedAirplane();
+        createAirplane();
 
-        // ===== LIGHTING =====
-        const ambientLight = new THREE.AmbientLight(0x0a0a18, 0.4);
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x0a0a0c, 0.5);
         scene.add(ambientLight);
 
-        const hemiLight = new THREE.HemisphereLight(0x181835, 0x040408, 0.3);
-        scene.add(hemiLight);
-
-        // Dynamic orbit lights
-        const dynamicLights = [];
-        const lightColors = [colors.copper, colors.orange, colors.violet, colors.gold, colors.teal, colors.cyan, colors.white, colors.copper];
-
-        for (let i = 0; i < LIGHT_COUNT; i++) {
-            const light = new THREE.SpotLight(lightColors[i].getHex(), 0, 70, Math.PI / 5, 0.35, 1.2);
-            light.castShadow = true;
-            light.shadow.mapSize.width = 512;
-            light.shadow.mapSize.height = 512;
-            light.shadow.bias = -0.0005;
-            
-            light.userData.baseAngle = (i / LIGHT_COUNT) * Math.PI * 2;
-            light.userData.radius = 28;
-            light.userData.height = 10;
-            light.userData.speed = 0.2 + Math.random() * 0.15;
-            light.userData.verticalSpeed = 0.3 + Math.random() * 0.2;
-            
-            scene.add(light);
-            scene.add(light.target);
-            dynamicLights.push(light);
-        }
-
-        // Key light
-        const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
-        keyLight.position.set(35, 25, 25);
-        keyLight.castShadow = true;
+        const keyLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        keyLight.position.set(30, 20, 20);
         scene.add(keyLight);
 
-        // Rim lights
-        const rimLight1 = new THREE.SpotLight(0xe87a3f, 2.5, 100, Math.PI / 5, 0.25, 1);
-        rimLight1.position.set(-35, 18, 0);
-        rimLight1.target = airplane;
+        const rimLight1 = new THREE.PointLight(0xa8b4c0, 1.5, 80);
+        rimLight1.position.set(-25, 10, 0);
         scene.add(rimLight1);
 
-        const rimLight2 = new THREE.SpotLight(0x38d9d9, 1.5, 100, Math.PI / 5, 0.25, 1);
-        rimLight2.position.set(0, -15, 35);
-        rimLight2.target = airplane;
+        const rimLight2 = new THREE.PointLight(0xc4a882, 1, 80);
+        rimLight2.position.set(0, -10, 30);
         scene.add(rimLight2);
 
-        // ===== PARTICLES =====
+        // Particles
         const particleGeometry = new THREE.BufferGeometry();
-        const particlePositions = new Float32Array(PARTICLES_COUNT * 3);
-        const particleSizes = new Float32Array(PARTICLES_COUNT);
-        const particleOffsets = new Float32Array(PARTICLES_COUNT);
-        const particleAlphas = new Float32Array(PARTICLES_COUNT);
+        const positions = new Float32Array(PARTICLE_COUNT * 3);
+        const sizes = new Float32Array(PARTICLE_COUNT);
+        const offsets = new Float32Array(PARTICLE_COUNT);
 
-        for (let i = 0; i < PARTICLES_COUNT; i++) {
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.random() * Math.PI;
-            const radius = 25 + Math.random() * 120;
-            
-            particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-            particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) - 15;
-            particlePositions[i * 3 + 2] = radius * Math.cos(phi);
-            
-            particleSizes[i] = Math.random() * 3 + 0.8;
-            particleOffsets[i] = Math.random() * Math.PI * 2;
-            particleAlphas[i] = Math.random() * 0.5 + 0.5;
+            const radius = 30 + Math.random() * 100;
+
+            positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+            positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) - 10;
+            positions[i * 3 + 2] = radius * Math.cos(phi);
+
+            sizes[i] = Math.random() * 2 + 0.5;
+            offsets[i] = Math.random() * Math.PI * 2;
         }
 
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        particleGeometry.setAttribute('aSize', new THREE.BufferAttribute(particleSizes, 1));
-        particleGeometry.setAttribute('aOffset', new THREE.BufferAttribute(particleOffsets, 1));
-        particleGeometry.setAttribute('aAlpha', new THREE.BufferAttribute(particleAlphas, 1));
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particleGeometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+        particleGeometry.setAttribute('aOffset', new THREE.BufferAttribute(offsets, 1));
 
         const particleMaterial = new THREE.ShaderMaterial({
             uniforms: {
                 uTime: { value: 0 },
-                uColor1: { value: colors.copper },
-                uColor2: { value: colors.cyan },
-                uOpacity: { value: 1 },
+                uColor: { value: accentColor },
                 uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
             },
             vertexShader: `
                 attribute float aSize;
                 attribute float aOffset;
-                attribute float aAlpha;
                 varying float vAlpha;
-                varying float vMix;
                 uniform float uTime;
                 uniform float uPixelRatio;
-                
+
                 void main() {
-                    vAlpha = aAlpha * aSize / 4.0;
-                    vMix = (sin(uTime * 0.2 + aOffset) + 1.0) * 0.5;
-                    
+                    vAlpha = aSize / 3.0;
+
                     vec3 pos = position;
-                    pos.y += sin(uTime * 0.15 + aOffset) * 2.0;
-                    pos.x += cos(uTime * 0.12 + aOffset) * 1.5;
-                    pos.z += sin(uTime * 0.1 + aOffset * 0.5) * 1.0;
-                    
+                    pos.y += sin(uTime * 0.1 + aOffset) * 1.5;
+                    pos.x += cos(uTime * 0.08 + aOffset) * 1.0;
+
                     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                    gl_PointSize = aSize * uPixelRatio * (250.0 / max(-mvPosition.z, 1.0));
+                    gl_PointSize = aSize * uPixelRatio * (180.0 / max(-mvPosition.z, 1.0));
                     gl_Position = projectionMatrix * mvPosition;
                 }
             `,
             fragmentShader: `
-                uniform vec3 uColor1;
-                uniform vec3 uColor2;
-                uniform float uOpacity;
+                uniform vec3 uColor;
                 varying float vAlpha;
-                varying float vMix;
-                
+
                 void main() {
                     float dist = length(gl_PointCoord - vec2(0.5));
                     if (dist > 0.5) discard;
-                    
-                    vec3 color = mix(uColor1, uColor2, vMix);
-                    float glow = 1.0 - smoothstep(0.0, 0.5, dist);
-                    float alpha = glow * uOpacity * vAlpha * 0.7;
-                    
-                    gl_FragColor = vec4(color, alpha);
+
+                    float alpha = (1.0 - smoothstep(0.0, 0.5, dist)) * vAlpha * 0.4;
+                    gl_FragColor = vec4(uColor, alpha);
                 }
             `,
             transparent: true,
@@ -1652,163 +1001,46 @@
         const particles = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(particles);
 
-        // ===== HORIZON =====
-        const horizonGeometry = new THREE.PlaneGeometry(500, 120);
-        const horizonMaterial = new THREE.ShaderMaterial({
-            uniforms: {
-                uTime: { value: 0 },
-                uProgress: { value: 0 }
-            },
-            vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform float uTime;
-                uniform float uProgress;
-                varying vec2 vUv;
-                
-                vec3 copper = vec3(0.91, 0.48, 0.25);
-                vec3 cyan = vec3(0.22, 0.85, 0.85);
-                vec3 violet = vec3(0.66, 0.58, 0.85);
-                vec3 gold = vec3(0.91, 0.72, 0.29);
-                
-                void main() {
-                    vec3 baseColor = vec3(0.01, 0.01, 0.03);
-                    float y = vUv.y;
-                    
-                    vec3 color = baseColor;
-                    float glowIntensity = 0.0;
-                    vec3 glowColor = copper;
-                    
-                    if (uProgress <= 0.25) {
-                        float t = uProgress / 0.25;
-                        glowIntensity = t * 0.5;
-                        glowColor = mix(copper, gold, t);
-                    } else if (uProgress <= 0.5) {
-                        float t = (uProgress - 0.25) / 0.25;
-                        glowIntensity = 0.5 + t * 0.3;
-                        glowColor = mix(gold, cyan, t);
-                    } else if (uProgress <= 0.75) {
-                        float t = (uProgress - 0.5) / 0.25;
-                        glowIntensity = 0.8 - t * 0.2;
-                        glowColor = mix(cyan, violet, t);
-                    } else {
-                        float t = (uProgress - 0.75) / 0.25;
-                        glowIntensity = 0.6 - t * 0.3;
-                        glowColor = mix(violet, copper, t);
-                    }
-                    
-                    float glow = smoothstep(0.1, 0.5, y) * smoothstep(0.9, 0.5, y);
-                    color += glowColor * glow * glowIntensity * 0.6;
-                    
-                    // Noise-like variation
-                    float noise = sin(vUv.x * 30.0 + uTime * 0.5) * 0.02;
-                    color += noise * glow;
-                    
-                    float edgeFade = smoothstep(1.0, 0.65, y) * smoothstep(0.0, 0.15, y);
-                    float sideFade = smoothstep(0.0, 0.15, vUv.x) * smoothstep(1.0, 0.85, vUv.x);
-                    
-                    gl_FragColor = vec4(color, edgeFade * sideFade * 0.9);
-                }
-            `,
-            transparent: true,
-            depthWrite: false,
-            side: THREE.DoubleSide
-        });
-
-        const horizon = new THREE.Mesh(horizonGeometry, horizonMaterial);
-        horizon.position.set(0, -18, -90);
-        horizon.rotation.x = -Math.PI / 10;
-        scene.add(horizon);
-
-        // ===== GRID FLOOR =====
-        const gridHelper = new THREE.GridHelper(200, 50, 0x1a1a30, 0x0a0a18);
-        gridHelper.position.y = -25;
-        gridHelper.material.opacity = 0.3;
+        // Grid
+        const gridHelper = new THREE.GridHelper(180, 40, 0x151518, 0x0a0a0c);
+        gridHelper.position.y = -20;
+        gridHelper.material.opacity = 0.4;
         gridHelper.material.transparent = true;
         scene.add(gridHelper);
 
-        // ===== ANIMATION =====
+        // Animation
         function animate() {
             requestAnimationFrame(animate);
-            
+
             if (isReducedMotion) {
                 renderer.render(scene, camera);
                 return;
             }
-            
+
             time += 0.016;
-            scrollProgress += (targetScrollProgress - scrollProgress) * 0.04;
+            scrollProgress += (targetScrollProgress - scrollProgress) * 0.05;
 
             // Particles
             particleMaterial.uniforms.uTime.value = time;
-            particleMaterial.uniforms.uOpacity.value = Math.max(0.2, 1 - scrollProgress * 0.4);
-            
-            // Horizon
-            horizonMaterial.uniforms.uTime.value = time;
-            horizonMaterial.uniforms.uProgress.value = scrollProgress;
-
-            // Dynamic lights
-            dynamicLights.forEach((light, i) => {
-                const baseAngle = light.userData.baseAngle;
-                const radius = light.userData.radius;
-                const height = light.userData.height;
-                const speed = light.userData.speed;
-                const vSpeed = light.userData.verticalSpeed;
-                
-                const angle = baseAngle + time * speed + scrollProgress * Math.PI * 1.5;
-                const yOffset = Math.sin(time * vSpeed + i * 0.8) * 4;
-                
-                light.position.x = Math.cos(angle) * radius;
-                light.position.y = height + yOffset;
-                light.position.z = Math.sin(angle) * radius;
-                
-                light.target.position.copy(airplane.position);
-                
-                const intensityMod = 0.6 + Math.sin(time * 0.25 + i * 0.6) * 0.4;
-                light.intensity = 2 + scrollProgress * 3 * intensityMod;
-            });
-
-            // Color transitions
-            const currentColor = new THREE.Color();
-            if (scrollProgress < 0.33) {
-                currentColor.lerpColors(colors.copper, colors.cyan, scrollProgress * 3);
-            } else if (scrollProgress < 0.66) {
-                currentColor.lerpColors(colors.cyan, colors.violet, (scrollProgress - 0.33) * 3);
-            } else {
-                currentColor.lerpColors(colors.violet, colors.gold, (scrollProgress - 0.66) * 3);
-            }
-            
-            particleMaterial.uniforms.uColor1.value = currentColor;
-            particleMaterial.uniforms.uColor2.value = colors.cyan;
-            
-            keyLight.color.copy(currentColor);
-            keyLight.intensity = 0.5 + scrollProgress * 0.5;
-            
-            rimLight1.intensity = 2.5 + scrollProgress * 4;
-            rimLight1.color.copy(currentColor);
-            rimLight2.intensity = 1.5 + scrollProgress * 2;
 
             // Airplane
-            if (modelReady) {
-                airplane.position.y = Math.sin(time * 0.35) * 0.2;
-                airplane.rotation.y = -0.35 + scrollProgress * 0.5;
-                airplane.rotation.x = Math.sin(scrollProgress * Math.PI * 1.2) * 0.04;
-                airplane.rotation.z = Math.sin(time * 0.25) * 0.012;
-            }
+            airplane.position.y = Math.sin(time * 0.3) * 0.15;
+            airplane.rotation.y = -0.3 + scrollProgress * 0.4;
+            airplane.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.03;
+            airplane.rotation.z = Math.sin(time * 0.2) * 0.008;
+
+            // Lights
+            rimLight1.intensity = 1.5 + scrollProgress * 2;
+            rimLight2.intensity = 1 + scrollProgress * 1.5;
 
             // Camera
-            const cameraRadius = 28 + scrollProgress * 8;
-            const cameraAngle = -0.35 + scrollProgress * 0.3;
-            
+            const cameraRadius = 30 + scrollProgress * 6;
+            const cameraAngle = -0.3 + scrollProgress * 0.25;
+
             camera.position.x = Math.cos(cameraAngle) * cameraRadius;
-            camera.position.y = 4 + Math.sin(scrollProgress * Math.PI * 1.5) * 4;
+            camera.position.y = 3 + Math.sin(scrollProgress * Math.PI * 1.2) * 3;
             camera.position.z = Math.sin(cameraAngle) * cameraRadius;
-            
+
             camera.lookAt(airplane.position);
 
             renderer.render(scene, camera);
@@ -1816,36 +1048,25 @@
 
         animate();
 
-        // ===== LOADING =====
+        // Loading
         let loadProgress = 0;
         const loadingInterval = setInterval(() => {
-            loadProgress += 2.5 + Math.random() * 4;
+            loadProgress += 3 + Math.random() * 5;
             if (loadProgress >= 100) {
                 loadProgress = 100;
                 clearInterval(loadingInterval);
-                setTimeout(() => {
-                    loadingScreen.classList.add('hidden');
-                }, 350);
+                setTimeout(() => loadingScreen.classList.add('hidden'), 300);
             }
-            if (loadingProgress) {
-                loadingProgress.style.width = `${loadProgress}%`;
-            }
-        }, 35);
+            if (loadingProgress) loadingProgress.style.width = `${loadProgress}%`;
+        }, 30);
 
-        // ===== EVENTS =====
+        // Events
         window.addEventListener('scroll', () => {
             const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
             targetScrollProgress = Math.max(0, Math.min(1, window.scrollY / totalHeight));
-            
-            if (progressBar) {
-                progressBar.style.width = `${targetScrollProgress * 100}%`;
-            }
-            
-            if (mainNav) {
-                mainNav.classList.toggle('scrolled', window.scrollY > 50);
-            }
-            
-            updateJourney();
+
+            if (progressBar) progressBar.style.width = `${targetScrollProgress * 100}%`;
+            if (mainNav) mainNav.classList.toggle('scrolled', window.scrollY > 50);
         }, { passive: true });
 
         window.addEventListener('resize', () => {
@@ -1853,95 +1074,6 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
             particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
-        });
-
-        // ===== JOURNEY =====
-        const journeyItems = document.querySelectorAll('.journey-text-item');
-        const journeyStages = document.querySelectorAll('.journey-stage');
-
-        function updateJourney() {
-            if (!journeySection) return;
-            
-            const rect = journeySection.getBoundingClientRect();
-            const sectionHeight = journeySection.offsetHeight;
-            const viewportHeight = window.innerHeight;
-            
-            if (rect.top < viewportHeight && rect.bottom > 0) {
-                const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / Math.max(1, sectionHeight - viewportHeight / 2)));
-                const stageIndex = Math.min(3, Math.floor(progress * 4));
-                
-                journeyItems.forEach((item, i) => {
-                    item.classList.toggle('active', i <= stageIndex);
-                });
-                
-                journeyStages.forEach((stage, i) => {
-                    stage.classList.toggle('active', i === stageIndex);
-                });
-            }
-        }
-
-        // ===== HUD ANIMATION =====
-        function animateValue(element, endValue, duration, isFloat) {
-            const startTime = performance.now();
-            const valueEl = element.querySelector('.value');
-            const unitEl = element.querySelector('.unit');
-            const unit = unitEl ? unitEl.textContent : '';
-            
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const currentValue = eased * endValue;
-                
-                if (valueEl) {
-                    const displayValue = isFloat 
-                        ? currentValue.toFixed(1) 
-                        : Math.round(currentValue).toLocaleString('ru-RU');
-                    valueEl.innerHTML = displayValue + (unitEl ? `<span class="unit">${unit}</span>` : '');
-                }
-                
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-            
-            requestAnimationFrame(update);
-        }
-
-        const hudObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && !hudAnimated) {
-                hudAnimated = true;
-                
-                const hudElements = document.querySelectorAll('.hud-element');
-                hudElements.forEach((el, i) => {
-                    setTimeout(() => {
-                        el.classList.add('visible');
-                    }, i * 120);
-                });
-                
-                setTimeout(() => {
-                    animateValue(document.querySelector('.hud-1'), 1020, 2200, false);
-                    animateValue(document.querySelector('.hud-2'), 14800, 2800, false);
-                    animateValue(document.querySelector('.hud-3'), 14500, 2400, false);
-                    animateValue(document.querySelector('.hud-4'), 2.4, 2000, true);
-                    animateValue(document.querySelector('.hud-5'), 380, 2200, false);
-                }, 500);
-            }
-        }, { threshold: 0.35 });
-
-        if (specsSection) {
-            hudObserver.observe(specsSection);
-        }
-
-        // ===== GALLERY =====
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        galleryItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                item.style.zIndex = '10';
-            });
-            item.addEventListener('mouseleave', () => {
-                item.style.zIndex = '1';
-            });
         });
     </script>
 </body>
