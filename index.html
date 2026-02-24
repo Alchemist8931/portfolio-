@@ -3,38 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vellura — Невидимый источник вашей энергии</title>
+  <title>АкваЧист — Чистая вода с доставкой</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --ivory: #faf8f5;
-      --ivory-warm: #f5f0e8;
-      --cream: #ede4d8;
-      --linen: #e8e0d4;
-      --water-ice: #e8f4f8;
-      --water-crystal: #d0e8ec;
-      --water-deep: #a8d4dc;
-      --water-glass: #c8e4e8;
-      --frost: #f0f8fa;
-      --ice-blue: #d8f0f4;
-      --glacier: #b8e0e8;
-      --soft-sage: #c5d1c7;
-      --sage: #9aada1;
-      --deep-sage: #5a7a6a;
-      --terracotta: #c9a88a;
-      --terracotta-soft: #d4b898;
-      --warm-gold: #b8a078;
-      --gold-light: #d4c4a0;
-      --charcoal: #3a3835;
-      --charcoal-soft: #5a5652;
-      --font-display: 'Jost', sans-serif;
-      --font-body: 'Cormorant Garamond', serif;
-      --transition-smooth: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      --transition-gentle: 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+      --water-deep: #005577;
+      --water-light: #00aadd;
+      --water-glow: #66eeff;
+      --water-foam: #aaeeff;
+      --bg-dark: #020a0f;
+      --bg-medium: #041218;
+      --text-primary: #e8f8ff;
+      --text-secondary: #88ccee;
+      --text-muted: #447788;
+      --accent: #00ddff;
+      --accent-warm: #00ffaa;
     }
 
     * {
@@ -45,1156 +32,606 @@
 
     html {
       scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    @media (min-width: 768px) {
-      html { font-size: 18px; }
     }
 
     body {
-      font-family: var(--font-body);
-      background: linear-gradient(180deg, var(--water-ice) 0%, var(--ivory) 30%, var(--ivory) 100%);
-      color: var(--charcoal);
+      font-family: 'Onest', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
     }
 
-    ::selection {
-      background: var(--water-glass);
-      color: var(--charcoal);
+    h1, h2, h3, h4 {
+      font-family: 'Unbounded', sans-serif;
     }
 
-    /* Scroll Progress */
-    .scroll-progress {
+    #water-canvas {
       position: fixed;
       top: 0;
       left: 0;
-      width: 0%;
-      height: 1px;
-      background: linear-gradient(90deg, var(--water-deep), var(--glacier), var(--water-crystal));
-      z-index: 1001;
-      transition: width 0.1s linear;
-    }
-
-    /* Typography */
-    .heading-xl {
-      font-family: var(--font-display);
-      font-weight: 200;
-      letter-spacing: 0.15em;
-      line-height: 1.2;
-    }
-
-    .heading-lg {
-      font-family: var(--font-display);
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      line-height: 1.3;
-    }
-
-    .body-text {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 1.05em;
-      line-height: 1.9;
-      letter-spacing: 0.02em;
-    }
-
-    /* Blur Curtain */
-    .blur-curtain {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+      width: 100vw;
       height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-      backdrop-filter: blur(0px) saturate(1);
-      -webkit-backdrop-filter: blur(0px) saturate(1);
-      background: linear-gradient(
-        to bottom,
-        rgba(232, 244, 248, 0) 0%,
-        rgba(232, 244, 248, 0) 0%
-      );
-      transition: all 0.1s ease-out;
-      will-change: backdrop-filter, background;
-    }
-
-    /* Hero Section */
-    .hero-section {
-      position: relative;
-      height: 100vh;
-      min-height: 650px;
-      overflow: hidden;
-      background: linear-gradient(175deg, var(--water-ice) 0%, var(--frost) 40%, var(--ivory) 100%);
-    }
-
-    #container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       z-index: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        180deg,
-        rgba(232, 244, 248, 0.02) 0%,
-        rgba(232, 244, 248, 0.08) 40%,
-        rgba(232, 244, 248, 0.25) 70%,
-        rgba(250, 248, 245, 0.85) 100%
-      );
-      z-index: 2;
       pointer-events: none;
     }
 
-    .hero-content {
+    .section {
       position: relative;
-      z-index: 3;
-      height: 100%;
+      z-index: 10;
+    }
+
+    .hero-section {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
       padding: 2rem;
-    }
-
-    .hero-eyebrow {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.6rem;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--water-deep);
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      transform: translateY(25px);
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.2s forwards;
+      text-align: center;
     }
 
     .hero-title {
-      font-size: clamp(2.5rem, 9vw, 6.5rem);
-      color: var(--charcoal);
-      margin-bottom: 2rem;
-      opacity: 0;
-      transform: translateY(35px);
-      animation: fadeInUp 1.4s var(--transition-smooth) 0.3s forwards;
-      position: relative;
-      line-height: 1.15;
-    }
-
-    .hero-title::after {
-      content: '';
-      position: absolute;
-      bottom: -0.8rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--water-deep), transparent);
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-warm) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-subtitle {
-      font-size: clamp(1rem, 2.3vw, 1.25rem);
-      color: var(--charcoal-soft);
-      max-width: 520px;
-      opacity: 0;
-      transform: translateY(25px);
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.5s forwards;
-    }
-
-    .hero-tagline {
-      position: absolute;
-      bottom: 4rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.55rem;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: var(--water-deep);
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-smooth) 1.1s forwards;
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 7.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.9s forwards;
-      cursor: pointer;
-      transition: transform 0.4s ease;
-    }
-
-    .scroll-indicator:hover {
-      transform: translateX(-50%) translateY(3px);
-    }
-
-    .scroll-indicator .scroll-line {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--water-deep), transparent);
-      animation: scrollPulse 3s ease-in-out infinite;
-      position: relative;
-    }
-
-    .scroll-indicator .scroll-line::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 15px;
-      background: var(--glacier);
-      animation: scrollDrop 3s ease-in-out infinite;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0) translateX(var(--translate-x, 0));
-      }
-    }
-
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 0.7; }
-    }
-
-    @keyframes scrollDrop {
-      0% { transform: translateY(0); opacity: 0.8; }
-      100% { transform: translateY(45px); opacity: 0; }
-    }
-
-    /* Navigation */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 1.8rem 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      transition: all var(--transition-smooth);
-    }
-
-    .nav.scrolled {
-      background: rgba(232, 244, 248, 0.95);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      padding: 1.2rem 3rem;
-      box-shadow: 0 1px 0 rgba(168, 212, 220, 0.15);
-    }
-
-    .logo {
-      font-family: var(--font-display);
-      font-weight: 200;
-      font-size: 1.3rem;
-      letter-spacing: 0.3em;
-      color: var(--charcoal);
-      text-decoration: none;
-      transition: all 0.4s ease;
-      position: relative;
-      padding: 0.5rem 0;
-    }
-
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--water-deep);
-      transition: width 0.4s ease;
-    }
-
-    .logo:hover::after {
-      width: 100%;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 3rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.62rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--charcoal-soft);
-      text-decoration: none;
-      position: relative;
-      padding: 0.5rem 0;
-      transition: color 0.4s ease;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 0;
-      height: 1px;
-      background: var(--water-deep);
-      transition: all 0.5s var(--transition-smooth);
-      transform: translateX(-50%);
-    }
-
-    .nav-links a:hover {
-      color: var(--charcoal);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-btn {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-      z-index: 101;
-    }
-
-    .mobile-menu-btn span {
-      width: 22px;
-      height: 1px;
-      background: var(--charcoal);
-      transition: all 0.35s ease;
-      transform-origin: center;
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(4px, 4px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(4px, -4px);
-    }
-
-    .mobile-nav {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100vh;
-      background: var(--water-ice);
-      z-index: 99;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      transition: right 0.6s var(--transition-smooth);
-    }
-
-    .mobile-nav.active {
-      right: 0;
-    }
-
-    .mobile-nav a {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 1.1rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      text-decoration: none;
-      opacity: 0;
-      transform: translateX(25px);
-      transition: all 0.5s ease;
-    }
-
-    .mobile-nav.active a {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .mobile-nav.active a:nth-child(1) { transition-delay: 0.12s; }
-    .mobile-nav.active a:nth-child(2) { transition-delay: 0.18s; }
-    .mobile-nav.active a:nth-child(3) { transition-delay: 0.24s; }
-    .mobile-nav.active a:nth-child(4) { transition-delay: 0.3s; }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      
-      .mobile-menu-btn {
-        display: flex;
-      }
-      
-      .nav {
-        padding: 1rem 1.5rem;
-      }
-    }
-
-    /* Quote Section */
-    .quote-section {
-      padding: 12rem 2rem;
-      background: linear-gradient(180deg, var(--ivory) 0%, var(--water-ice) 100%);
-      position: relative;
-      overflow: hidden;
-      z-index: 10;
-    }
-
-    .quote-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(ellipse 120% 50% at 50% 0%, rgba(168, 212, 220, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse 70% 40% at 85% 100%, rgba(208, 232, 236, 0.12) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .quote-container {
-      max-width: 850px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .quote-mark {
-      font-family: var(--font-body);
-      font-size: 7rem;
-      line-height: 1;
-      color: var(--water-glass);
-      margin-bottom: -2.5rem;
-      opacity: 0.5;
-    }
-
-    .quote-text {
-      font-family: var(--font-body);
-      font-size: clamp(1.4rem, 3.2vw, 2rem);
-      font-weight: 400;
-      font-style: italic;
-      line-height: 1.55;
-      color: var(--charcoal);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      max-width: 600px;
       margin-bottom: 2.5rem;
-      letter-spacing: 0.025em;
-    }
-
-    .quote-author {
-      font-family: var(--font-display);
       font-weight: 300;
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--water-deep);
     }
 
-    .quote-line {
-      width: 35px;
-      height: 1px;
-      background: var(--water-deep);
-      margin: 1.8rem auto 0;
-    }
-
-    /* Interactive Glass Section */
-    .glass-section {
-      min-height: 100vh;
-      background: linear-gradient(180deg, var(--water-ice) 0%, var(--frost) 50%, var(--ivory) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 7rem 2rem;
-      position: relative;
-      overflow: hidden;
-      z-index: 10;
-    }
-
-    .glass-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(ellipse 60% 45% at 10% 25%, rgba(168, 212, 220, 0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 55% 40% at 90% 75%, rgba(208, 232, 236, 0.15) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    /* Organic floating elements */
-    .floating-elements {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .organic-circle {
-      position: absolute;
-      border: 1px solid rgba(168, 212, 220, 0.2);
-      border-radius: 50%;
-    }
-
-    .oc-1 {
-      width: 450px;
-      height: 450px;
-      top: 3%;
-      left: -8%;
-      animation: organicFloat 35s ease-in-out infinite;
-    }
-
-    .oc-2 {
-      width: 320px;
-      height: 320px;
-      bottom: 8%;
-      right: -5%;
-      animation: organicFloat 28s ease-in-out infinite reverse;
-    }
-
-    .oc-3 {
-      width: 180px;
-      height: 180px;
-      top: 45%;
-      right: 12%;
-      border-style: dashed;
-      animation: organicFloat 22s ease-in-out infinite;
-    }
-
-    @keyframes organicFloat {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(15px, -25px) rotate(45deg); }
-      50% { transform: translate(-8px, 18px) rotate(90deg); }
-      75% { transform: translate(22px, 8px) rotate(135deg); }
-    }
-
-    .glass-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2.8rem;
-      max-width: 800px;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    .glass-section-title {
-      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .glass-section-text {
-      text-align: center;
-      color: var(--charcoal-soft);
-      max-width: 440px;
-    }
-
-    .glass-demo {
-      position: relative;
-      width: 200px;
-      height: 340px;
-      filter: drop-shadow(0 35px 70px rgba(168, 212, 220, 0.2));
-      cursor: pointer;
-      transition: transform 0.5s var(--transition-smooth);
-    }
-
-    .glass-demo:hover {
-      transform: translateY(-4px);
-    }
-
-    .glass-svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Water types */
-    .water-types {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .water-type-btn {
-      padding: 1rem 2rem;
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      background: transparent;
-      border: 1px solid rgba(168, 212, 220, 0.4);
-      color: var(--charcoal-soft);
-      cursor: pointer;
-      transition: all 0.5s var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .water-type-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--water-deep), var(--glacier));
-      transform: translateY(100%);
-      transition: transform 0.5s var(--transition-smooth);
-      z-index: -1;
-    }
-
-    .water-type-btn:hover::before,
-    .water-type-btn.active::before {
-      transform: translateY(0);
-    }
-
-    .water-type-btn:hover,
-    .water-type-btn.active {
-      border-color: var(--water-deep);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(168, 212, 220, 0.3);
-    }
-
-    .additives {
-      display: flex;
-      gap: 0.7rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .additive-btn {
-      padding: 0.65rem 1.3rem;
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.55rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid transparent;
-      color: var(--charcoal-soft);
-      cursor: pointer;
-      transition: all 0.4s ease;
-      border-radius: 2px;
-    }
-
-    .additive-btn:hover {
-      background: rgba(255,255,255,0.95);
-      color: var(--charcoal);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 18px rgba(168, 212, 220, 0.15);
-    }
-
-    .additive-btn.active {
-      background: rgba(200, 228, 232, 0.5);
-      color: var(--charcoal);
-      border-color: rgba(168, 212, 220, 0.4);
-      box-shadow: 0 2px 12px rgba(200, 228, 232, 0.5);
-    }
-
-    /* Split Section */
-    .split-section {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (max-width: 768px) {
-      .split-section {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .split-image {
-      position: relative;
-      overflow: hidden;
-      min-height: 50vh;
-      background: linear-gradient(145deg, var(--water-ice) 0%, var(--water-glass) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .split-image-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 1.2s var(--transition-smooth);
-    }
-
-    .split-image:hover .split-image-inner {
-      transform: scale(1.02);
-    }
-
-    .split-image-graphic {
-      opacity: 0.4;
-      transition: opacity 0.6s ease, transform 0.9s var(--transition-smooth);
-    }
-
-    .split-image:hover .split-image-graphic {
-      opacity: 0.6;
-      transform: rotate(5deg) scale(1.05);
-    }
-
-    .split-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 5rem 5rem;
-      background: var(--ivory);
-      position: relative;
-    }
-
-    .gold-line {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 1px;
-      background: linear-gradient(
-        to bottom,
-        transparent,
-        var(--water-deep),
-        var(--glacier),
-        var(--water-deep),
-        transparent
-      );
-      opacity: 0.5;
-    }
-
-    .scene-number {
-      font-family: var(--font-display);
-      font-weight: 200;
-      font-size: 3.5rem;
-      color: var(--water-glass);
-      margin-bottom: 1rem;
-      line-height: 1;
-    }
-
-    .scene-label {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.52rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--water-deep);
-      margin-bottom: 1.3rem;
+    .cta-button {
       display: inline-flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      color: var(--bg-dark);
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
     }
 
-    .scene-label::before {
-      content: '';
-      width: 20px;
-      height: 1px;
-      background: var(--water-deep);
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 40px rgba(0, 221, 255, 0.4);
     }
 
-    .scene-title {
-      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
-      margin-bottom: 1.5rem;
+    .stats-bar {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .scene-text {
-      color: var(--charcoal-soft);
-      max-width: 380px;
+    .stat-item {
+      text-align: center;
     }
 
-    @media (max-width: 768px) {
-      .split-content {
-        padding: 3rem 2rem;
-      }
+    .stat-value {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
     }
 
-    /* Specs Section */
-    .specs-section {
-      padding: 9rem 2rem;
-      background: linear-gradient(180deg, var(--ivory) 0%, var(--water-ice) 100%);
-      position: relative;
-      overflow: hidden;
-      z-index: 10;
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
 
-    .specs-section::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(168, 212, 220, 0.12) 0%, transparent 60%);
-      pointer-events: none;
+    /* Products Section */
+    .products-section {
+      padding: 6rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 85, 119, 0.1) 50%, transparent 100%);
     }
 
-    .specs-container {
-      max-width: 850px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .specs-title {
-      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    .section-header {
       text-align: center;
       margin-bottom: 4rem;
     }
 
-    .accordion {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .section-title {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
     }
 
-    .accordion-item {
-      background: rgba(255,255,255,0.8);
-      border: 1px solid rgba(168, 212, 220, 0.2);
-      overflow: hidden;
-      transition: all 0.5s var(--transition-smooth);
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
-    .accordion-item:hover {
-      border-color: rgba(168, 212, 220, 0.4);
-      background: rgba(255,255,255,0.95);
-      transform: translateX(5px);
-    }
-
-    .accordion-item.open {
-      border-color: rgba(168, 212, 220, 0.5);
-      background: rgba(255,255,255,0.98);
-    }
-
-    .accordion-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.5rem 2rem;
-      cursor: pointer;
-      user-select: none;
-      transition: padding 0.3s ease;
-    }
-
-    .accordion-label {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      color: var(--charcoal);
-    }
-
-    .accordion-sensory {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 0.82rem;
-      color: var(--water-deep);
-    }
-
-    .accordion-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.5s var(--transition-smooth);
-    }
-
-    .accordion-icon svg {
-      width: 10px;
-      height: 10px;
-      stroke: var(--water-deep);
-      transition: stroke 0.3s ease;
-    }
-
-    .accordion-item:hover .accordion-icon svg {
-      stroke: var(--glacier);
-    }
-
-    .accordion-item.open .accordion-icon {
-      transform: rotate(180deg);
-    }
-
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.7s var(--transition-smooth);
-    }
-
-    .accordion-item.open .accordion-content {
-      max-height: 400px;
-    }
-
-    .accordion-inner {
-      padding: 0 2rem 2rem;
-      border-top: 1px solid rgba(168, 212, 220, 0.1);
-    }
-
-    .spec-grid {
+    .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1.2rem;
-      margin-top: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .spec-item {
-      text-align: center;
-      padding: 1.2rem 0.5rem;
-      transition: transform 0.3s ease;
-    }
-
-    .spec-item:hover {
-      transform: translateY(-3px);
-    }
-
-    .spec-value {
-      font-family: var(--font-display);
-      font-weight: 200;
-      font-size: 1.65rem;
-      color: var(--charcoal);
-      margin-bottom: 0.4rem;
-    }
-
-    .spec-name {
-      font-size: 0.62rem;
-      color: var(--charcoal-soft);
-      letter-spacing: 0.04em;
-    }
-
-    /* CTA Section */
-    .cta-section {
-      padding: 15rem 2rem;
-      text-align: center;
-      background: linear-gradient(175deg, var(--water-deep) 0%, #7ab8c4 50%, var(--charcoal) 100%);
-      color: var(--ivory);
+    .product-card {
+      background: rgba(0, 170, 221, 0.05);
+      border: 1px solid rgba(0, 221, 255, 0.15);
+      border-radius: 24px;
+      padding: 2rem;
+      transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
-      z-index: 10;
     }
 
-    .cta-section::before {
+    .product-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(ellipse 85% 60% at 20% 15%, rgba(184, 224, 232, 0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 45% at 80% 85%, rgba(200, 228, 232, 0.12) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .cta-ripple {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.03);
-      animation: rippleExpand 12s ease-out infinite;
-    }
-
-    .cta-ripple:nth-child(1) { width: 180px; height: 180px; animation-delay: 0s; }
-    .cta-ripple:nth-child(2) { width: 360px; height: 360px; animation-delay: 3s; }
-    .cta-ripple:nth-child(3) { width: 540px; height: 540px; animation-delay: 6s; }
-
-    @keyframes rippleExpand {
-      0% { transform: scale(0.5); opacity: 0.8; }
-      100% { transform: scale(2.5); opacity: 0; }
-    }
-
-    .cta-eyebrow {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.55rem;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: var(--ice-blue);
-      margin-bottom: 1.8rem;
+      height: 3px;
+      background: linear-gradient(90deg, var(--water-light), var(--accent), var(--accent-warm));
       opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.15s forwards;
+      transition: opacity 0.3s ease;
     }
 
-    .cta-title {
-      font-size: clamp(1.8rem, 5vw, 3.5rem);
-      margin-bottom: 1.8rem;
-      color: var(--ivory);
-      position: relative;
-      z-index: 1;
-      opacity: 0;
-      animation: fadeInUp 1.4s var(--transition-smooth) 0.25s forwards;
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 221, 255, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 170, 221, 0.15);
     }
 
-    .cta-text {
-      color: rgba(250, 248, 245, 0.55);
-      max-width: 440px;
-      margin: 0 auto 3.5rem;
-      position: relative;
-      z-index: 1;
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.4s forwards;
+    .product-card:hover::before {
+      opacity: 1;
     }
 
-    .cta-btn {
-      display: inline-block;
-      padding: 1.25rem 4rem;
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.6rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: var(--ivory);
-      text-decoration: none;
-      transition: all 0.5s var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-smooth) 0.55s forwards;
-    }
-
-    .cta-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--glacier), var(--water-crystal));
-      transform: translateY(100%);
-      transition: transform 0.5s var(--transition-smooth);
-      z-index: -1;
-    }
-
-    .cta-btn:hover::before {
-      transform: translateY(0);
-    }
-
-    .cta-btn:hover {
-      color: var(--charcoal);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(168, 212, 220, 0.3);
-      border-color: transparent;
-    }
-
-    .cta-btn:active {
-      transform: translateY(-1px);
-    }
-
-    /* Footer */
-    .footer {
-      padding: 4.5rem 2rem;
-      background: var(--charcoal);
-      border-top: 1px solid rgba(250, 248, 245, 0.04);
-      position: relative;
-      z-index: 10;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
+    .product-image {
+      height: 180px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(0, 221, 255, 0.2) 0%, rgba(0, 255, 170, 0.1) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .product-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--accent);
+    }
+
+    .product-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .product-volume {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .product-price span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    /* Equipment Section */
+    .equipment-section {
+      padding: 6rem 2rem;
+    }
+
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .equipment-card {
+      background: linear-gradient(145deg, rgba(0, 85, 119, 0.15) 0%, rgba(0, 170, 221, 0.05) 100%);
+      border: 1px solid rgba(0, 221, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .equipment-card:hover {
+      border-color: rgba(0, 221, 255, 0.3);
+      background: linear-gradient(145deg, rgba(0, 85, 119, 0.25) 0%, rgba(0, 170, 221, 0.1) 100%);
+    }
+
+    .equipment-icon {
+      width: 70px;
+      height: 70px;
+      min-width: 70px;
+      background: rgba(0, 221, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .equipment-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--accent);
+    }
+
+    .equipment-info h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .equipment-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .equipment-price {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      color: var(--accent-warm);
+    }
+
+    /* Delivery Section */
+    .delivery-section {
+      padding: 6rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 170, 0.03) 50%, transparent 100%);
+    }
+
+    .delivery-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .delivery-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .delivery-steps {
+      display: flex;
+      flex-direction: column;
       gap: 1.5rem;
     }
 
+    .delivery-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    .step-content h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .delivery-form {
+      background: rgba(0, 85, 119, 0.1);
+      border: 1px solid rgba(0, 221, 255, 0.15);
+      border-radius: 24px;
+      padding: 2.5rem;
+    }
+
+    .form-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 221, 255, 0.2);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Onest', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(0, 221, 255, 0.2);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ddff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
+      color: var(--bg-dark);
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 221, 255, 0.3);
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 6rem 2rem;
+    }
+
+    .contact-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .contact-card {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: rgba(0, 221, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--accent);
+    }
+
+    .contact-card h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-card p {
+      font-size: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .contact-card a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-card a:hover {
+      color: var(--accent-warm);
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(0, 221, 255, 0.1);
+      text-align: center;
+    }
+
     .footer-logo {
-      font-family: var(--font-display);
-      font-weight: 200;
-      font-size: 1.05rem;
-      letter-spacing: 0.3em;
-      color: var(--ivory);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
     }
 
     .footer-links {
       display: flex;
       gap: 2rem;
+      justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 1.5rem;
     }
 
     .footer-links a {
-      font-family: var(--font-display);
-      font-weight: 300;
-      font-size: 0.58rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(250, 248, 245, 0.3);
+      color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.4s ease;
-      position: relative;
-    }
-
-    .footer-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -3px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--water-crystal);
-      transition: width 0.4s ease;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
     }
 
     .footer-links a:hover {
-      color: var(--ivory);
-    }
-
-    .footer-links a:hover::after {
-      width: 100%;
+      color: var(--accent);
     }
 
     .footer-copy {
-      font-size: 0.58rem;
-      color: rgba(250, 248, 245, 0.12);
-      width: 100%;
-      text-align: center;
-      margin-top: 3rem;
-      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }
 
-    /* Reveal animations */
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(2, 10, 15, 0.9) 0%, transparent 100%);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--water-light) 0%, var(--accent) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--bg-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .phone-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .phone-link svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    /* Scroll reveal */
     .reveal {
       opacity: 0;
-      transform: translateY(40px);
-      transition: all 1.1s var(--transition-smooth);
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .reveal.visible {
@@ -1202,1291 +639,637 @@
       transform: translateY(0);
     }
 
-    .reveal-delay-1 { transition-delay: 0.15s; }
-    .reveal-delay-2 { transition-delay: 0.3s; }
-    .reveal-delay-3 { transition-delay: 0.45s; }
-    .reveal-delay-4 { transition-delay: 0.6s; }
-
-    /* Focus states */
-    button:focus-visible,
-    a:focus-visible {
-      outline: 2px solid var(--water-deep);
-      outline-offset: 4px;
-    }
-
-    .cta-section button:focus-visible,
-    .cta-section a:focus-visible,
-    .footer a:focus-visible {
-      outline-color: var(--water-crystal);
-    }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-
-    /* Mobile adjustments */
-    @media (max-width: 768px) {
-      .glass-demo {
-        width: 170px;
-        height: 290px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .footer-links {
-        justify-content: center;
-      }
-
-      .cta-section {
-        padding: 11rem 2rem;
-      }
-
-      .scene-number {
-        font-size: 2.8rem;
-      }
-
-      .hero-eyebrow {
-        font-size: 0.55rem;
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Scroll Progress -->
-  <div class="scroll-progress" id="scrollProgress"></div>
-  
-  <!-- Blur Curtain -->
-  <div class="blur-curtain" id="blurCurtain"></div>
+  <!-- Water Animation Canvas -->
+  <canvas id="water-canvas"></canvas>
 
-  <!-- Navigation -->
-  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
-    <a href="#" class="logo">Vellura</a>
-    <ul class="nav-links">
-      <li><a href="#glass">Продукт</a></li>
-      <li><a href="#scenes">Ритуалы</a></li>
-      <li><a href="#specs">Состав</a></li>
-      <li><a href="#cta">Доставка</a></li>
-    </ul>
-    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-
-  <!-- Mobile Navigation -->
-  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <a href="#glass">Продукт</a>
-    <a href="#scenes">Ритуалы</a>
-    <a href="#specs">Состав</a>
-    <a href="#cta">Доставка</a>
-  </nav>
-
-  <!-- Hero Section -->
-  <section class="hero-section" aria-label="Hero">
-    <div id="container" aria-hidden="true"></div>
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="hero-content">
-      <span class="hero-eyebrow">Премиальная вода из горных источников</span>
-      <h1 class="heading-xl hero-title">Невидимый источник<br>вашей энергии</h1>
-      <p class="body-text hero-subtitle">Лучшая вода — это не просто напиток. Это ежедневный ритуал заботы о себе и кристальная чистота в каждом глотке.</p>
-    </div>
-    <a href="#glass" class="scroll-indicator" aria-label="Scroll down">
-      <span class="scroll-line" aria-hidden="true"></span>
-    </a>
-    <p class="hero-tagline">Листайте, чтобы узнать больше</p>
-  </section>
-
-  <!-- Quote Section -->
-  <section class="quote-section">
-    <div class="quote-container reveal">
-      <div class="quote-mark">"</div>
-      <p class="quote-text">Вода — это единственный напиток мудреца. В её прозрачности мы находим отражение собственной ясности.</p>
-      <div class="quote-line"></div>
-      <p class="quote-author">Философия Vellura</p>
-    </div>
-  </section>
-
-  <!-- Interactive Glass Section -->
-  <section class="glass-section" id="glass" aria-labelledby="glass-title">
-    <div class="floating-elements" aria-hidden="true">
-      <div class="organic-circle oc-1"></div>
-      <div class="organic-circle oc-2"></div>
-      <div class="organic-circle oc-3"></div>
-    </div>
-    
-    <div class="glass-container">
-      <h2 class="heading-lg glass-section-title reveal" id="glass-title">Создайте свой ритуал</h2>
-      <p class="body-text glass-section-text reveal reveal-delay-1">Выберите тип воды и добавки — наблюдайте, как кристальная чистота наполняет ваш стакан</p>
-      
-      <div class="glass-demo reveal reveal-delay-2" aria-label="Interactive water glass demonstration">
-        <svg class="glass-svg" viewBox="0 0 200 340" fill="none" role="img" aria-label="Glass with water">
-          <ellipse cx="100" cy="332" rx="55" ry="7" fill="rgba(168, 212, 220, 0.15)"/>
-          
-          <defs>
-            <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:rgba(255,255,255,0.15)"/>
-              <stop offset="12%" style="stop-color:rgba(255,255,255,0.03)"/>
-              <stop offset="88%" style="stop-color:rgba(255,255,255,0.03)"/>
-              <stop offset="100%" style="stop-color:rgba(255,255,255,0.18)"/>
-            </linearGradient>
-            
-            <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#e8f4f8;stop-opacity:0.4"/>
-              <stop offset="30%" style="stop-color:#d0e8ec;stop-opacity:0.6"/>
-              <stop offset="70%" style="stop-color:#b8dce4;stop-opacity:0.75"/>
-              <stop offset="100%" style="stop-color:#a8d4dc;stop-opacity:0.85"/>
-            </linearGradient>
-            
-            <linearGradient id="sparklingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#f0f8fa;stop-opacity:0.45"/>
-              <stop offset="50%" style="stop-color:#d8f0f4;stop-opacity:0.62"/>
-              <stop offset="100%" style="stop-color:#c0e4e8;stop-opacity:0.8"/>
-            </linearGradient>
-            
-            <linearGradient id="alkalineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#f0f8f8;stop-opacity:0.4"/>
-              <stop offset="50%" style="stop-color:#e0f0f0;stop-opacity:0.58"/>
-              <stop offset="100%" style="stop-color:#c8e8e8;stop-opacity:0.78"/>
-            </linearGradient>
-            
-            <linearGradient id="causticGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:rgba(255,255,255,0.7)"/>
-              <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
-            </linearGradient>
-            
-            <clipPath id="glassClip">
-              <path d="M40 26 L35 310 Q35 325 52 325 L148 325 Q165 325 165 310 L160 26 Z"/>
-            </clipPath>
-          </defs>
-          
-          <path d="M40 26 L35 310 Q35 325 52 325 L148 325 Q165 325 165 310 L160 26" 
-                fill="url(#glassGradient)" stroke="rgba(168, 212, 220, 0.25)" stroke-width="1.5"/>
-          
-          <path d="M42 26 Q100 18 158 26" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <path d="M44 34 L39 307" stroke="rgba(255,255,255,0.85)" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M153 42 L155 205" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="100" cy="318" rx="32" ry="3.5" fill="rgba(255,255,255,0.12)"/>
-          
-          <g clip-path="url(#glassClip)">
-            <rect id="waterBody" class="water-fill" x="32" y="340" width="136" height="340" 
-                  fill="url(#waterGradient)"/>
-            
-            <g id="waterSurfaceGroup" opacity="0">
-              <ellipse id="waterSurface" cx="100" cy="100" rx="58" ry="5.5" fill="rgba(255,255,255,0.5)"/>
-              <ellipse id="waterSurfaceHighlight" cx="100" cy="100" rx="36" ry="2.5" fill="rgba(255,255,255,0.32)"/>
-              <path id="surfaceWave" d="" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
-            </g>
-            
-            <g id="causticGroup" opacity="0">
-              <ellipse id="causticMain" cx="100" cy="295" rx="40" ry="10" fill="url(#causticGradient)" opacity="0.45"/>
-              <ellipse cx="75" cy="283" rx="18" ry="5" fill="rgba(255,255,255,0.18)"/>
-              <ellipse cx="125" cy="290" rx="14" ry="4.5" fill="rgba(255,255,255,0.15)"/>
-              <ellipse cx="90" cy="302" rx="10" ry="3.5" fill="rgba(255,255,255,0.1)"/>
-            </g>
-            
-            <g id="additiveGroup" opacity="0">
-              <ellipse id="additiveSlice" cx="100" cy="150" rx="27" ry="8" fill="#e8e8d0" opacity="0.8"/>
-              <ellipse id="additiveHighlight" cx="93" cy="147" rx="10" ry="3.5" fill="rgba(255,255,255,0.4)"/>
-            </g>
-            
-            <g id="particlesGroup" opacity="0"></g>
-          </g>
-          
-          <g id="bubblesGroup" opacity="0"></g>
-          
-          <g id="pourGroup" opacity="0">
-            <path id="pourStream" d="M100 0 Q100 18 100 55" stroke="url(#waterGradient)" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.6"/>
-            <ellipse id="pourSplash1" cx="100" cy="95" rx="14" ry="3.5" fill="rgba(255,255,255,0.42)" opacity="0"/>
-            <ellipse id="pourSplash2" cx="100" cy="95" rx="22" ry="5.5" fill="rgba(255,255,255,0.25)" opacity="0"/>
-          </g>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
         </svg>
       </div>
+      АкваЧист
+    </div>
+    <nav class="nav-links">
+      <a href="#products">Продукция</a>
+      <a href="#equipment">Оборудование</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a href="tel:+78001234567" class="phone-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      8 800 123-45-67
+    </a>
+  </header>
 
-      <div class="water-types reveal reveal-delay-3" role="group" aria-label="Water type selection">
-        <button class="water-type-btn active" data-type="still" aria-pressed="true">Негазированная</button>
-        <button class="water-type-btn" data-type="sparkling" aria-pressed="false">Газированная</button>
-        <button class="water-type-btn" data-type="alkaline" aria-pressed="false">Щелочная</button>
+  <!-- Hero Section -->
+  <section class="section hero-section">
+    <div class="reveal">
+      <h1 class="hero-title">Чистая вода<br>с доставкой</h1>
+      <p class="hero-subtitle">Кристально чистая артезианская вода для вашего дома и офиса. Добываем из глубин 250 метров, очищаем и доставляем в удобное для вас время.</p>
+      <a href="#delivery" class="cta-button">
+        Заказать воду
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+    
+    <div class="stats-bar reveal">
+      <div class="stat-item">
+        <div class="stat-value">15+</div>
+        <div class="stat-label">Лет на рынке</div>
       </div>
-
-      <div class="additives reveal reveal-delay-4" role="group" aria-label="Additive selection">
-        <button class="additive-btn" data-additive="none">Чистая</button>
-        <button class="additive-btn active" data-additive="lemon">Лимон</button>
-        <button class="additive-btn" data-additive="ginger">Имбирь</button>
-        <button class="additive-btn" data-additive="mint">Мята</button>
+      <div class="stat-item">
+        <div class="stat-value">50K+</div>
+        <div class="stat-label">Клиентов</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">250м</div>
+        <div class="stat-label">Глубина скважины</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">24ч</div>
+        <div class="stat-label">Доставка</div>
       </div>
     </div>
   </section>
 
-  <!-- Split Sections -->
-  <section id="scenes" aria-label="Rituals">
-    <div class="split-section">
-      <div class="split-image" aria-hidden="true">
-        <div class="split-image-inner">
-          <svg class="split-image-graphic" width="240" height="240" viewBox="0 0 240 240" fill="none">
-            <circle cx="120" cy="120" r="95" stroke="#a8d4dc" stroke-width="0.4" fill="none"/>
-            <circle cx="120" cy="120" r="70" stroke="#a8d4dc" stroke-width="0.3" fill="none" stroke-dasharray="6 4"/>
-            <circle cx="120" cy="120" r="45" stroke="#a8d4dc" stroke-width="0.3" fill="none"/>
-            <circle cx="120" cy="120" r="20" stroke="#a8d4dc" stroke-width="0.4" fill="none" stroke-dasharray="2 3"/>
-            <path d="M120 75 L120 120 L155 120" stroke="#a8d4dc" stroke-width="1.2" stroke-linecap="round"/>
-            <circle cx="120" cy="120" r="4" fill="#a8d4dc"/>
-            <line x1="120" y1="22" x2="120" y2="38" stroke="#a8d4dc" stroke-width="0.4"/>
-            <line x1="120" y1="202" x2="120" y2="218" stroke="#a8d4dc" stroke-width="0.4"/>
-            <line x1="22" y1="120" x2="38" y2="120" stroke="#a8d4dc" stroke-width="0.4"/>
-            <line x1="202" y1="120" x2="218" y2="120" stroke="#a8d4dc" stroke-width="0.4"/>
-            <circle cx="120" cy="120" r="108" stroke="#a8d4dc" stroke-width="0.12" fill="none" stroke-dasharray="2 7"/>
-          </svg>
-        </div>
-      </div>
-      <div class="split-content">
-        <div class="gold-line" aria-hidden="true"></div>
-        <span class="scene-number reveal">01</span>
-        <span class="scene-label reveal reveal-delay-1">Утренний ритуал</span>
-        <h3 class="heading-lg scene-title reveal reveal-delay-2">Пробуждение с чистым разумом</h3>
-        <p class="body-text scene-text reveal reveal-delay-3">Стакан воды за 30 минут до йоги настраивает тело на гармонию. Кристальная чистота смывает остатки сна, подготавливая вас к осознанному дню.</p>
-      </div>
+  <!-- Products Section -->
+  <section id="products" class="section products-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Наша вода</h2>
+      <p class="section-subtitle">Артезианская вода высшей категории для всей семьи</p>
     </div>
-
-    <div class="split-section">
-      <div class="split-content">
-        <div class="gold-line" aria-hidden="true"></div>
-        <span class="scene-number reveal">02</span>
-        <span class="scene-label reveal reveal-delay-1">Рабочий процесс</span>
-        <h3 class="heading-lg scene-title reveal reveal-delay-2">Ясность мысли в каждом решении</h3>
-        <p class="body-text scene-text reveal reveal-delay-3">Минимальный дизайн вашей рабочей среды требует идеальных деталей. Прозрачная бутылка Vellura на столе — напоминание о балансе между продуктивностью и заботой о себе.</p>
-      </div>
-      <div class="split-image" aria-hidden="true">
-        <div class="split-image-inner">
-          <svg class="split-image-graphic" width="220" height="220" viewBox="0 0 220 220" fill="none">
-            <rect x="35" y="35" width="150" height="150" rx="2.5" stroke="#a8d4dc" stroke-width="0.4" fill="none"/>
-            <line x1="55" y1="75" x2="165" y2="75" stroke="#a8d4dc" stroke-width="0.4"/>
-            <line x1="55" y1="105" x2="140" y2="105" stroke="#a8d4dc" stroke-width="0.4"/>
-            <line x1="55" y1="135" x2="115" y2="135" stroke="#a8d4dc" stroke-width="0.4"/>
-            <circle cx="170" cy="170" r="28" stroke="#a8d4dc" stroke-width="0.4" fill="none" stroke-dasharray="4 3"/>
-            <circle cx="170" cy="170" r="10" fill="rgba(168, 212, 220, 0.2)"/>
-            <circle cx="170" cy="170" r="3.5" fill="#a8d4dc"/>
-          </svg>
+    
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2h8l4 10H4L8 2z"/>
+              <path d="M12 12v10"/>
+              <path d="M8 22h8"/>
+            </svg>
+          </div>
         </div>
+        <h3 class="product-title">Стандарт</h3>
+        <p class="product-volume">Бутыль 19 литров</p>
+        <div class="product-price">350 <span>руб.</span></div>
       </div>
-    </div>
-
-    <div class="split-section">
-      <div class="split-image" aria-hidden="true">
-        <div class="split-image-inner">
-          <svg class="split-image-graphic" width="200" height="200" viewBox="0 0 200 200" fill="none">
-            <circle cx="100" cy="100" r="80" stroke="#a8d4dc" stroke-width="0.4" fill="none"/>
-            <ellipse cx="100" cy="100" rx="55" ry="55" stroke="#a8d4dc" stroke-width="0.3" fill="none"/>
-            <ellipse cx="100" cy="100" rx="30" ry="30" stroke="#a8d4dc" stroke-width="0.3" fill="none"/>
-            <circle cx="100" cy="100" r="7" fill="#a8d4dc"/>
-            <path d="M100 18 Q118 60 100 100 Q82 140 100 182" stroke="#a8d4dc" stroke-width="0.3" fill="none" stroke-dasharray="5 4"/>
-            <path d="M18 100 Q60 82 100 100 Q140 118 182 100" stroke="#a8d4dc" stroke-width="0.3" fill="none" stroke-dasharray="5 4"/>
-            <path d="M42 42 Q71 71 100 100 Q129 129 158 158" stroke="#a8d4dc" stroke-width="0.2" fill="none" stroke-dasharray="3 5"/>
-            <path d="M158 42 Q129 71 100 100 Q71 129 42 158" stroke="#a8d4dc" stroke-width="0.2" fill="none" stroke-dasharray="3 5"/>
-          </svg>
-        </div>
-      </div>
-      <div class="split-content">
-        <div class="gold-line" aria-hidden="true"></div>
-        <span class="scene-number reveal">03</span>
-        <span class="scene-label reveal reveal-delay-1">Вечерний покой</span>
-        <h3 class="heading-lg scene-title reveal reveal-delay-2">Завершение дня в гармонии</h3>
-        <p class="body-text scene-text reveal reveal-delay-3">Семейный ужин или тихий вечер с книгой — вода Vellura дополняет моменты единения. Щелочной баланс поддерживает естественный ритм восстановления организма.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Specs Section -->
-  <section class="specs-section" id="specs" aria-labelledby="specs-title">
-    <div class="specs-container">
-      <h2 class="heading-lg specs-title reveal" id="specs-title">Кристальная чистота в деталях</h2>
       
-      <div class="accordion reveal">
-        <div class="accordion-item">
-          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-source">
-            <div>
-              <span class="accordion-label">Источник</span>
-              <span class="accordion-sensory"> — Вкус горного воздуха</span>
-            </div>
-            <span class="accordion-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </span>
-          </div>
-          <div class="accordion-content" id="accordion-source">
-            <div class="accordion-inner">
-              <div class="spec-grid">
-                <div class="spec-item">
-                  <div class="spec-value">1847 м</div>
-                  <div class="spec-name">Высота источника</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">-4°C</div>
-                  <div class="spec-name">Температура родника</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">450 лет</div>
-                  <div class="spec-name">Возраст водоносного слоя</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">0</div>
-                  <div class="spec-name">Следов воздействия</div>
-                </div>
-              </div>
-            </div>
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2h8l4 10H4L8 2z"/>
+              <path d="M12 12v10"/>
+              <path d="M8 22h8"/>
+              <circle cx="12" cy="6" r="2"/>
+            </svg>
           </div>
         </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-minerals">
-            <div>
-              <span class="accordion-label">Минеральный состав</span>
-              <span class="accordion-sensory"> — Абсолютная мягкость</span>
-            </div>
-            <span class="accordion-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </span>
-          </div>
-          <div class="accordion-content" id="accordion-minerals">
-            <div class="accordion-inner">
-              <div class="spec-grid">
-                <div class="spec-item">
-                  <div class="spec-value">7.4</div>
-                  <div class="spec-name">pH баланс</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">42 мг/л</div>
-                  <div class="spec-name">Общая минерализация</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">12 мг/л</div>
-                  <div class="spec-name">Кальций Ca2+</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">4 мг/л</div>
-                  <div class="spec-name">Магний Mg2+</div>
-                </div>
-              </div>
-            </div>
+        <h3 class="product-title">Премиум</h3>
+        <p class="product-volume">Бутыль 19 литров</p>
+        <div class="product-price">450 <span>руб.</span></div>
+      </div>
+      
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+              <line x1="15" y1="3" x2="15" y2="21"/>
+            </svg>
           </div>
         </div>
-
-        <div class="accordion-item">
-          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-purification">
-            <div>
-              <span class="accordion-label">Очистка</span>
-              <span class="accordion-sensory"> — Невесомая прозрачность</span>
-            </div>
-            <span class="accordion-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </span>
-          </div>
-          <div class="accordion-content" id="accordion-purification">
-            <div class="accordion-inner">
-              <div class="spec-grid">
-                <div class="spec-item">
-                  <div class="spec-value">0.1 мкм</div>
-                  <div class="spec-name">Микрофильтрация</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">UV-C</div>
-                  <div class="spec-name">УФ стерилизация</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">99.99%</div>
-                  <div class="spec-name">Удаление микропластика</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">0</div>
-                  <div class="spec-name">Химических добавок</div>
-                </div>
-              </div>
-            </div>
+        <h3 class="product-title">Комплект 6 шт</h3>
+        <p class="product-volume">6 бутылей по 19 литров</p>
+        <div class="product-price">1 900 <span>руб.</span></div>
+      </div>
+      
+      <div class="product-card reveal">
+        <div class="product-image">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
           </div>
         </div>
+        <h3 class="product-title">Маленькая</h3>
+        <p class="product-volume">Бутылка 5 литров</p>
+        <div class="product-price">120 <span>руб.</span></div>
+      </div>
+    </div>
+  </section>
 
-        <div class="accordion-item">
-          <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="accordion-packaging">
-            <div>
-              <span class="accordion-label">Упаковка</span>
-              <span class="accordion-sensory"> — Этика в каждой детали</span>
-            </div>
-            <span class="accordion-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </span>
-          </div>
-          <div class="accordion-content" id="accordion-packaging">
-            <div class="accordion-inner">
-              <div class="spec-grid">
-                <div class="spec-item">
-                  <div class="spec-value">100%</div>
-                  <div class="spec-name">Перерабатываемые материалы</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">Стекло</div>
-                  <div class="spec-name">Основной материал</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">-80%</div>
-                  <div class="spec-name">Углеродный след</div>
-                </div>
-                <div class="spec-item">
-                  <div class="spec-value">Дуб</div>
-                  <div class="spec-name">Крышка FSC-дерево</div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <!-- Equipment Section -->
+  <section id="equipment" class="section equipment-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Оборудование</h2>
+      <p class="section-subtitle">Кулеры, помпы и диспенсеры для воды</p>
+    </div>
+    
+    <div class="equipment-grid">
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="12" y1="6" x2="12" y2="10"/>
+            <circle cx="12" cy="14" r="2"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Кулер напольный</h4>
+          <p>Нагрев и охлаждение, защита от детей</p>
+          <span class="equipment-price">от 8 500 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="4" width="14" height="16" rx="2"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <circle cx="12" cy="15" r="1"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Кулер настольный</h4>
+          <p>Компактный, два режима температуры</p>
+          <span class="equipment-price">от 5 900 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Помпа механическая</h4>
+          <p>Простое решение для дома</p>
+          <span class="equipment-price">от 650 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Помпа электрическая</h4>
+          <p>Автоматическая подача воды, USB-зарядка</p>
+          <span class="equipment-price">от 1 200 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Подставка-держатель</h4>
+          <p>Для бутылей 19 литров, устойчивая</p>
+          <span class="equipment-price">от 1 500 руб.</span>
+        </div>
+      </div>
+      
+      <div class="equipment-card reveal">
+        <div class="equipment-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <line x1="12" y1="10" x2="12" y2="14"/>
+            <line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+        </div>
+        <div class="equipment-info">
+          <h4>Фильтр-кувшин</h4>
+          <p>Дополнительная очистка, 4 литра</p>
+          <span class="equipment-price">от 990 руб.</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta-section" id="cta" aria-labelledby="cta-title">
-    <div class="cta-ripple" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-    <div class="cta-ripple" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-    <div class="cta-ripple" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-    <span class="cta-eyebrow">Начните сегодня</span>
-    <h2 class="heading-xl cta-title" id="cta-title">Ваш ритуал чистоты</h2>
-    <p class="body-text cta-text">Первая доставка — бесплатно. Отменить можно в любой момент. Почувствуйте разницу с первым глотком.</p>
-    <a href="#" class="cta-btn">Подключить доставку</a>
+  <!-- Delivery Section -->
+  <section id="delivery" class="section delivery-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Как заказать</h2>
+      <p class="section-subtitle">Просто и удобно — вода уже через 24 часа</p>
+    </div>
+    
+    <div class="delivery-content">
+      <div class="delivery-steps reveal">
+        <div class="delivery-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Оформите заказ</h4>
+            <p>Позвоните или заполните форму на сайте</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Выберите время</h4>
+            <p>Укажите удобный интервал доставки</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Получите воду</h4>
+            <p>Курьер занесёт воду прямо к двери</p>
+          </div>
+        </div>
+        <div class="delivery-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Оплатите</h4>
+            <p>Наличными, картой или онлайн</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="delivery-form reveal">
+        <h3 class="form-title">Заказать доставку</h3>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Ваше имя">
+        </div>
+        <div class="form-group">
+          <input type="tel" class="form-input" placeholder="Телефон">
+        </div>
+        <div class="form-group">
+          <select class="form-input form-select">
+            <option value="">Выберите продукт</option>
+            <option value="standard">Вода Стандарт 19л</option>
+            <option value="premium">Вода Премиум 19л</option>
+            <option value="set">Комплект 6 бутылей</option>
+            <option value="small">Вода 5л</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Адрес доставки">
+        </div>
+        <button type="submit" class="submit-btn">Отправить заявку</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section contact-section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Контакты</h2>
+      <p class="section-subtitle">Свяжитесь с нами любым удобным способом</p>
+    </div>
+    
+    <div class="contact-grid">
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <h4>Телефон</h4>
+        <p><a href="tel:+78001234567">8 800 123-45-67</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Бесплатно по России</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h4>Адрес</h4>
+        <p>г. Москва, ул. Водная, 15</p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Пн-Вс: 8:00-22:00</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h4>Email</h4>
+        <p><a href="mailto:info@aquachist.ru">info@aquachist.ru</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Ответим в течение часа</p>
+      </div>
+      
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </div>
+        <h4>Мессенджеры</h4>
+        <p><a href="#">WhatsApp</a> / <a href="#">Telegram</a></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Быстрые ответы</p>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer-inner">
-      <span class="footer-logo">Vellura</span>
-      <div class="footer-links">
-        <a href="#">О воде</a>
-        <a href="#">Доставка</a>
-        <a href="#">Тарифы</a>
-        <a href="#">Контакты</a>
-        <a href="#">Политика конфиденциальности</a>
-      </div>
-      <span class="footer-copy">2024 Vellura. Невидимый источник вашей энергии.</span>
+  <footer>
+    <div class="footer-logo">АкваЧист</div>
+    <div class="footer-links">
+      <a href="#products">Продукция</a>
+      <a href="#equipment">Оборудование</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contact">Контакты</a>
     </div>
+    <p class="footer-copy">2024 АкваЧист. Все права защищены.</p>
   </footer>
 
   <script type="importmap">
   {
     "imports": {
-      "three": "https://esm.sh/three@0.178.0"
+      "three": "https://esm.sh/three@0.160.0"
     }
   }
   </script>
 
   <script type="module">
-    import * as THREE from "three";
+    import * as THREE from 'three';
 
-    // =====================
-    // CONFIGURATION - Optimized for performance
-    // =====================
+    // Device detection
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const devicePixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.2 : 1.5);
+    const isLowPower = isMobile || navigator.hardwareConcurrency <= 4;
 
-    // =====================
-    // THREE.JS - Lightweight Crystal Water Shader
-    // =====================
-    let scene, camera, renderer, material, clock;
-    let targetMousePosition = { x: 0.5, y: 0.5 };
-    let mousePosition = { x: 0.5, y: 0.5 };
-    let animationId = null;
+    // Canvas and renderer setup
+    const canvas = document.getElementById('water-canvas');
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      antialias: !isMobile,
+      alpha: true,
+      powerPreference: isMobile ? 'low-power' : 'high-performance'
+    });
 
-    function initThreeJS() {
-      const container = document.getElementById('container');
-      if (!container) return;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-      scene = new THREE.Scene();
-      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-      camera.position.z = 1;
-      clock = new THREE.Clock();
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-      renderer = new THREE.WebGLRenderer({
-        antialias: false,
-        alpha: true,
-        powerPreference: 'low-power'
-      });
+    // Mouse tracking
+    const mouse = { x: 0.5, y: 0.5 };
+    const targetMouse = { x: 0.5, y: 0.5 };
 
-      const pixelRatio = devicePixelRatio;
-      renderer.setPixelRatio(pixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x000000, 0);
-
-      const canvas = renderer.domElement;
-      canvas.style.cssText = `
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        display: block !important;
-      `;
-      container.appendChild(canvas);
-
-      // Crystal clear water shader - optimized
-      material = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-          uActualResolution: { value: new THREE.Vector2(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio) },
-          uMousePosition: { value: new THREE.Vector2(0.5, 0.5) },
-          uCursorSphere: { value: new THREE.Vector3(0, 0, 0) },
-          uCursorRadius: { value: 0.15 },
-          uSphereCount: { value: isMobile ? 3 : 4 },
-          uSmoothness: { value: 0.4 },
-          uAmbientIntensity: { value: 0.12 },
-          uDiffuseIntensity: { value: 0.45 },
-          uSpecularIntensity: { value: 1.4 },
-          uSpecularPower: { value: 8 },
-          uFresnelPower: { value: 1.3 },
-          uBackgroundColor: { value: new THREE.Color(0xe8f4f8) },
-          uSphereColor: { value: new THREE.Color(0xd8f0f4) },
-          uLightColor: { value: new THREE.Color(0xffffff) },
-          uLightPosition: { value: new THREE.Vector3(1, 1, 1) },
-          uContrast: { value: 1.6 },
-          uFogDensity: { value: 0.06 },
-          uAnimationSpeed: { value: 0.35 },
-          uMovementScale: { value: 0.85 },
-          uCursorGlowIntensity: { value: 0.4 },
-          uCursorGlowRadius: { value: 1.2 },
-          uCursorGlowColor: { value: new THREE.Color(0xc8e8ec) }
-        },
-        vertexShader: `
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          precision mediump float;
+    // Water shader material - optimized
+    const waterMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        uPixelRatio: { value: pixelRatio }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position.xy, 0.0, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision ${isLowPower ? 'mediump' : 'highp'} float;
+        
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec2 uMouse;
+        uniform float uPixelRatio;
+        
+        varying vec2 vUv;
+        
+        #define PI 3.14159265359
+        
+        // Simplified noise function
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        }
+        
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
           
-          uniform float uTime;
-          uniform vec2 uResolution;
-          uniform vec2 uActualResolution;
-          uniform vec2 uMousePosition;
-          uniform vec3 uCursorSphere;
-          uniform float uCursorRadius;
-          uniform int uSphereCount;
-          uniform float uSmoothness;
-          uniform float uAmbientIntensity;
-          uniform float uDiffuseIntensity;
-          uniform float uSpecularIntensity;
-          uniform float uSpecularPower;
-          uniform float uFresnelPower;
-          uniform vec3 uBackgroundColor;
-          uniform vec3 uSphereColor;
-          uniform vec3 uLightColor;
-          uniform vec3 uLightPosition;
-          uniform float uContrast;
-          uniform float uFogDensity;
-          uniform float uAnimationSpeed;
-          uniform float uMovementScale;
-          uniform float uCursorGlowIntensity;
-          uniform float uCursorGlowRadius;
-          uniform vec3 uCursorGlowColor;
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
           
-          varying vec2 vUv;
+          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        }
+        
+        // Smooth metaball SDF
+        float metaballs(vec2 uv, float time) {
+          float result = 0.0;
           
-          const float PI = 3.14159265359;
-          const float EPSILON = 0.002;
-          const float MAX_DIST = 100.0;
+          // Main cursor blob
+          vec2 cursorPos = uMouse * 2.0 - 1.0;
+          cursorPos.x *= uResolution.x / uResolution.y;
+          float cursorDist = length(uv - cursorPos);
+          result += 0.25 / (cursorDist * cursorDist + 0.02);
           
-          float smin(float a, float b, float k) {
-            float h = max(k - abs(a - b), 0.0) / k;
-            return min(a, b) - h * h * k * 0.25;
+          // Floating blobs - optimized count
+          int blobCount = isLowPower ? 4 : 6;
+          
+          for (int i = 0; i < 6; i++) {
+            if (i >= blobCount) break;
+            
+            float fi = float(i);
+            float speed = 0.3 + fi * 0.1;
+            float size = 0.08 + mod(fi, 3.0) * 0.03;
+            
+            vec2 blobPos = vec2(
+              sin(time * speed + fi * 1.5) * 0.8,
+              cos(time * speed * 0.7 + fi * 2.1) * 0.6
+            );
+            
+            // Mouse attraction
+            blobPos += (cursorPos - blobPos) * 0.15;
+            
+            float dist = length(uv - blobPos);
+            result += size / (dist * dist + 0.01);
           }
           
-          float sdSphere(vec3 p, float r) {
-            return length(p) - r;
-          }
+          return result;
+        }
+        
+        void main() {
+          vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution * uPixelRatio) / (uResolution.y * uPixelRatio);
           
-          vec3 screenToWorld(vec2 normalizedPos) {
-            vec2 uv = normalizedPos * 2.0 - 1.0;
-            uv.x *= uResolution.x / uResolution.y;
-            return vec3(uv * 2.0, 0.0);
-          }
+          float time = uTime * 0.5;
           
-          float sceneSDF(vec3 pos) {
-            float result = MAX_DIST;
-            
-            // Static corner spheres
-            vec3 topLeftPos = screenToWorld(vec2(0.08, 0.92));
-            float topLeft = sdSphere(pos - topLeftPos, 0.65);
-            
-            vec3 bottomRightPos = screenToWorld(vec2(0.92, 0.08));
-            float bottomRight = sdSphere(pos - bottomRightPos, 0.75);
-            
-            vec3 smallTopLeftPos = screenToWorld(vec2(0.22, 0.75));
-            float smallTopLeft = sdSphere(pos - smallTopLeftPos, 0.25);
-            
-            vec3 smallBottomRightPos = screenToWorld(vec2(0.78, 0.22));
-            float smallBottomRight = sdSphere(pos - smallBottomRightPos, 0.28);
-            
-            float t = uTime * uAnimationSpeed;
-            
-            // Reduced number of animated spheres
-            for (int i = 0; i < 4; i++) {
-              if (i >= uSphereCount) break;
-              
-              float fi = float(i);
-              float speed = 0.35 + fi * 0.1;
-              float radius = 0.08 + mod(fi, 2.0) * 0.04;
-              float orbitRadius = (0.2 + mod(fi, 2.0) * 0.1) * uMovementScale;
-              float phaseOffset = fi * PI * 0.4;
-              
-              vec3 offset = vec3(
-                sin(t * speed + phaseOffset) * orbitRadius * 0.7,
-                cos(t * speed * 0.8 + phaseOffset) * orbitRadius * 0.5,
-                sin(t * speed * 0.5 + phaseOffset) * 0.25
-              );
-              
-              float movingSphere = sdSphere(pos - offset, radius);
-              result = smin(result, movingSphere, uSmoothness);
-            }
-            
-            float cursorBall = sdSphere(pos - uCursorSphere, uCursorRadius);
-            
-            float topLeftGroup = smin(topLeft, smallTopLeft, 0.35);
-            float bottomRightGroup = smin(bottomRight, smallBottomRight, 0.35);
-            
-            result = smin(result, topLeftGroup, 0.28);
-            result = smin(result, bottomRightGroup, 0.28);
-            result = smin(result, cursorBall, uSmoothness);
-            
-            return result;
-          }
+          // Calculate metaballs
+          float blobs = metaballs(uv, time);
           
-          vec3 calcNormal(vec3 p) {
-            float eps = 0.002;
-            return normalize(vec3(
-              sceneSDF(p + vec3(eps, 0, 0)) - sceneSDF(p - vec3(eps, 0, 0)),
-              sceneSDF(p + vec3(0, eps, 0)) - sceneSDF(p - vec3(0, eps, 0)),
-              sceneSDF(p + vec3(0, 0, eps)) - sceneSDF(p - vec3(0, 0, eps))
-            ));
-          }
+          // Threshold for water surface
+          float threshold = 1.0;
+          float edge = smoothstep(threshold - 0.3, threshold + 0.3, blobs);
           
-          float ambientOcclusion(vec3 p, vec3 n) {
-            float occ = 0.0;
-            float weight = 1.0;
-            for (int i = 0; i < 3; i++) {
-              float dist = 0.01 + 0.02 * float(i * i);
-              float h = sceneSDF(p + n * dist);
-              occ += (dist - h) * weight;
-              weight *= 0.8;
-            }
-            return clamp(1.0 - occ, 0.0, 1.0);
-          }
+          // Water colors
+          vec3 waterDeep = vec3(0.0, 0.33, 0.47);
+          vec3 waterLight = vec3(0.0, 0.67, 0.87);
+          vec3 waterGlow = vec3(0.4, 0.93, 1.0);
+          vec3 waterFoam = vec3(0.67, 0.93, 1.0);
           
-          float rayMarch(vec3 ro, vec3 rd) {
-            float t = 0.0;
-            int maxSteps = isMobile ? 16 : 28;
-            
-            for (int i = 0; i < 28; i++) {
-              if (i >= maxSteps) break;
-              
-              vec3 p = ro + rd * t;
-              float d = sceneSDF(p);
-              
-              if (d < EPSILON) return t;
-              if (t > 4.0) break;
-              
-              t += d * 0.85;
-            }
-            
-            return -1.0;
-          }
+          // Depth-based coloring
+          float depth = (blobs - threshold) * 2.0;
+          depth = clamp(depth, 0.0, 1.0);
           
-          vec3 lighting(vec3 p, vec3 rd, float t) {
-            if (t < 0.0) return vec3(0.0);
-            
-            vec3 normal = calcNormal(p);
-            vec3 viewDir = -rd;
-            
-            vec3 baseColor = uSphereColor;
-            
-            float ao = ambientOcclusion(p, normal);
-            
-            vec3 ambient = uLightColor * uAmbientIntensity * ao;
-            
-            vec3 lightDir = normalize(uLightPosition);
-            float diff = max(dot(normal, lightDir), 0.0);
-            vec3 diffuse = uLightColor * diff * uDiffuseIntensity;
-            
-            vec3 reflectDir = reflect(-lightDir, normal);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), uSpecularPower);
-            float fresnel = pow(1.0 - max(dot(viewDir, normal), 0.0), uFresnelPower);
-            
-            vec3 specular = uLightColor * spec * uSpecularIntensity * fresnel;
-            vec3 fresnelRim = uLightColor * fresnel * 0.3;
-            
-            float distToCursor = length(p - uCursorSphere);
-            if (distToCursor < uCursorRadius + 0.3) {
-              float highlight = 1.0 - smoothstep(0.0, uCursorRadius + 0.3, distToCursor);
-              specular += uLightColor * highlight * 0.12;
-            }
-            
-            vec3 color = (baseColor + ambient + diffuse + specular + fresnelRim) * ao;
-            
-            color = pow(color, vec3(uContrast * 0.85));
-            color = color / (color + vec3(0.8));
-            
-            return color;
-          }
+          vec3 waterColor = mix(waterLight, waterDeep, depth);
           
-          float calculateCursorGlow(vec3 worldPos) {
-            float dist = length(worldPos.xy - uCursorSphere.xy);
-            float glow = 1.0 - smoothstep(0.0, uCursorGlowRadius, dist);
-            glow = pow(glow, 2.0);
-            return glow * uCursorGlowIntensity;
-          }
+          // Add caustics-like effect
+          float caustics = noise(uv * 8.0 + time * 2.0) * 0.5 + 0.5;
+          caustics *= noise(uv * 12.0 - time * 1.5) * 0.5 + 0.5;
+          waterColor += waterGlow * caustics * 0.15 * (1.0 - depth);
           
-          void main() {
-            vec2 uv = (gl_FragCoord.xy * 2.0 - uActualResolution.xy) / uActualResolution.xy;
-            uv.x *= uResolution.x / uResolution.y;
-            
-            vec3 ro = vec3(uv * 2.0, -1.0);
-            vec3 rd = vec3(0.0, 0.0, 1.0);
-            
-            float t = rayMarch(ro, rd);
-            
-            vec3 p = ro + rd * t;
-            
-            vec3 color = lighting(p, rd, t);
-            
-            float cursorGlow = calculateCursorGlow(ro);
-            vec3 glowContribution = uCursorGlowColor * cursorGlow;
-            
-            if (t > 0.0) {
-              float fogAmount = 1.0 - exp(-t * uFogDensity);
-              color = mix(color, uBackgroundColor.rgb, fogAmount * 0.2);
-              
-              color += glowContribution * 0.2;
-              
-              gl_FragColor = vec4(color, 0.65);
-            } else {
-              if (cursorGlow > 0.01) {
-                gl_FragColor = vec4(glowContribution, cursorGlow * 0.5);
-              } else {
-                gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-              }
-            }
-          }
-        `,
-        transparent: true
-      });
+          // Edge glow/foam
+          float foam = 1.0 - smoothstep(threshold - 0.2, threshold + 0.1, blobs);
+          waterColor = mix(waterColor, waterFoam, foam * 0.6);
+          
+          // Fresnel-like rim effect
+          vec2 gradUv = uv * 0.5;
+          float fresnel = 1.0 - smoothstep(0.0, 2.0, length(uv));
+          waterColor *= 0.7 + fresnel * 0.3;
+          
+          // Cursor highlight
+          vec2 cursorPos = uMouse * 2.0 - 1.0;
+          cursorPos.x *= uResolution.x / uResolution.y;
+          float cursorDist = length(uv - cursorPos);
+          float cursorGlow = exp(-cursorDist * 2.0) * 0.3;
+          waterColor += waterGlow * cursorGlow;
+          
+          // Apply edge masking
+          float alpha = edge * 0.85;
+          
+          // Background gradient
+          vec3 bgColor = mix(
+            vec3(0.008, 0.039, 0.059),
+            vec3(0.02, 0.08, 0.1),
+            vUv.y
+          );
+          
+          // Subtle noise on background
+          bgColor += noise(vUv * 200.0 + time * 0.5) * 0.02;
+          
+          // Final color
+          vec3 finalColor = mix(bgColor, waterColor, alpha);
+          
+          // Vignette
+          float vignette = 1.0 - smoothstep(0.4, 1.4, length(uv * 0.7));
+          finalColor *= 0.8 + vignette * 0.2;
+          
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `,
+      transparent: false
+    });
 
-      const geometry = new THREE.PlaneGeometry(2, 2);
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+    // Create mesh
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const mesh = new THREE.Mesh(geometry, waterMaterial);
+    scene.add(mesh);
 
-      window.addEventListener('mousemove', onMouseMove, { passive: true });
-      window.addEventListener('touchmove', onTouchMove, { passive: true });
-      window.addEventListener('resize', onResize, { passive: true });
+    // Clock
+    const clock = new THREE.Clock();
 
-      animateThreeJS();
-    }
-
-    function screenToWorldJS(normalizedX, normalizedY) {
-      const uv_x = normalizedX * 2.0 - 1.0;
-      const uv_y = normalizedY * 2.0 - 1.0;
-      const aspect = window.innerWidth / window.innerHeight;
-      return new THREE.Vector3(uv_x * aspect * 2.0, uv_y * 2.0, 0.0);
-    }
-
+    // Event listeners
     function onMouseMove(e) {
-      targetMousePosition.x = e.clientX / window.innerWidth;
-      targetMousePosition.y = 1.0 - e.clientY / window.innerHeight;
-      
-      const worldPos = screenToWorldJS(targetMousePosition.x, targetMousePosition.y);
-      material.uniforms.uCursorSphere.value.copy(worldPos);
+      targetMouse.x = e.clientX / window.innerWidth;
+      targetMouse.y = 1.0 - e.clientY / window.innerHeight;
     }
 
     function onTouchMove(e) {
       if (e.touches.length > 0) {
-        targetMousePosition.x = e.touches[0].clientX / window.innerWidth;
-        targetMousePosition.y = 1.0 - e.touches[0].clientY / window.innerHeight;
-        
-        const worldPos = screenToWorldJS(targetMousePosition.x, targetMousePosition.y);
-        material.uniforms.uCursorSphere.value.copy(worldPos);
+        targetMouse.x = e.touches[0].clientX / window.innerWidth;
+        targetMouse.y = 1.0 - e.touches[0].clientY / window.innerHeight;
       }
     }
 
     function onResize() {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      const currentPixelRatio = devicePixelRatio;
-
+      const pr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+      
       renderer.setSize(width, height);
-      renderer.setPixelRatio(currentPixelRatio);
-      material.uniforms.uResolution.value.set(width, height);
-      material.uniforms.uActualResolution.value.set(width * currentPixelRatio, height * currentPixelRatio);
+      renderer.setPixelRatio(pr);
+      
+      waterMaterial.uniforms.uResolution.value.set(width, height);
+      waterMaterial.uniforms.uPixelRatio.value = pr;
     }
 
-    function animateThreeJS() {
-      animationId = requestAnimationFrame(animateThreeJS);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
 
-      mousePosition.x += (targetMousePosition.x - mousePosition.x) * 0.06;
-      mousePosition.y += (targetMousePosition.y - mousePosition.y) * 0.06;
-
-      material.uniforms.uTime.value = clock.getElapsedTime();
-      material.uniforms.uMousePosition.value.set(mousePosition.x, mousePosition.y);
-
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Smooth mouse
+      mouse.x += (targetMouse.x - mouse.x) * 0.08;
+      mouse.y += (targetMouse.y - mouse.y) * 0.08;
+      
+      waterMaterial.uniforms.uTime.value = clock.getElapsedTime();
+      waterMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
+      
       renderer.render(scene, camera);
     }
 
-    // Initialize Three.js
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initThreeJS);
-    } else {
-      initThreeJS();
-    }
+    animate();
 
-    // =====================
-    // BLUR CURTAIN - Scroll-based background fade
-    // =====================
-    const blurCurtain = document.getElementById('blurCurtain');
-    const container = document.getElementById('container');
-    
-    function updateBlurCurtain() {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const progress = Math.min(scrollTop / (windowHeight * 0.5), 1);
-      
-      // Blur intensity
-      const blurAmount = progress * 12;
-      const saturation = 1 + progress * 0.1;
-      
-      // Background opacity
-      const bgOpacity = progress * 0.92;
-      
-      blurCurtain.style.backdropFilter = `blur(${blurAmount}px) saturate(${saturation})`;
-      blurCurtain.style.webkitBackdropFilter = `blur(${blurAmount}px) saturate(${saturation})`;
-      
-      // Gradient background that becomes more opaque from top
-      blurCurtain.style.background = `linear-gradient(
-        to bottom,
-        rgba(232, 244, 248, ${bgOpacity}) 0%,
-        rgba(232, 244, 248, ${bgOpacity * 0.85}) 30%,
-        rgba(232, 244, 248, ${bgOpacity * 0.5}) 70%,
-        rgba(232, 244, 248, ${bgOpacity * 0.2}) 100%
-      )`;
-      
-      // Fade out the 3D animation
-      if (container) {
-        container.style.opacity = 1 - progress * 0.4;
-      }
-    }
-    
-    window.addEventListener('scroll', updateBlurCurtain, { passive: true });
-
-    // =====================
-    // SCROLL PROGRESS
-    // =====================
-    const scrollProgress = document.getElementById('scrollProgress');
-    
-    function updateScrollProgress() {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      scrollProgress.style.width = progress + '%';
-    }
-    
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
-
-    // =====================
-    // NAVIGATION
-    // =====================
-    const nav = document.getElementById('nav');
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileNav = document.getElementById('mobileNav');
-    
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 80) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
-    }, { passive: true });
-
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('active');
-      mobileMenuBtn.setAttribute('aria-expanded', mobileMenuBtn.classList.contains('active'));
-      document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-    });
-
-    mobileNav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenuBtn.classList.remove('active');
-        mobileNav.classList.remove('active');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // =====================
-    // REVEAL ANIMATIONS
-    // =====================
+    // Scroll reveal
     const revealElements = document.querySelectorAll('.reveal');
+    
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
     const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    }, observerOptions);
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // =====================
-    // INTERACTIVE GLASS
-    // =====================
-    const waterBody = document.getElementById('waterBody');
-    const waterSurfaceGroup = document.getElementById('waterSurfaceGroup');
-    const waterSurface = document.getElementById('waterSurface');
-    const waterSurfaceHighlight = document.getElementById('waterSurfaceHighlight');
-    const surfaceWave = document.getElementById('surfaceWave');
-    const causticGroup = document.getElementById('causticGroup');
-    const causticMain = document.getElementById('causticMain');
-    const additiveGroup = document.getElementById('additiveGroup');
-    const additiveSlice = document.getElementById('additiveSlice');
-    const additiveHighlight = document.getElementById('additiveHighlight');
-    const bubblesGroup = document.getElementById('bubblesGroup');
-    const particlesGroup = document.getElementById('particlesGroup');
-    const pourGroup = document.getElementById('pourGroup');
-    const pourStream = document.getElementById('pourStream');
-    const pourSplash1 = document.getElementById('pourSplash1');
-    const pourSplash2 = document.getElementById('pourSplash2');
-    const waterTypeBtns = document.querySelectorAll('.water-type-btn');
-    const additiveBtns = document.querySelectorAll('.additive-btn');
-    const glassDemo = document.querySelector('.glass-demo');
-
-    let currentFillLevel = 0;
-    let targetFillLevel = 72;
-    let currentType = 'still';
-    let currentAdditive = 'lemon';
-    let surfaceY = 340;
-    let bubbles = [];
-    let particles = [];
-    let isPouring = false;
-
-    const additiveColors = {
-      none: '#e8f0f0',
-      lemon: '#e8e8d0',
-      ginger: '#d8d8c0',
-      mint: '#d0e8e0'
-    };
-
-    const waterGradients = {
-      still: 'url(#waterGradient)',
-      sparkling: 'url(#sparklingGradient)',
-      alkaline: 'url(#alkalineGradient)'
-    };
-
-    additiveGroup.setAttribute('opacity', '1');
-    additiveSlice.setAttribute('fill', additiveColors.lemon);
-
-    function createBubble() {
-      return {
-        cx: 42 + Math.random() * 110,
-        cy: 300 + Math.random() * 25,
-        r: 1 + Math.random() * 2,
-        speed: 0.35 + Math.random() * 0.5,
-        wobbleSpeed: 1 + Math.random() * 1.5,
-        wobbleAmount: 0.8 + Math.random() * 1.5,
-        phase: Math.random() * Math.PI * 2,
-        element: null
-      };
-    }
-
-    function initBubbles() {
-      bubblesGroup.innerHTML = '';
-      bubbles = [];
-      for (let i = 0; i < 12; i++) {
-        const bubble = createBubble();
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('fill', 'rgba(255,255,255,0.55)');
-        circle.setAttribute('cx', bubble.cx);
-        circle.setAttribute('cy', bubble.cy);
-        circle.setAttribute('r', bubble.r);
-        bubblesGroup.appendChild(circle);
-        bubble.element = circle;
-        bubbles.push(bubble);
-      }
-    }
-
-    function createParticle() {
-      return {
-        cx: 42 + Math.random() * 110,
-        cy: 75 + Math.random() * 180,
-        r: 0.35 + Math.random() * 0.6,
-        speed: 0.1 + Math.random() * 0.15,
-        phase: Math.random() * Math.PI * 2,
-        element: null
-      };
-    }
-
-    function initParticles() {
-      particlesGroup.innerHTML = '';
-      particles = [];
-      for (let i = 0; i < 5; i++) {
-        const particle = createParticle();
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('fill', 'rgba(255,255,255,0.25)');
-        circle.setAttribute('cx', particle.cx);
-        circle.setAttribute('cy', particle.cy);
-        circle.setAttribute('r', particle.r);
-        particlesGroup.appendChild(circle);
-        particle.element = circle;
-        particles.push(particle);
-      }
-    }
-
-    function startPouring() {
-      if (isPouring) return;
-      isPouring = true;
-      
-      pourGroup.setAttribute('opacity', '1');
-      pourStream.setAttribute('d', 'M100 0 Q100 18 100 55');
-      
-      let pourProgress = 0;
-      const pourDuration = 1200;
-      const startTime = Date.now();
-      
-      function animatePour() {
-        const elapsed = Date.now() - startTime;
-        pourProgress = Math.min(elapsed / pourDuration, 1);
-        
-        const streamLength = 55 + pourProgress * (surfaceY - 75);
-        pourStream.setAttribute('d', `M100 0 Q100 ${streamLength * 0.3} 100 ${streamLength}`);
-        
-        if (pourProgress > 0.3) {
-          const splashOpacity = Math.min((pourProgress - 0.3) * 2, 1);
-          pourSplash1.setAttribute('opacity', splashOpacity * 0.5);
-          pourSplash2.setAttribute('opacity', splashOpacity * 0.3);
-          pourSplash1.setAttribute('cy', surfaceY);
-          pourSplash2.setAttribute('cy', surfaceY + 5);
-        }
-        
-        if (pourProgress < 1) {
-          requestAnimationFrame(animatePour);
-        } else {
-          setTimeout(() => {
-            pourGroup.setAttribute('opacity', '0');
-            pourSplash1.setAttribute('opacity', '0');
-            pourSplash2.setAttribute('opacity', '0');
-            isPouring = false;
-          }, 250);
-        }
-      }
-      
-      animatePour();
-    }
-
-    function animateWater() {
-      if (Math.abs(currentFillLevel - targetFillLevel) > 0.1) {
-        currentFillLevel += (targetFillLevel - currentFillLevel) * 0.022;
-      }
-      
-      surfaceY = 320 - (currentFillLevel * 2.6);
-      waterBody.setAttribute('y', Math.max(surfaceY, 28));
-      
-      waterSurface.setAttribute('cy', surfaceY);
-      waterSurfaceHighlight.setAttribute('cy', surfaceY);
-      
-      const causticY = Math.min(surfaceY + 160, 315);
-      causticMain.setAttribute('cy', causticY);
-      
-      const additiveY = Math.min(surfaceY + 42, 265);
-      additiveSlice.setAttribute('cy', additiveY);
-      additiveHighlight.setAttribute('cy', additiveY - 3);
-      
-      waterSurfaceGroup.setAttribute('opacity', currentFillLevel > 18 ? '1' : '0');
-      causticGroup.setAttribute('opacity', currentFillLevel > 25 ? '1' : '0');
-      additiveGroup.setAttribute('opacity', currentFillLevel > 32 && currentAdditive !== 'none' ? '1' : '0');
-      particlesGroup.setAttribute('opacity', currentFillLevel > 38 ? '0.6' : '0');
-      
-      if (currentType === 'sparkling' && !prefersReducedMotion) {
-        const time = Date.now() * 0.001;
-        bubbles.forEach((bubble) => {
-          bubble.cy -= bubble.speed;
-          
-          if (bubble.cy < surfaceY + 10) {
-            bubble.cy = 300 + Math.random() * 15;
-            bubble.cx = 42 + Math.random() * 110;
-          }
-          
-          const wobble = Math.sin(time * bubble.wobbleSpeed + bubble.phase) * bubble.wobbleAmount;
-          bubble.element.setAttribute('cx', bubble.cx + wobble);
-          bubble.element.setAttribute('cy', bubble.cy);
-          
-          const opacity = bubble.cy < surfaceY + 32 ? 0.25 : 0.55;
-          bubble.element.setAttribute('fill', `rgba(255,255,255,${opacity})`);
-        });
-      }
-      
-      if (!prefersReducedMotion && currentFillLevel > 38) {
-        const time = Date.now() * 0.001;
-        particles.forEach((particle) => {
-          particle.cy -= particle.speed;
-          
-          if (particle.cy < surfaceY + 12) {
-            particle.cy = surfaceY + 140 + Math.random() * 90;
-          }
-          
-          const wobble = Math.sin(time * 0.6 + particle.phase) * 0.35;
-          particle.element.setAttribute('cx', particle.cx + wobble);
-          particle.element.setAttribute('cy', particle.cy);
-        });
-      }
-      
-      if (!prefersReducedMotion && currentFillLevel > 20) {
-        const waveTime = Date.now() * 0.0012;
-        const wavePath = `M ${42 - 58} ${surfaceY} ` + 
-          Array.from({length: 10}, (_, i) => {
-            const x = 42 - 58 + i * 12;
-            const y = surfaceY + Math.sin(waveTime + i * 0.5) * 1.2;
-            return `Q ${x + 6} ${y} ${x + 12} ${surfaceY}`;
-          }).join(' ');
-        surfaceWave.setAttribute('d', wavePath);
-      }
-      
-      requestAnimationFrame(animateWater);
-    }
-
-    glassDemo.addEventListener('click', () => {
-      if (!isPouring) {
-        currentFillLevel = Math.max(currentFillLevel - 25, 0);
-        targetFillLevel = 72;
-        startPouring();
-      }
-    });
-
-    initBubbles();
-    initParticles();
-    animateWater();
-
-    waterTypeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        waterTypeBtns.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('active');
-        btn.setAttribute('aria-pressed', 'true');
-        
-        currentType = btn.dataset.type;
-        waterBody.setAttribute('fill', waterGradients[currentType]);
-        
-        if (currentType === 'sparkling') {
-          bubblesGroup.setAttribute('opacity', '1');
-          targetFillLevel = 74;
-        } else if (currentType === 'alkaline') {
-          bubblesGroup.setAttribute('opacity', '0');
-          targetFillLevel = 80;
-        } else {
-          bubblesGroup.setAttribute('opacity', '0');
-          targetFillLevel = 72;
-        }
-        
-        if (!isPouring) {
-          currentFillLevel = Math.max(currentFillLevel - 20, 0);
-          startPouring();
-        }
-      });
-    });
-
-    additiveBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        additiveBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        currentAdditive = btn.dataset.additive;
-        
-        if (currentAdditive !== 'none') {
-          additiveGroup.setAttribute('opacity', '1');
-          additiveSlice.setAttribute('fill', additiveColors[currentAdditive]);
-        } else {
-          additiveGroup.setAttribute('opacity', '0');
-        }
-      });
-    });
-
-    // =====================
-    // ACCORDION
-    // =====================
-    const accordionItems = document.querySelectorAll('.accordion-item');
-    
-    accordionItems.forEach(item => {
-      const header = item.querySelector('.accordion-header');
-      
-      const toggle = () => {
-        const isOpen = item.classList.contains('open');
-        
-        accordionItems.forEach(i => {
-          i.classList.remove('open');
-          i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
-        });
-        
-        if (!isOpen) {
-          item.classList.add('open');
-          header.setAttribute('aria-expanded', 'true');
-        }
-      };
-      
-      header.addEventListener('click', toggle);
-      header.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggle();
-        }
-      });
-    });
-
-    // =====================
-    // SCROLL INDICATOR
-    // =====================
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (scrollIndicator) {
-      scrollIndicator.addEventListener('click', () => {
-        document.getElementById('glass').scrollIntoView({ behavior: 'smooth' });
-      });
-    }
-
-    // =====================
-    // SPLIT SECTION PARALLAX
-    // =====================
-    const splitImages = document.querySelectorAll('.split-image-inner');
-    
-    if (!prefersReducedMotion && !isMobile) {
-      window.addEventListener('scroll', () => {
-        splitImages.forEach((img) => {
-          const rect = img.closest('.split-section').getBoundingClientRect();
-          const speed = 0.015;
-          const offset = (rect.top - window.innerHeight / 2) * speed;
-          img.style.transform = `translateY(${offset}px)`;
-        });
-      }, { passive: true });
-    }
+    // Initial reveal for hero
+    setTimeout(() => {
+      document.querySelector('.hero-section .reveal').classList.add('visible');
+    }, 300);
   </script>
 </body>
 </html>
